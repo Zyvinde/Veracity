@@ -1,0 +1,125 @@
+import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
+
+const config: Config = {
+  darkMode: ["class"],
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-jakarta)", "var(--font-sans)", "Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Playfair Display", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "IBM Plex Mono", "JetBrains Mono", "monospace"],
+        manrope: ["var(--font-manrope)", "Manrope", "sans-serif"],
+      },
+      colors: {
+        background: "#000000",
+        foreground: "#FFFFFF",
+        /* Veracity mist + slate semantic tokens (default light theme) */
+        cream: {
+          DEFAULT: "#E4E9ED",
+          deep: "#EFF3F6",
+        },
+        forest: {
+          DEFAULT: "#223140",
+          deep: "#16222C",
+          ink: "#0F1820",
+        },
+        mint: {
+          DEFAULT: "#10B981",
+          dark: "#059669",
+          pale: "#34D399",
+        },
+        singularity: {
+          ground: "#000000",
+          surface: "#0F1117",
+          "surface-hover": "#161922",
+          panel: "rgba(18, 20, 26, 0.95)",
+          border: "rgba(255, 255, 255, 0.08)",
+          "border-bright": "rgba(255, 255, 255, 0.16)",
+          red: {
+            DEFAULT: "#DC2626",
+            lift: "#EF4444",
+            deep: "#991B1B",
+            crimson: "#E11D48",
+            light: "#FCA5A5",
+          },
+          gold: {
+            DEFAULT: "#DC2626",
+            lift: "#EF4444",
+            deep: "#991B1B",
+          },
+          ink: {
+            1: "#FFFFFF",
+            2: "#E2E8F0",
+            3: "#94A3B8",
+            4: "#64748B",
+          },
+          up: "#FFFFFF",
+          down: "#DC2626",
+          warn: "#EAB308",
+          orange: "#F97316",
+          yellow: "#EAB308",
+        },
+        card: {
+          DEFAULT: "#0F1117",
+          foreground: "#FFFFFF",
+        },
+        popover: {
+          DEFAULT: "#0F1117",
+          foreground: "#FFFFFF",
+        },
+        primary: {
+          DEFAULT: "#DC2626",
+          foreground: "#FFFFFF",
+        },
+        muted: {
+          DEFAULT: "#141720",
+          foreground: "#94A3B8",
+        },
+        accent: {
+          DEFAULT: "#1C1F2B",
+          foreground: "#FFFFFF",
+        },
+        destructive: {
+          DEFAULT: "#DC2626",
+          foreground: "#FFFFFF",
+        },
+        border: "rgba(255, 255, 255, 0.08)",
+        input: "rgba(255, 255, 255, 0.08)",
+        ring: "#DC2626",
+        clearance: {
+          cleared: "#FFFFFF",
+          yellow: "#EAB308",
+          amber: "#EAB308",
+          orange: "#F97316",
+          red: "#DC2626",
+        },
+      },
+      boxShadow: {
+        glow: "0 0 20px -5px rgba(220, 38, 38, 0.35)",
+        "glow-red": "0 0 25px -4px rgba(220, 38, 38, 0.45)",
+        "glow-white": "0 0 20px -5px rgba(255, 255, 255, 0.35)",
+        "glow-orange": "0 0 20px -5px rgba(249, 115, 22, 0.4)",
+        "glow-yellow": "0 0 20px -5px rgba(234, 179, 8, 0.4)",
+      },
+      animation: {
+        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "shimmer": "shimmer 2s linear infinite",
+      },
+      keyframes: {
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+      },
+    },
+  },
+  plugins: [animate],
+};
+
+export default config;

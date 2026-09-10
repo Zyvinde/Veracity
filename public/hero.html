@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VERACITY // OS — Sovereign Surgical Defense</title>
+    <link href="https://db.onlinewebfonts.com/c/ca3d10781128664daddf89bf2e2d1305?family=Graphik+LCG+Regular+Regular" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #000; overflow-x: hidden; }
+
+      .font-graphik { font-family: 'Graphik LCG Regular Regular', 'Graphik LCG', sans-serif; }
+      .font-manrope { font-family: 'Manrope', sans-serif; }
+
+      @keyframes fadeUp      { from { opacity: 0; transform: translateY(18px); }  to { opacity: 1; transform: translateY(0); } }
+      @keyframes fadeIn      { from { opacity: 0; }                                to { opacity: 1; } }
+      @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+      @keyframes slideInRight{ from { opacity: 0; transform: translateX(20px); }  to { opacity: 1; transform: translateX(0); } }
+      @keyframes scaleIn     { from { opacity: 0; transform: scale(0.85); }       to { opacity: 1; transform: scale(1); } }
+      @keyframes drawLine    { from { opacity: 0; stroke-dashoffset: 100; }       to { opacity: 1; stroke-dashoffset: 0; } }
+      @keyframes gridReveal  { from { opacity: 0; transform: scaleY(0); }         to { opacity: 1; transform: scaleY(1); } }
+      @keyframes gridRevealH { from { opacity: 0; transform: scaleX(0); }         to { opacity: 1; transform: scaleX(1); } }
+
+      .anim-fade-up     { opacity: 0; animation: fadeUp       0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-fade-in     { opacity: 0; animation: fadeIn       0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-slide-left  { opacity: 0; animation: slideInLeft  0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-slide-right { opacity: 0; animation: slideInRight 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-scale-in    { opacity: 0; animation: scaleIn      0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-grid-v      { opacity: 0; transform-origin: top;  animation: gridReveal  1.2s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-grid-h      { opacity: 0; transform-origin: left; animation: gridRevealH 1.2s cubic-bezier(0.16,1,0.3,1) forwards; }
+      .anim-draw-line   { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawLine 1s cubic-bezier(0.16,1,0.3,1) forwards; }
+    </style>
+  </head>
+  <body class="bg-black text-white font-manrope selection:bg-white selection:text-black">
+    <section class="relative w-full h-screen overflow-hidden bg-black select-none">
+      <!-- Layer 0: Background video -->
+      <video
+        class="absolute inset-0 w-full h-full object-cover anim-fade-in pointer-events-none"
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260813_115057_94c3699b-0fd1-4124-bcf3-3626bb8c1f77.mp4"
+        autoplay
+        muted
+        loop
+        playsinline
+      ></video>
+
+      <!-- Content Layer -->
+      <div class="relative z-10 w-full h-full">
+        <!-- Nav -->
+        <nav class="absolute top-0 left-0 w-full flex items-center px-5 md:px-[35px] py-5 md:py-[27px]">
+          <!-- Left group -->
+          <div class="flex items-center gap-[40px]">
+            <span class="font-graphik text-white text-[18px] md:text-[21px] leading-[21px] whitespace-nowrap anim-fade-up cursor-pointer" style="animation-delay: 200ms;">
+              VERACITY // OS
+            </span>
+
+            <div class="hidden lg:flex items-center gap-[40px]">
+              <div class="flex items-center gap-[3px] anim-fade-up cursor-pointer" style="animation-delay: 350ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[13px] leading-[15.6px]">01.</span>
+                <span class="font-manrope text-white text-[13px] leading-[15.6px] cursor-pointer hover:text-[#AFDDFF] transition-colors">MED_GUARDS</span>
+              </div>
+              <div class="flex items-center gap-[3px] anim-fade-up cursor-pointer" style="animation-delay: 450ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[13px] leading-[15.6px]">02.</span>
+                <span class="font-manrope text-white text-[13px] leading-[15.6px] cursor-pointer hover:text-[#AFDDFF] transition-colors">NPO_TIMERS</span>
+              </div>
+              <div class="flex items-center gap-[3px] anim-fade-up cursor-pointer" style="animation-delay: 550ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[13px] leading-[15.6px]">03.</span>
+                <span class="font-manrope text-white text-[13px] leading-[15.6px] cursor-pointer hover:text-[#AFDDFF] transition-colors">STAT_LABS</span>
+              </div>
+              <div class="flex items-center gap-[3px] anim-fade-up cursor-pointer" style="animation-delay: 650ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[13px] leading-[15.6px]">04.</span>
+                <span class="font-manrope text-white text-[13px] leading-[15.6px] cursor-pointer hover:text-[#AFDDFF] transition-colors">PAC_CONSOLE</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right group -->
+          <div class="hidden lg:flex items-center gap-[12px] ml-auto anim-slide-right" style="animation-delay: 600ms;">
+            <svg class="w-[15px] h-[15px] text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            </svg>
+            <span class="font-manrope text-white text-[13px] leading-[15.6px]">0x71...f4e2</span>
+            <span class="font-manrope text-[#AFDDFF] text-[13px] leading-[15.6px]">[ SOVEREIGN_ENCLAVE ]</span>
+            <span class="font-manrope text-white text-[13px] leading-[15.6px] ml-[20px]">STATUS:</span>
+            <span class="bg-[#AFDDFF] rounded-[3px] px-[5px] py-[2px] text-black text-[13px] leading-[15.6px] font-manrope font-medium">DHA_LICENSED</span>
+          </div>
+
+          <!-- Hamburger Button -->
+          <button id="menu-btn" type="button" class="lg:hidden ml-auto relative w-[40px] h-[40px] flex items-center justify-center anim-fade-in" style="animation-delay: 400ms;" aria-label="Toggle menu">
+            <span id="menu-icon-burger" class="absolute transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-100 rotate-0 scale-100">
+              <svg class="w-[22px] h-[22px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            </span>
+            <span id="menu-icon-x" class="absolute transition-all duration-300 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -rotate-90 scale-50">
+              <svg class="w-[22px] h-[22px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </span>
+          </button>
+        </nav>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-overlay" class="fixed inset-0 z-50 lg:hidden transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] invisible pointer-events-none">
+          <div id="mobile-backdrop" class="absolute inset-0 bg-black/90 backdrop-blur-md transition-opacity duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0"></div>
+          <div id="mobile-panel" class="relative h-full flex flex-col px-5 pt-24 pb-10 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-y-4">
+            <button id="menu-close-btn" type="button" class="absolute top-5 right-5 w-[40px] h-[40px] flex items-center justify-center" aria-label="Close menu">
+              <svg class="w-[22px] h-[22px] text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div class="flex flex-col gap-8">
+              <div class="mobile-nav-row flex items-center gap-3 cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-x-6" style="transition-delay: 150ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[14px] leading-[1]">01.</span>
+                <span class="font-manrope text-white text-[28px] leading-[1.2] tracking-tight">MED_GUARDS</span>
+              </div>
+              <div class="mobile-nav-row flex items-center gap-3 cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-x-6" style="transition-delay: 225ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[14px] leading-[1]">02.</span>
+                <span class="font-manrope text-white text-[28px] leading-[1.2] tracking-tight">NPO_TIMERS</span>
+              </div>
+              <div class="mobile-nav-row flex items-center gap-3 cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-x-6" style="transition-delay: 300ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[14px] leading-[1]">03.</span>
+                <span class="font-manrope text-white text-[28px] leading-[1.2] tracking-tight">STAT_LABS</span>
+              </div>
+              <div class="mobile-nav-row flex items-center gap-3 cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 -translate-x-6" style="transition-delay: 375ms;" onclick="window.location.href='/'">
+                <span class="font-manrope text-[#AFDDFF]/80 text-[14px] leading-[1]">04.</span>
+                <span class="font-manrope text-white text-[28px] leading-[1.2] tracking-tight">PAC_CONSOLE</span>
+              </div>
+            </div>
+            <div id="mobile-wallet" class="mt-auto pt-10 border-t border-white/10 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] opacity-0 translate-y-4">
+              <div class="flex items-center gap-[10px] mb-3">
+                <svg class="w-[15px] h-[15px] text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                <span class="font-manrope text-white text-[13px] leading-[15.6px]">0x71...f4e2</span>
+                <span class="font-manrope text-[#AFDDFF] text-[13px] leading-[15.6px]">[ SOVEREIGN_ENCLAVE ]</span>
+              </div>
+              <div class="flex items-center gap-[8px]">
+                <span class="font-manrope text-white text-[13px] leading-[15.6px]">STATUS:</span>
+                <span class="bg-[#AFDDFF] rounded-[3px] px-[5px] py-[2px] text-black text-[13px] leading-[15.6px] font-manrope font-medium">DHA_LICENSED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- H1 Main Heading -->
+        <h1 class="font-graphik text-white font-normal leading-[1em] absolute anim-fade-up text-[32px] sm:text-[48px] md:text-[68px] top-[140px] sm:top-[160px] md:top-[178px] left-5 md:left-[35px] max-w-[300px] sm:max-w-[420px] md:max-w-[554px]" style="animation-delay: 400ms;">
+          Sovereign Clearance. Zero OT Delays.
+        </h1>
+
+        <!-- 4 Vertical Grid Lines -->
+        <div class="absolute top-0 h-full w-px bg-white/[0.04] anim-grid-v pointer-events-none" style="left: 12.6%; animation-delay: 600ms;"></div>
+        <div class="absolute top-0 h-full w-px bg-white/[0.04] anim-grid-v pointer-events-none" style="left: 37.5%; animation-delay: 700ms;"></div>
+        <div class="absolute top-0 h-full w-px bg-white/[0.04] anim-grid-v pointer-events-none" style="left: 61.9%; animation-delay: 800ms;"></div>
+        <div class="absolute top-0 h-full w-px bg-white/[0.04] anim-grid-v pointer-events-none" style="left: 86.2%; animation-delay: 900ms;"></div>
+
+        <!-- 2 Horizontal Grid Lines -->
+        <div class="absolute left-0 w-full h-px bg-white/[0.04] anim-grid-h pointer-events-none" style="top: 32.7%; animation-delay: 800ms;"></div>
+        <div class="absolute left-0 w-full h-px bg-white/[0.04] anim-grid-h pointer-events-none" style="top: 71.4%; animation-delay: 950ms;"></div>
+
+        <!-- 8 Plus Marks -->
+        <!-- Row 1 (top: 32.7%) -->
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 32.7%; left: 12.6%; animation-delay: 1000ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 32.7%; left: 37.5%; animation-delay: 1080ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 32.7%; left: 61.9%; animation-delay: 1160ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 32.7%; left: 86.2%; animation-delay: 1240ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        <!-- Row 2 (top: 71.4%) -->
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 71.4%; left: 12.6%; animation-delay: 1320ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 71.4%; left: 37.5%; animation-delay: 1400ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 71.4%; left: 61.9%; animation-delay: 1480ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+        <div class="absolute anim-scale-in pointer-events-none" style="top: 71.4%; left: 86.2%; animation-delay: 1560ms;">
+          <div class="absolute w-[10px] h-px bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute w-px h-[10px] bg-white/70 -translate-x-1/2 -translate-y-1/2"></div>
+        </div>
+
+        <!-- Central Nodes (md+) -->
+        <div class="absolute inset-0 pointer-events-none hidden md:block">
+          <!-- 6 Connector SVGs -->
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 1200ms;">
+            <line x1="38%" y1="14%" x2="52%" y2="14%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 1400ms;">
+            <line x1="52%" y1="14%" x2="60%" y2="27%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 1500ms;">
+            <line x1="32%" y1="58%" x2="20%" y2="74%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 1700ms;">
+            <line x1="20%" y1="74%" x2="6%" y2="74%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 1800ms;">
+            <line x1="78%" y1="53%" x2="63%" y2="53%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="absolute inset-0 w-full h-full pointer-events-none anim-fade-in" style="animation-delay: 2000ms;">
+            <line x1="63%" y1="53%" x2="50%" y2="63%" stroke="rgba(255,255,255,0.25)" stroke-width="1" vector-effect="non-scaling-stroke" />
+          </svg>
+
+          <!-- Square 1 -->
+          <div class="absolute top-[27%] left-[60%] w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] border border-white/80 anim-scale-in" style="animation-delay: 1500ms;"></div>
+          <!-- Label 1 -->
+          <div class="absolute top-[11%] left-[26%] anim-slide-left max-w-[160px]" style="animation-delay: 1100ms;">
+            <span class="font-manrope text-white text-[13px] leading-[15.6px] whitespace-nowrap">[ DRUG_INTERFERENCE_GUARD ]</span>
+            <p class="font-manrope text-white/50 text-[11px] leading-[14px] mt-[4px]">Neural node processing real-time medication holds & GLP-1 clearance.</p>
+          </div>
+
+          <!-- Square 2 -->
+          <div class="absolute top-[58%] left-[32%] w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] border border-white/80 anim-scale-in" style="animation-delay: 1800ms;"></div>
+          <!-- Label 2 -->
+          <div class="absolute top-[76%] left-[3%] anim-slide-left max-w-[160px]" style="animation-delay: 1400ms;">
+            <span class="font-manrope text-white text-[13px] leading-[15.6px] whitespace-nowrap">[ 8H_NPO_FASTING_CLOCK ]</span>
+            <p class="font-manrope text-white/50 text-[11px] leading-[14px] mt-[4px]">Gastric clearance engine & aspiration risk prevention algorithms.</p>
+          </div>
+
+          <!-- Square 3 -->
+          <div class="absolute top-[63%] left-[50%] w-[80px] h-[80px] lg:w-[100px] lg:h-[100px] border border-white/80 anim-scale-in" style="animation-delay: 2100ms;"></div>
+          <!-- Label 3 -->
+          <div class="absolute top-[50%] left-[78%] anim-slide-right max-w-[180px]" style="animation-delay: 1700ms;">
+            <span class="font-manrope text-white text-[13px] leading-[15.6px] whitespace-nowrap">[ STAT_LAB_EXPEDITER ]</span>
+            <p class="font-manrope text-white/50 text-[11px] leading-[14px] mt-[4px]">Sub-20m STAT routing for potassium, hemoglobin & troponin assays.</p>
+          </div>
+        </div>
+
+        <!-- Bottom Row -->
+        <div class="absolute bottom-5 md:bottom-[35px] left-5 md:left-[35px] right-5 md:right-[35px] flex flex-col md:flex-row items-start md:items-end justify-between gap-5 md:gap-0">
+          <!-- Left CTA Button -->
+          <button type="button" onclick="window.location.href='/'" class="bg-[#AFDDFF] px-[16px] md:px-[20px] py-[10px] md:py-[12px] flex items-center gap-[10px] hover:bg-[#c8e8ff] transition-colors anim-fade-up cursor-pointer select-none" style="animation-delay: 900ms;">
+            <span class="text-black text-[16px] leading-none">&#10022;</span>
+            <span class="font-manrope text-black text-[12px] md:text-[13px] leading-[15.6px] uppercase tracking-wide font-medium">LAUNCH OT DEFENSE CONSOLE</span>
+          </button>
+
+          <!-- Right Info Card -->
+          <div class="relative max-w-[280px] hidden sm:block anim-slide-right" style="animation-delay: 1100ms;">
+            <span class="font-manrope text-black text-[13px] leading-[15.6px] bg-[#AFDDFF] px-[6px] py-[2px] inline-block mb-[10px] font-medium">
+              NOT A FORM — AN OPERATING SYSTEM
+            </span>
+            <div class="relative p-[20px]">
+              <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 280 168" preserveAspectRatio="none">
+                <polygon points="0.5,0.5 279.5,0.5 279.5,167.5 30,167.5 0.5,137.5" fill="none" stroke="#AFDDFF" stroke-width="1" vector-effect="non-scaling-stroke" />
+              </svg>
+              <p class="relative font-manrope text-white text-[13px] leading-[18px] mb-[18px]">
+                Eliminating day-of-surgery cancellations with sovereign pre-operative clearance, statutory compliance, and zero-delay OT orchestration.
+              </p>
+              <span onclick="window.location.href='/'" class="relative font-manrope text-[#AFDDFF] text-[13px] leading-[15.6px] cursor-pointer hover:underline font-medium">
+                VIEW_COMPLIANCE_PASSPORT
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const menuBtn = document.getElementById('menu-btn');
+      const closeBtn = document.getElementById('menu-close-btn');
+      const overlay = document.getElementById('mobile-overlay');
+      const backdrop = document.getElementById('mobile-backdrop');
+      const panel = document.getElementById('mobile-panel');
+      const wallet = document.getElementById('mobile-wallet');
+      const burgerIcon = document.getElementById('menu-icon-burger');
+      const xIcon = document.getElementById('menu-icon-x');
+      const navRows = document.querySelectorAll('.mobile-nav-row');
+
+      let isOpen = false;
+
+      function toggleMenu(open) {
+        isOpen = open;
+        if (isOpen) {
+          overlay.classList.remove('invisible', 'pointer-events-none');
+          overlay.classList.add('visible');
+          backdrop.classList.remove('opacity-0');
+          backdrop.classList.add('opacity-100');
+          panel.classList.remove('opacity-0', '-translate-y-4');
+          panel.classList.add('opacity-100', 'translate-y-0');
+          wallet.classList.remove('opacity-0', 'translate-y-4');
+          wallet.classList.add('opacity-100', 'translate-y-0');
+          burgerIcon.classList.remove('opacity-100', 'rotate-0', 'scale-100');
+          burgerIcon.classList.add('opacity-0', 'rotate-90', 'scale-50');
+          xIcon.classList.remove('opacity-0', '-rotate-90', 'scale-50');
+          xIcon.classList.add('opacity-100', 'rotate-0', 'scale-100');
+          navRows.forEach(row => {
+            row.classList.remove('opacity-0', '-translate-x-6');
+            row.classList.add('opacity-100', 'translate-x-0');
+          });
+        } else {
+          backdrop.classList.remove('opacity-100');
+          backdrop.classList.add('opacity-0');
+          panel.classList.remove('opacity-100', 'translate-y-0');
+          panel.classList.add('opacity-0', '-translate-y-4');
+          wallet.classList.remove('opacity-100', 'translate-y-0');
+          wallet.classList.add('opacity-0', 'translate-y-4');
+          burgerIcon.classList.remove('opacity-0', 'rotate-90', 'scale-50');
+          burgerIcon.classList.add('opacity-100', 'rotate-0', 'scale-100');
+          xIcon.classList.remove('opacity-100', 'rotate-0', 'scale-100');
+          xIcon.classList.add('opacity-0', '-rotate-90', 'scale-50');
+          navRows.forEach(row => {
+            row.classList.remove('opacity-100', 'translate-x-0');
+            row.classList.add('opacity-0', '-translate-x-6');
+          });
+          setTimeout(() => {
+            if (!isOpen) {
+              overlay.classList.remove('visible');
+              overlay.classList.add('invisible', 'pointer-events-none');
+            }
+          }, 500);
+        }
+      }
+
+      if (menuBtn) menuBtn.addEventListener('click', () => toggleMenu(!isOpen));
+      if (closeBtn) closeBtn.addEventListener('click', () => toggleMenu(false));
+      if (backdrop) backdrop.addEventListener('click', () => toggleMenu(false));
+    </script>
+  </body>
+</html>
