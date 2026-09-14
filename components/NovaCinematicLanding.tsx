@@ -70,7 +70,8 @@ const TOTAL_FRAMES = 202;
 
 function getFramePath(index: number): string {
   const padIndex = String(index).padStart(3, '0');
-  return `/frames/frame_${padIndex}.webp`;
+  const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  return `${base}/frames/frame_${padIndex}.webp`;
 }
 
 function ScrollCanvas({ posterSrc }: { posterSrc?: string }) {

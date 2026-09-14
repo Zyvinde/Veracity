@@ -11,3 +11,5 @@ dev-server.log
 prod-server.log
 .tmp.driveupload
 scratch/.chrome-*
+out
+.vercel

@@ -305,7 +305,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             <div className="flex flex-col items-center gap-5 w-full px-2">
               {/* Brand Mark — back to site */}
               <a
-                href="/"
+                href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/' || '/'}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-600 to-blue-700 text-white font-serif italic text-xl font-bold shadow-md shadow-sky-600/20"
                 title="Back to Veracity home"
                 aria-label="Back to Veracity home"
@@ -421,7 +421,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               {/* Left: Return to Landing + Console Wordmark + Global Search */}
               <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
                 <a
-                  href="/"
+                  href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/' || '/'}
                   className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/15 hover:bg-sky-500/25 text-sky-200 hover:text-white text-xs font-semibold transition backdrop-blur-md shrink-0 shadow-xs min-h-[36px]"
                   title="Return to Veracity Landing Page"
                 >
