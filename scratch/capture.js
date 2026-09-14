@@ -158,6 +158,51 @@ async function capture() {
     }
   }
 
+  // Desktop captures
+  await send('Emulation.setDeviceMetricsOverride', {
+    width: 1440,
+    height: 900,
+    deviceScaleFactor: 1,
+    mobile: false,
+    screenOrientation: { type: 'landscapePrimary', angle: 0 },
+  });
+  await send('Emulation.setUserAgentOverride', {
+    userAgent:
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    platform: 'Win32',
+  });
+  await send('Emulation.setTouchEmulationEnabled', { enabled: false });
+
+  const desktopTargets = [
+    { name: 'desktop_landing.png', url: `http://localhost:${port}/` },
+    { name: 'desktop_console.png', url: `http://localhost:${port}/console` },
+  ];
+
+  for (const t of desktopTargets) {
+    const outPath = path.join(outputDir, t.name);
+    if (fs.existsSync(outPath)) {
+      try {
+        fs.unlinkSync(outPath);
+      } catch {}
+    }
+    console.log(`Navigating to ${t.url} (desktop)...`);
+    await send('Page.navigate', { url: t.url });
+    await wait(3500);
+
+    console.log(`Capturing screenshot for ${t.name}...`);
+    const result = await send('Page.captureScreenshot', {
+      format: 'png',
+      clip: { x: 0, y: 0, width: 1440, height: 900, scale: 1 },
+      captureBeyondViewport: false,
+    });
+
+    if (result && result.data) {
+      const buffer = Buffer.from(result.data, 'base64');
+      fs.writeFileSync(outPath, buffer);
+      console.log(`Saved ${t.name} (${buffer.length} bytes, 1440x900)`);
+    }
+  }
+
   ws.close();
   try {
     chromeProc.kill();

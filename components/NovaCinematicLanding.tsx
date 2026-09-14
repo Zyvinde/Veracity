@@ -487,7 +487,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={goConsole}
-                    className="flex items-center justify-center gap-1.5 rounded-full bg-white px-6 py-3.5 text-xs sm:text-sm font-semibold text-black transition-all duration-300 hover:bg-white/85 shadow-lg active:scale-95 min-h-[44px]"
+                    className="btn-press flex items-center justify-center gap-1.5 rounded-full bg-white px-6 py-3.5 text-xs sm:text-sm font-semibold text-black transition-all duration-300 hover:bg-white/85 shadow-lg min-h-[44px] cursor-pointer"
                   >
                     <span>Open OT Console</span>
                     <ChevronRight size={14} />
@@ -495,7 +495,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={() => setModal('QUESTIONNAIRE')}
-                    className="flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-5 py-3.5 text-xs sm:text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 font-medium min-h-[44px]"
+                    className="btn-press flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-5 py-3.5 text-xs sm:text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 font-medium min-h-[44px] cursor-pointer"
                   >
                     Sample Pre-Op Intake
                   </button>
@@ -733,7 +733,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   },
                 ].map((card, i) => (
                   <Reveal key={card.headline} delay={220 + i * 100}>
-                    <div className="flex h-full flex-col justify-between rounded-2xl border border-white/15 bg-white/10 p-5 sm:p-6 backdrop-blur-md hover:border-sky-400/40 transition">
+                    <div className="glass-specular flex h-full flex-col justify-between rounded-2xl border border-white/15 bg-white/10 p-5 sm:p-6 backdrop-blur-md hover:border-sky-400/40 transition">
                       <div>
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-serif text-2xl sm:text-4xl font-normal text-white">
@@ -758,6 +758,69 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   </Reveal>
                 ))}
               </div>
+
+              {/* Comparative Matrix: Traditional Pre-Op vs Veracity Defense */}
+              <Reveal delay={320} className="mt-8 sm:mt-12">
+                <div className="glass-specular rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 backdrop-blur-md">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-white/15">
+                    <div>
+                      <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-sky-300 font-bold">
+                        Comparative Clinical Impact
+                      </span>
+                      <h3 className="font-serif italic text-lg sm:text-xl font-bold text-white mt-0.5">
+                        Traditional Pre-Op vs. Veracity OT Defense
+                      </h3>
+                    </div>
+                    <span className="self-start sm:self-auto text-[11px] font-mono text-white/70 bg-white/10 px-2.5 py-1 rounded-full border border-white/15">
+                      UAE DHA § 3060 &amp; ASA Standards
+                    </span>
+                  </div>
+
+                  <div className="mt-4 divide-y divide-white/10 overflow-x-auto">
+                    {[
+                      {
+                        dimension: 'Pharmacotherapy Holds (GLP-1 / DOAC)',
+                        legacy: 'Manual recall; holding bay delays (45–120m) or same-day cancellations',
+                        veracity: '168h automated reverse timers & ASA algorithm safety flags',
+                      },
+                      {
+                        dimension: 'NPO Fasting Adherence',
+                        legacy: 'Paper recall; high risk of pulmonary aspiration during induction',
+                        veracity: 'Minute-by-minute solids (8h) & clear liquids (2h) countdown telemetry',
+                      },
+                      {
+                        dimension: 'Blood Bank & Anemia Triage',
+                        legacy: 'Morning crossmatch panic; delayed emergency packed RBC units',
+                        veracity: 'Pre-op Hb/Ferritin optimization & automated PRBC crossmatch reserve',
+                      },
+                      {
+                        dimension: 'Regulatory Attestation',
+                        legacy: 'Scattered paper slips; difficult retrospective medicolegal defense',
+                        veracity: '1-Tap 256-bit SHA immutable audit trail compliant with DHA § 3060(a)',
+                      },
+                      {
+                        dimension: 'Patient Communication',
+                        legacy: 'Unanswered calls; missed pre-op preparation guidelines',
+                        veracity: 'Automated bilingual WhatsApp & SMS digital intake directives',
+                      },
+                    ].map((row, idx) => (
+                      <div key={idx} className="py-3.5 grid grid-cols-1 md:grid-cols-12 gap-2 text-xs items-center">
+                        <div className="md:col-span-4 font-semibold text-white">
+                          {row.dimension}
+                        </div>
+                        <div className="md:col-span-4 flex items-start gap-2 text-white/60">
+                          <span className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-rose-500/20 text-rose-300 shrink-0 text-[10px] font-bold">✕</span>
+                          <span>{row.legacy}</span>
+                        </div>
+                        <div className="md:col-span-4 flex items-start gap-2 text-sky-200 font-medium">
+                          <span className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-emerald-500/25 text-emerald-300 shrink-0 text-[10px] font-bold">✓</span>
+                          <span>{row.veracity}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
             </div>
           </section>
 
@@ -803,7 +866,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   },
                 ].map((card, i) => (
                   <Reveal key={card.title} delay={260 + i * 100}>
-                    <div className="flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md">
+                    <div className="glass-specular flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md">
                       <span className="font-mono text-[11px] tracking-[0.15em] text-sky-300 font-bold">
                         {card.index}
                       </span>
@@ -817,7 +880,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 <button
                   type="button"
                   onClick={goConsole}
-                  className="mt-8 flex items-center gap-1 rounded-full border border-sky-400/30 bg-sky-500/20 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-sky-500/30 sm:text-sm font-semibold"
+                  className="btn-press mt-8 flex items-center gap-1 rounded-full border border-sky-400/30 bg-sky-500/20 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-sky-500/30 sm:text-sm font-semibold cursor-pointer"
                 >
                   Open the OT Console
                   <ChevronRight size={14} />
@@ -840,7 +903,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={goConsole}
-                    className="flex items-center gap-1 rounded-full bg-white px-6 py-3 text-xs font-semibold text-black transition-colors duration-300 hover:bg-white/85 sm:text-sm shadow-md"
+                    className="btn-press flex items-center gap-1 rounded-full bg-white px-6 py-3 text-xs font-semibold text-black transition-colors duration-300 hover:bg-white/85 sm:text-sm shadow-md cursor-pointer"
                   >
                     Open OT Console
                     <ChevronRight size={14} />
@@ -848,7 +911,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={() => setModal('QUESTIONNAIRE')}
-                    className="rounded-full border border-white/25 bg-white/10 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:text-sm font-medium"
+                    className="btn-press rounded-full border border-white/25 bg-white/10 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:text-sm font-medium cursor-pointer"
                   >
                     Sample Pre-Op Intake
                   </button>

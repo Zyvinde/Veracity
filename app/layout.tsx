@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Dev
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n/context";
 import { ToastProvider } from "@/components/Toast";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -95,6 +96,7 @@ export default function RootLayout({
             <div id="app-root">
               {children}
             </div>
+            <Toaster richColors theme="dark" position="bottom-right" closeButton />
           </ToastProvider>
         </I18nProvider>
       </body>

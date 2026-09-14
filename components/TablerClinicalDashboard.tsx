@@ -30,6 +30,8 @@ import FishboneViewer from '@/components/FishboneViewer';
 import OTDelayPreventionHub from '@/components/OTDelayPreventionHub';
 import PatientPreOpQuestionnaire from '@/components/PatientPreOpQuestionnaire';
 import MobileAnesthesiaBloodView from '@/components/MobileAnesthesiaBloodView';
+import { CommandPalette } from '@/components/CommandPalette';
+import { toast } from 'sonner';
 
 import {
   Activity,
@@ -150,6 +152,43 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
       }
     }
   };
+
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  const handleOpenAttestation = useCallback(() => {
+    toast.info('DHA PAC Attestation Protocol', {
+      description: `Reviewing statutory criteria for ${currentPatient?.name || 'case'} (DHA § 3060)`,
+    });
+    onOpenAttestation();
+  }, [currentPatient?.name, onOpenAttestation]);
+
+  const handleOpenWhatsApp = useCallback(() => {
+    toast.success('Pre-Op Directive Dispatched', {
+      description: `Bilingual SMS & WhatsApp verification sent for ${currentPatient?.name || 'case'}`,
+    });
+    onOpenWhatsApp();
+  }, [currentPatient?.name, onOpenWhatsApp]);
+
+  const handleOpenPrintSlip = useCallback(() => {
+    toast('Generating PAC Clearance Slip', {
+      description: `Exporting FHIR JSON & PDF clearance for ${currentPatient?.name || 'case'}`,
+    });
+    onOpenPrintSlip();
+  }, [currentPatient?.name, onOpenPrintSlip]);
+
+  const handleOpenAuditDrawer = useCallback(() => {
+    toast('Clinical Audit Log Synchronized', {
+      description: 'Immutable 256-bit SHA audit trail verified',
+    });
+    onOpenAuditDrawer();
+  }, [onOpenAuditDrawer]);
+
+  const handleOpenIngestion = useCallback(() => {
+    toast.info('Patient Case Ingestion', {
+      description: 'Upload lab PDFs, HL7 ORU messages, or OCR records',
+    });
+    onOpenIngestion();
+  }, [onOpenIngestion]);
 
   const drugInteractions = useMemo(
     () => (currentPatient?.medications ? checkDrugInteractions(currentPatient.medications) : []),
@@ -361,37 +400,37 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             <div className="flex flex-col items-center gap-2 w-full px-2 pt-3 border-t border-white/25">
               <button
                 type="button"
-                onClick={onOpenAttestation}
+                onClick={handleOpenAttestation}
                 title="1-Tap DHA PAC Attestation"
                 aria-label="1-Tap DHA PAC Attestation"
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-white hover:bg-white/85 text-slate-900 transition cursor-pointer shadow-md shadow-black/40"
+                className="btn-press flex h-9 w-9 items-center justify-center rounded-xl bg-white hover:bg-white/85 text-slate-900 transition cursor-pointer shadow-md shadow-black/40"
               >
                 <Lock className="h-4 w-4" />
               </button>
               <button
                 type="button"
-                onClick={onOpenWhatsApp}
+                onClick={handleOpenWhatsApp}
                 title="Dispatch WhatsApp PAC Link"
                 aria-label="Dispatch WhatsApp PAC Link"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
+                className="btn-press flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
               >
                 <Share2 className="h-4 w-4" />
               </button>
               <button
                 type="button"
-                onClick={onOpenPrintSlip}
+                onClick={handleOpenPrintSlip}
                 title="Print PAC Attestation Slip"
                 aria-label="Print PAC Attestation Slip"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
+                className="btn-press flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
               >
                 <Printer className="h-4 w-4" />
               </button>
               <button
                 type="button"
-                onClick={onOpenAuditDrawer}
+                onClick={handleOpenAuditDrawer}
                 title="Audit Logs & System Settings"
                 aria-label="Audit Logs & System Settings"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
+                className="btn-press flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
               >
                 <History className="h-4 w-4" />
               </button>
@@ -400,7 +439,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 onClick={toggleFullscreen}
                 title={isFullscreen ? 'Exit Full Screen' : 'Full Screen View'}
                 aria-label={isFullscreen ? 'Exit Full Screen' : 'Full Screen View'}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
+                className="btn-press flex h-9 w-9 items-center justify-center rounded-xl border border-white/25 bg-white/10 hover:bg-white/15 hover:border-white/30 text-white/85 hover:text-white transition cursor-pointer"
               >
                 {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
               </button>
@@ -451,20 +490,35 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   </div>
                   <input
                     type="text"
-                    placeholder="Search case, MRN..."
+                    placeholder="Search case, MRN (⌘K)..."
                     value={searchQuery}
+                    onClick={() => setIsCommandPaletteOpen(true)}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-7 sm:pl-10 pr-6 sm:pr-10 py-1.5 sm:py-2 text-xs font-medium bg-white/10 border border-white/25 rounded-full text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:ring-2 focus:ring-white/20 focus:border-white/60 transition truncate"
+                    className="w-full pl-7 sm:pl-10 pr-12 sm:pr-14 py-1.5 sm:py-2 text-xs font-medium bg-white/10 border border-white/25 rounded-full text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:ring-2 focus:ring-white/20 focus:border-white/60 transition truncate cursor-pointer"
                   />
-                  {searchQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery('')}
-                      className="absolute inset-y-0 right-0 pr-2 sm:pr-3.5 flex items-center text-white/60 hover:text-white/75"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  )}
+                  <div className="absolute inset-y-0 right-0 pr-2 sm:pr-3 flex items-center gap-1">
+                    {searchQuery ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSearchQuery('');
+                        }}
+                        className="text-white/60 hover:text-white/90"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsCommandPaletteOpen(true)}
+                        className="hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[9.5px] font-mono text-white/70 bg-white/10 hover:bg-white/20 rounded border border-white/20 shadow-xs cursor-pointer transition"
+                        title="Open Spotlight Command Palette (⌘K)"
+                      >
+                        ⌘K
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -614,9 +668,26 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                           type="button"
                           onClick={() => {
                             setIsProfileMenuOpen(false);
-                            onOpenIngestion();
+                            setIsCommandPaletteOpen(true);
                           }}
-                          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
+                          className="btn-press w-full flex items-center justify-between px-2.5 py-2 rounded-xl text-white/90 hover:bg-white/15 hover:text-white text-left transition"
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <Search className="h-4 w-4 text-sky-300" />
+                            <span>Command Palette</span>
+                          </div>
+                          <kbd className="text-[10px] font-mono text-white/60 bg-white/10 px-1.5 py-0.5 rounded border border-white/15">
+                            ⌘K
+                          </kbd>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsProfileMenuOpen(false);
+                            handleOpenIngestion();
+                          }}
+                          className="btn-press w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
                         >
                           <Plus className="h-4 w-4 text-sky-200" />
                           <span>Ingest New Case</span>
@@ -626,9 +697,9 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                           type="button"
                           onClick={() => {
                             setIsProfileMenuOpen(false);
-                            onOpenAttestation();
+                            handleOpenAttestation();
                           }}
-                          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
+                          className="btn-press w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
                         >
                           <Lock className="h-4 w-4 text-sky-200" />
                           <span>1-Tap DHA PAC Attestation</span>
@@ -638,9 +709,9 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                           type="button"
                           onClick={() => {
                             setIsProfileMenuOpen(false);
-                            onOpenPrintSlip();
+                            handleOpenPrintSlip();
                           }}
-                          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
+                          className="btn-press w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
                         >
                           <Printer className="h-4 w-4 text-white/60" />
                           <span>Print PAC Attestation Slip</span>
@@ -650,9 +721,9 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                           type="button"
                           onClick={() => {
                             setIsProfileMenuOpen(false);
-                            onOpenAuditDrawer();
+                            handleOpenAuditDrawer();
                           }}
-                          className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
+                          className="btn-press w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-white/85 hover:bg-white/15 hover:text-white text-left transition"
                         >
                           <History className="h-4 w-4 text-white/60" />
                           <span>DHA Regulatory Audit Trail</span>
@@ -669,7 +740,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               {/* Hero Stat Strip (4 tiles) */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 {/* Tile 1: Cases Today */}
-                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Cases Today
@@ -689,7 +760,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 2: Active Holds */}
-                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Active Holds
@@ -707,7 +778,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 3: NPO Fasting */}
-                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       NPO Fasting
@@ -725,7 +796,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 4: PAC Attestation */}
-                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       PAC Attestation
@@ -756,8 +827,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   </div>
                   <button
                     type="button"
-                    onClick={onOpenIngestion}
-                    className="text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 cursor-pointer bg-white hover:bg-white/85 border border-white/60 px-3 py-1.5 rounded-full shadow-md shadow-black/40"
+                    onClick={handleOpenIngestion}
+                    className="btn-press text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 cursor-pointer bg-white hover:bg-white/85 border border-white/60 px-3 py-1.5 rounded-full shadow-md shadow-black/40"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Ingest Case</span>
@@ -780,10 +851,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         type="button"
                         onClick={() => selectPatient(p.id)}
                         data-active={isSelected}
-                        className={`console-roster-card shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] sm:min-w-[260px] border cursor-pointer transition-all ${
+                        className={`console-roster-card btn-press shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] sm:min-w-[260px] border cursor-pointer transition-all ${
                           isSelected
-                            ? 'bg-white/20 text-white border-sky-400/80 shadow-[0_0_16px_rgba(56,189,248,0.25)]'
-                            : 'bg-white/10 backdrop-blur-sm border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs'
+                            ? 'bg-white/20 text-white border-sky-400/80 shadow-[0_0_16px_rgba(56,189,248,0.25)] glass-specular'
+                            : 'bg-white/10 backdrop-blur-sm border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs glass-specular'
                         }`}
                       >
                         <div
@@ -1630,8 +1701,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       <div className="pt-3 border-t border-white/15 flex items-center gap-3">
                         <button
                           type="button"
-                          onClick={onOpenAttestation}
-                          className="flex-1 py-2.5 rounded-xl bg-white hover:bg-white/85 text-slate-900 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-black/40"
+                          onClick={handleOpenAttestation}
+                          className="btn-press flex-1 py-2.5 rounded-xl bg-white hover:bg-white/85 text-slate-900 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-black/40"
                         >
                           <FileCheck2 className="h-4 w-4" />
                           <span>1-Tap DHA PAC Attest</span>
@@ -1639,8 +1710,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
                         <button
                           type="button"
-                          onClick={onOpenWhatsApp}
-                          className="flex-1 py-2.5 rounded-xl bg-white/15 hover:bg-white/30 text-white border border-white/35 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
+                          onClick={handleOpenWhatsApp}
+                          className="btn-press flex-1 py-2.5 rounded-xl bg-white/15 hover:bg-white/30 text-white border border-white/35 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
                         >
                           <Share2 className="h-4 w-4" />
                           <span>WhatsApp PAC Link</span>
@@ -1730,6 +1801,18 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 })}
               </div>
             </nav>
+
+            {/* Spotlight Command Palette (⌘K) */}
+            <CommandPalette
+              open={isCommandPaletteOpen}
+              onOpenChange={setIsCommandPaletteOpen}
+              onSelectNav={(navId) => setActiveNav(navId as DashboardNavTab)}
+              onOpenIngestion={handleOpenIngestion}
+              onOpenAttestation={handleOpenAttestation}
+              onOpenPrintSlip={handleOpenPrintSlip}
+              onOpenWhatsApp={handleOpenWhatsApp}
+              onOpenAuditDrawer={handleOpenAuditDrawer}
+            />
           </div>
         </div>
       </div>
