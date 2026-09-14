@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ConsolePage() {
   return (
-    <div className="relative w-full min-h-screen overflow-x-hidden bg-transparent text-white selection:bg-sky-500 selection:text-white" dir="ltr">
+    <div className="relative w-full min-h-screen overflow-x-hidden bg-[#071322] text-white selection:bg-sky-500 selection:text-white" dir="ltr">
       <ConsoleBackdrop />
       <ConsoleWorkspace />
     </div>

@@ -491,12 +491,7 @@ html::-webkit-scrollbar-thumb:hover {
 }
 
 .grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 100;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  display: none !important;
 }
 
 /* 3-Column Header */
@@ -1769,14 +1764,12 @@ h4, .h4 { font-weight: 700; }
 .console-pane,
 .console-stat {
   position: relative;
-  background: linear-gradient(165deg, rgba(14, 34, 58, 0.45), rgba(8, 20, 36, 0.52));
-  backdrop-filter: blur(16px) saturate(130%);
-  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  background: linear-gradient(165deg, rgba(14, 34, 58, 0.78), rgba(8, 20, 36, 0.88));
   border: 1px solid rgba(186, 230, 253, 0.20);
   border-radius: 20px;
   box-shadow:
-    0 20px 50px -20px rgba(2, 10, 22, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    0 16px 36px -12px rgba(2, 10, 22, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 .console-pane::before,
 .console-stat::before {
@@ -1793,7 +1786,7 @@ h4, .h4 { font-weight: 700; }
 }
 .console-pane:hover,
 .console-stat:hover {
-  background: linear-gradient(160deg, rgba(20, 48, 80, 0.55), rgba(12, 28, 52, 0.60));
+  background: linear-gradient(160deg, rgba(20, 48, 80, 0.85), rgba(12, 28, 52, 0.90));
   border-color: rgba(186, 230, 253, 0.35);
 }
 .console-stat {
@@ -1810,13 +1803,11 @@ h4, .h4 { font-weight: 700; }
 
 /* Strong glass — structural shell, rail, header */
 .glass-strong {
-  background: linear-gradient(165deg, rgba(12, 30, 52, 0.48), rgba(6, 18, 34, 0.55));
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  background: linear-gradient(165deg, rgba(10, 26, 46, 0.92), rgba(6, 16, 30, 0.96));
   border: 1px solid rgba(186, 230, 253, 0.22);
   box-shadow:
-    0 24px 60px -20px rgba(1, 8, 18, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    0 16px 40px -16px rgba(1, 8, 18, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .console-shell {
@@ -1828,9 +1819,7 @@ h4, .h4 { font-weight: 700; }
 /* Inset wells — inner cells with mist blue depth */
 .glass-soft,
 .console-biomarker {
-  background: rgba(8, 22, 40, 0.38);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(10, 26, 46, 0.65);
   border: 1px solid rgba(186, 230, 253, 0.16);
   box-shadow:
     inset 0 2px 8px rgba(0, 0, 0, 0.25),
@@ -1839,15 +1828,14 @@ h4, .h4 { font-weight: 700; }
 }
 .glass-soft:hover,
 .console-biomarker:hover {
-  background: rgba(14, 34, 58, 0.50);
+  background: rgba(14, 34, 58, 0.75);
   border-color: rgba(186, 230, 253, 0.35) !important;
 }
 
 /* Glass inputs — search, notes, ingestion fields */
 .glass-input {
-  background: rgba(14, 34, 58, 0.40) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(14, 34, 58, 0.75) !important;
+  border: 1px solid rgba(186, 230, 253, 0.25) !important;
   border: 1px solid rgba(186, 230, 253, 0.22) !important;
   color: #fff !important;
 }
@@ -2084,12 +2072,10 @@ h4, .h4 { font-weight: 700; }
 /* ── Specular Glassmorphism (Frontend-Rules & Apple Design) ── */
 .glass-specular {
   position: relative;
-  background: linear-gradient(165deg, rgba(16, 38, 68, 0.55), rgba(7, 19, 36, 0.65));
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  background: linear-gradient(165deg, rgba(16, 38, 68, 0.85), rgba(7, 19, 36, 0.92));
   border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow:
-    0 24px 60px -15px rgba(2, 8, 20, 0.65),
+    0 20px 48px -15px rgba(2, 8, 20, 0.65),
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.28),
     inset 0 -1px 0 0 rgba(0, 0, 0, 0.35);
 }
@@ -2106,9 +2092,7 @@ h4, .h4 { font-weight: 700; }
 .cmdk-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(2, 8, 18, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(2, 8, 18, 0.85);
   z-index: 100;
   animation: fadeIn 0.15s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
@@ -2120,9 +2104,7 @@ h4, .h4 { font-weight: 700; }
   transform: translateX(-50%);
   width: 92%;
   max-width: 620px;
-  background: rgba(10, 24, 46, 0.92);
-  backdrop-filter: blur(24px) saturate(150%);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  background: rgba(10, 24, 46, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
   box-shadow:

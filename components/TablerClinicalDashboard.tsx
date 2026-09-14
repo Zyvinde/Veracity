@@ -461,7 +461,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
                 <a
                   href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/' || '/'}
-                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/15 hover:bg-sky-500/25 text-sky-200 hover:text-white text-xs font-semibold transition backdrop-blur-md shrink-0 shadow-xs min-h-[36px]"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 hover:text-white text-xs font-semibold transition shrink-0 shadow-xs min-h-[36px]"
                   title="Return to Veracity Landing Page"
                 >
                   <ChevronRight className="h-3.5 w-3.5 rotate-180" />
@@ -854,7 +854,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         className={`console-roster-card btn-press shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] sm:min-w-[260px] border cursor-pointer transition-all ${
                           isSelected
                             ? 'bg-white/20 text-white border-sky-400/80 shadow-[0_0_16px_rgba(56,189,248,0.25)] glass-specular'
-                            : 'bg-white/10 backdrop-blur-sm border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs glass-specular'
+                            : 'bg-white/10 border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs glass-specular'
                         }`}
                       >
                         <div
@@ -1089,7 +1089,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   <TrafficLightBanner patient={currentPatient} />
 
                   {/* OT Waste & Delay Prevention Quick-Action Strip */}
-                  <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 space-y-3">
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-4 space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-sky-500/20 text-sky-200 border border-sky-300/30 shrink-0 font-bold text-xs font-mono">
@@ -1445,7 +1445,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* Live ECG Vector Strip with Grid */}
-                      <div className="rounded-2xl bg-slate-950/40 backdrop-blur-md p-4 border border-white/15 relative overflow-hidden shadow-inner">
+                      <div className="rounded-2xl bg-slate-950/70 p-4 border border-white/15 relative overflow-hidden shadow-inner">
                         <div className="flex items-center justify-between text-emerald-400 text-[10px] font-mono pb-1.5 border-b border-white/10">
                           <div className="flex items-center gap-1.5">
                             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
@@ -1738,7 +1738,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               )}
 
               {/* Persistent Regulatory & Non-Diagnostic Legal Disclaimer Footer */}
-              <div className="mt-8 p-4 rounded-2xl border border-amber-400/30 bg-amber-950/20 backdrop-blur-md text-center">
+              <div className="mt-8 p-4 rounded-2xl border border-amber-400/30 bg-amber-950/40 text-center">
                 <div className="flex items-center justify-center gap-2 mb-1.5 text-amber-300">
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                   <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider">
@@ -1754,7 +1754,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             {/* Mobile Fixed Bottom Navigation Bar (Phone Viewports 375px-430px) */}
             <nav
               aria-label="Mobile Bottom Navigation"
-              className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-white/20 bg-[#071322]/95 backdrop-blur-xl px-1 pt-1.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.8)] w-full max-w-full overflow-hidden"
+              className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-white/20 bg-[#071322] px-1 pt-1.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.8)] w-full max-w-full overflow-hidden"
             >
               <div className="grid grid-cols-7 gap-0.5 items-center w-full max-w-md mx-auto">
                 {[
