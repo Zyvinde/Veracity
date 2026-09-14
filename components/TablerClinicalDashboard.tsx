@@ -62,6 +62,8 @@ import {
   Lock,
   ExternalLink,
   Utensils,
+  AlertTriangle,
+  Sparkles,
 } from 'lucide-react';
 
 export type DashboardNavTab =
@@ -80,6 +82,8 @@ export interface TablerClinicalDashboardProps {
   onOpenWhatsApp: () => void;
   onOpenAuditDrawer: () => void;
 }
+
+const STATUS_RANK: Record<string, number> = { RED_HARD_STOP: 0, AMBER_CONDITIONAL: 1, GREEN_CLEARED: 2 };
 
 export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = ({
   onOpenIngestion,
@@ -153,7 +157,6 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   );
 
   // Red-first roster: STOP cases surface before CONDITIONAL and CLEARED.
-  const STATUS_RANK: Record<string, number> = { RED_HARD_STOP: 0, AMBER_CONDITIONAL: 1, GREEN_CLEARED: 2 };
   const sortByStatus = useCallback(
     (list: PatientCase[]) =>
       [...list].sort((a, b) => (STATUS_RANK[a.overallStatus] ?? 9) - (STATUS_RANK[b.overallStatus] ?? 9)),
@@ -290,10 +293,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   }
 
   return (
-    <div className="console-canvas min-h-screen text-white/90 font-sans selection:bg-sky-500 selection:text-white p-3 sm:p-6 lg:p-8">
-      {/* Outer Shell: premium lifted console card over gradient canvas */}
-      <div className="console-shell max-w-[1560px] mx-auto rounded-3xl overflow-hidden">
-        <div className="flex flex-col md:flex-row min-h-[960px]">
+    <div className="console-canvas w-full min-h-screen p-0 m-0 text-white/90 font-sans selection:bg-sky-500 selection:text-white">
+      {/* Outer Shell: edge-to-edge full width translucent console workspace */}
+      <div className="console-shell w-full min-h-screen rounded-none border-0 overflow-hidden">
+        <div className="flex flex-col md:flex-row min-h-screen w-full">
           {/* Tabler Slim Icon Rail (76px) */}
           <aside
             className="glass-strong hidden md:flex w-[76px] shrink-0 flex-col items-center justify-between border-r border-white/20 z-30 py-4"
@@ -414,49 +417,66 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
           {/* Tabler Main Body & Top Navigation Bar */}
           <div className="flex-1 flex flex-col transparent min-w-0">
             {/* Top Command Bar */}
-            <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 sm:gap-4">
-              {/* Left: Console Wordmark + Global Search */}
-              <div className="flex items-center gap-4 flex-1 max-w-2xl min-w-0">
+            <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full overflow-hidden">
+              {/* Left: Return to Landing + Console Wordmark + Global Search */}
+              <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
+                <a
+                  href="/"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/15 hover:bg-sky-500/25 text-sky-200 hover:text-white text-xs font-semibold transition backdrop-blur-md shrink-0 shadow-xs min-h-[36px]"
+                  title="Return to Veracity Landing Page"
+                >
+                  <ChevronRight className="h-3.5 w-3.5 rotate-180" />
+                  <span className="hidden sm:inline">Landing Page</span>
+                  <span className="sm:hidden">Home</span>
+                </a>
+
                 <div className="hidden sm:flex flex-col leading-none shrink-0">
-                  <span className="console-title font-serif italic text-[22px] font-bold tracking-tight text-white">
-                    OT <span className="text-sky-200 not-italic">Console</span>
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="console-title font-serif italic text-[20px] font-bold tracking-tight text-white">
+                      OT <span className="text-sky-200 not-italic">Console</span>
+                    </span>
+                    <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-300 bg-sky-950/70 border border-sky-400/30 px-2 py-0.5 rounded-full">
+                      Private Beta
+                    </span>
+                  </div>
                   <span className="text-[10px] font-mono font-bold uppercase tracking-[0.18em] text-sky-200/90 mt-1 flex items-center gap-1.5">
                     <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-                    DHA § 3060(a)
+                    DHA § 3060(a) CDS
                   </span>
                 </div>
-                <div className="console-search relative flex-1 rounded-full border border-transparent transition">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-white/60">
-                    <Search className="h-4 w-4" />
+
+                <div className="console-search relative flex-1 min-w-[70px] sm:min-w-[180px] rounded-full border border-transparent transition">
+                  <div className="absolute inset-y-0 left-0 pl-2.5 sm:pl-3.5 flex items-center pointer-events-none text-white/60">
+                    <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </div>
                   <input
                     type="text"
-                    placeholder="Search patient MRN, surgeon, or surgery..."
+                    placeholder="Search case, MRN..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-12 py-2 text-xs font-medium bg-white/10 border border-white/25 rounded-full text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:ring-2 focus:ring-white/20 focus:border-white/60 transition"
+                    className="w-full pl-7 sm:pl-10 pr-6 sm:pr-10 py-1.5 sm:py-2 text-xs font-medium bg-white/10 border border-white/25 rounded-full text-white placeholder-white/60 focus:outline-none focus:bg-white/20 focus:ring-2 focus:ring-white/20 focus:border-white/60 transition truncate"
                   />
-                  {searchQuery ? (
+                  {searchQuery && (
                     <button
                       type="button"
                       onClick={() => setSearchQuery('')}
-                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-white/60 hover:text-white/75"
+                      className="absolute inset-y-0 right-0 pr-2 sm:pr-3.5 flex items-center text-white/60 hover:text-white/75"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
-                  ) : (
-                    <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
-                      <span className="text-[10px] font-mono font-semibold text-white/60 bg-white/15 px-1.5 py-0.5 rounded border border-white/25">
-                        ⌘K
-                      </span>
-                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Right: Panic-Alert Pill, Notification Bell, Profile Menu */}
-              <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+              {/* Right: Disclaimer Chip, Panic-Alert Pill, Theme, Notification Bell, Profile Menu */}
+              <div className="flex items-center gap-1 sm:gap-2.5 shrink-0">
+                {/* Statutory Regulatory Disclaimer Chip */}
+                <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full border border-amber-400/40 bg-amber-500/15 text-amber-200 text-[10.5px] font-mono shadow-xs">
+                  <AlertTriangle className="h-3.5 w-3.5 text-amber-300 shrink-0" />
+                  <span className="font-bold">CDS EVALUATION ONLY</span>
+                  <span className="text-amber-200/75 hidden 2xl:inline">· Independent Physician Verification Required</span>
+                </div>
+
                 {/* Panic Alert Pill */}
                 <div className="hidden sm:flex items-center gap-1.5 bg-rose-500/20 border border-rose-300/40 px-3 py-1.5 rounded-full text-rose-200 shadow-xs">
                   <Flame className="h-3.5 w-3.5 text-rose-200 animate-pulse" />
@@ -471,9 +491,9 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   onClick={toggleTheme}
                   title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                   aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                  className="p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer"
+                  className="p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                 >
-                  {isDark ? <Sun className="h-4 w-4 text-amber-200" /> : <Moon className="h-4 w-4" />}
+                  {isDark ? <Sun className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-200" /> : <Moon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
                 </button>
 
                 {/* Notification Bell */}
@@ -484,11 +504,11 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       setIsNotificationsOpen(!isNotificationsOpen);
                       setIsProfileMenuOpen(false);
                     }}
-                    className="relative p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer"
+                    className="relative p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                     aria-label="Clinical Notifications"
                   >
-                    <Bell className="h-4 w-4" />
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-[9px] font-bold text-white shadow-xs">
+                    <Bell className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                    <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center rounded-full bg-rose-600 text-[8px] sm:text-[9px] font-bold text-white shadow-xs">
                       {notifications.length}
                     </span>
                   </button>
@@ -563,21 +583,15 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       setIsProfileMenuOpen(!isProfileMenuOpen);
                       setIsNotificationsOpen(false);
                     }}
-                    className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 rounded-full bg-white/10 border border-white/25 hover:border-white/50 transition cursor-pointer"
+                    className="flex items-center gap-1.5 pl-1 pr-2 py-0.5 sm:py-1 rounded-full bg-white/10 border border-white/25 hover:border-white/50 transition cursor-pointer min-h-[36px]"
                   >
-                    <img
-                      src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=120"
-                      alt="Dr. Tariq"
-                      className="h-7 w-7 rounded-full object-cover ring-2 ring-white/60"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=120';
-                      }}
-                    />
+                    <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 font-bold text-[10px] sm:text-xs flex items-center justify-center ring-1.5 sm:ring-2 ring-white/60 shrink-0 shadow-xs">
+                      TM
+                    </div>
                     <span className="text-xs font-bold text-white/90 hidden md:inline-block">
                       Dr. Tariq Mansoor
                     </span>
-                    <ChevronDown className="h-3.5 w-3.5 text-white/60" />
+                    <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white/60 shrink-0" />
                   </button>
 
                   {/* Profile Dropdown */}
@@ -651,55 +665,23 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             </header>
 
             {/* Main Content Area */}
-            <main className="p-5 sm:p-8 space-y-7 overflow-y-auto">
-              {/* Mobile Section Nav */}
-              <nav
-                className="md:hidden flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1"
-                aria-label="Dashboard sections"
-              >
-                {(
-                  [
-                    { id: 'dashboard', label: 'Dashboard' },
-                    { id: 'blood-labs', label: 'Blood Labs' },
-                    { id: 'questionnaire', label: 'Intake' },
-                    { id: 'regional', label: 'Regional' },
-                    { id: 'ot-defense', label: 'Defense' },
-                    { id: 'patients', label: 'Roster' },
-                    { id: 'notes', label: 'Notes' },
-                  ] as const
-                ).map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveNav(item.id)}
-                    aria-current={activeNav === item.id ? 'page' : undefined}
-                    className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
-                      activeNav === item.id
-                        ? 'bg-white text-slate-900 shadow-xs'
-                        : 'bg-white/15 text-white/75 border border-white/25 hover:bg-white/10'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </nav>
-
+            <main className="px-3 sm:px-8 py-3.5 sm:py-6 pb-28 md:pb-8 space-y-4 sm:space-y-6 overflow-y-auto w-full">
               {/* Hero Stat Strip (4 tiles) */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 {/* Tile 1: Cases Today */}
-                <div className="console-stat rounded-2xl border border-white/25 p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
+                    <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Cases Today
                     </span>
-                    <div className="h-8 w-8 rounded-xl bg-sky-500/20 text-sky-200 border border-sky-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Calendar className="h-4 w-4" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-sky-500/20 text-sky-200 border border-sky-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
-                  <div className="mt-2 font-mono text-4xl font-extrabold text-white leading-none tracking-tight">
-                    {patients.length} <span className="text-sm font-normal text-white/60 font-sans">Cases</span>
+                  <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
+                    {patients.length} <span className="text-xs sm:text-sm font-normal text-white/60 font-sans">Cases</span>
                   </div>
-                  <div className="mt-2 text-xs text-white/70 font-medium flex items-center gap-1.5">
+                  <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium flex items-center gap-1 sm:gap-1.5 flex-wrap">
                     <span className="text-emerald-200 font-bold">{greenCount} Clr</span> ·{' '}
                     <span className="text-amber-200 font-bold">{amberCount} Cond</span> ·{' '}
                     <span className="text-rose-200 font-bold">{redCount} Stop</span>
@@ -707,55 +689,55 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 2: Active Holds */}
-                <div className="console-stat rounded-2xl border border-white/25 p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
+                    <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Active Holds
                     </span>
-                    <div className="h-8 w-8 rounded-xl bg-amber-500/20 text-amber-200 border border-amber-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Clock className="h-4 w-4" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-amber-500/20 text-amber-200 border border-amber-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
-                  <div className="mt-2 font-mono text-4xl font-extrabold text-white leading-none tracking-tight">
-                    {activeHoldCount} <span className="text-sm font-normal text-white/60 font-sans">Active</span>
+                  <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
+                    {activeHoldCount} <span className="text-xs sm:text-sm font-normal text-white/60 font-sans">Active</span>
                   </div>
-                  <div className="mt-2 text-xs text-white/70 font-medium">
+                  <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium truncate">
                     GLP-1 168h · ACEi · DOAC
                   </div>
                 </div>
 
                 {/* Tile 3: NPO Fasting */}
-                <div className="console-stat rounded-2xl border border-white/25 p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
+                    <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       NPO Fasting
                     </span>
-                    <div className="h-8 w-8 rounded-xl bg-emerald-500/20 text-emerald-200 border border-emerald-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Utensils className="h-4 w-4" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-emerald-500/20 text-emerald-200 border border-emerald-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Utensils className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
-                  <div className="mt-2 font-mono text-4xl font-extrabold text-white leading-none tracking-tight">
-                    12h <span className="text-sm font-normal text-white/60 font-sans">00m</span>
+                  <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
+                    12h <span className="text-xs sm:text-sm font-normal text-white/60 font-sans">00m</span>
                   </div>
-                  <div className="mt-2 text-xs text-white/70 font-medium">
+                  <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium truncate">
                     Solids 12h · Liquids 3.5h
                   </div>
                 </div>
 
                 {/* Tile 4: PAC Attestation */}
-                <div className="console-stat rounded-2xl border border-white/25 p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
+                    <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       PAC Attestation
                     </span>
-                    <div className="h-8 w-8 rounded-xl bg-indigo-500/20 text-indigo-100 border border-indigo-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Award className="h-4 w-4" />
+                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-indigo-500/20 text-indigo-100 border border-indigo-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Award className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
-                  <div className="mt-2 font-mono text-4xl font-extrabold text-white leading-none tracking-tight">
-                    100<span className="text-xl font-bold text-sky-200">%</span>
+                  <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
+                    100<span className="text-lg sm:text-xl font-bold text-sky-200">%</span>
                   </div>
-                  <div className="mt-2 text-xs text-white/70 font-medium">
+                  <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium truncate">
                     DHA § 3060(a) Audited
                   </div>
                 </div>
@@ -765,7 +747,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="console-title font-serif italic text-[22px] font-bold tracking-tight text-white">
+                    <span className="console-title font-serif italic text-lg sm:text-[22px] font-bold tracking-tight text-white">
                       Active Surgical Day Roster
                     </span>
                     <span className="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-white/70 font-mono bg-white/15 border border-white/25 px-2.5 py-1 rounded-full shadow-xs">
@@ -782,16 +764,15 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   </button>
                 </div>
 
-                <div className="flex items-center gap-3.5 overflow-x-auto pb-2 scrollbar-none">
-                  {rosterPatients.map((p, idx) => {
+                <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-none snap-x scroll-smooth -mx-1 px-1">
+                  {rosterPatients.map((p) => {
                     const isSelected = p.id === currentPatient.id;
-                    const sampleAvatars = [
-                      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120',
-                      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120',
-                      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120',
-                      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120',
-                    ];
-                    const avatarSrc = sampleAvatars[idx % sampleAvatars.length];
+                    const initials = p.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .slice(0, 2)
+                      .join('')
+                      .toUpperCase();
 
                     return (
                       <button
@@ -799,22 +780,21 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         type="button"
                         onClick={() => selectPatient(p.id)}
                         data-active={isSelected}
-                        className={`console-roster-card shrink-0 rounded-2xl p-3 flex items-center gap-3 text-left min-w-[250px] border cursor-pointer ${
+                        className={`console-roster-card shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] sm:min-w-[260px] border cursor-pointer transition-all ${
                           isSelected
-                            ? 'bg-white/15 text-white border-white/60'
-                            : 'bg-white/10 backdrop-blur-sm border-white/25 text-white/85 hover:border-white/50 hover:bg-white/15 shadow-xs'
+                            ? 'bg-white/20 text-white border-sky-400/80 shadow-[0_0_16px_rgba(56,189,248,0.25)]'
+                            : 'bg-white/10 backdrop-blur-sm border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs'
                         }`}
                       >
-                        <img
-                          src={avatarSrc}
-                          alt={p.name}
-                          className={`h-11 w-11 rounded-full object-cover ring-2 shrink-0 ${
-                            isSelected ? 'ring-white/60' : 'ring-white/30'
+                        <div
+                          className={`h-10 w-10 sm:h-11 sm:w-11 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm tracking-wider shrink-0 transition-all ${
+                            isSelected
+                              ? 'bg-gradient-to-br from-sky-400 to-sky-600 text-slate-950 ring-2 ring-white shadow-[0_0_12px_rgba(56,189,248,0.5)]'
+                              : 'bg-white/15 text-white ring-1 ring-white/30'
                           }`}
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
+                        >
+                          {initials}
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className={`text-[13px] font-bold truncate ${isSelected ? 'text-white' : 'text-white/90'}`}>
                             {p.name}
@@ -1036,6 +1016,91 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 <div className="space-y-6">
                   {/* Traffic Light Banner */}
                   <TrafficLightBanner patient={currentPatient} />
+
+                  {/* OT Waste & Delay Prevention Quick-Action Strip */}
+                  <div className="rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md p-4 space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-sky-500/20 text-sky-200 border border-sky-300/30 shrink-0 font-bold text-xs font-mono">
+                          OT
+                        </span>
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-serif italic font-bold text-white">
+                            Operating Theatre Delay &amp; Cancellation Elimination Protocol
+                          </h4>
+                          <p className="text-[10.5px] text-white/70">
+                            Pre-induction defense targeting the multimillion-dollar problem of wasted surgical theatre hours
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setActiveNav('ot-defense')}
+                        className="self-start sm:self-auto flex items-center gap-1 text-[11px] font-mono font-bold text-sky-200 hover:text-white transition px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 cursor-pointer"
+                      >
+                        <span>Open Defense Hub</span>
+                        <ChevronRight className="h-3 w-3" />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => setActiveNav('ot-defense')}
+                        className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition text-left cursor-pointer space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-sky-300">120+ Min Delay Cut</span>
+                          <Clock className="h-3 w-3 text-sky-300" />
+                        </div>
+                        <p className="text-[11px] text-white/80 font-medium leading-tight">
+                          GLP-1 &amp; DOAC hold windows caught 7d prior
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveNav('ot-defense')}
+                        className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition text-left cursor-pointer space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-emerald-300">Zero Day-of-Op Cancels</span>
+                          <Utensils className="h-3 w-3 text-emerald-300" />
+                        </div>
+                        <p className="text-[11px] text-white/80 font-medium leading-tight">
+                          Pre-op intake fasting verification &amp; airway
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveNav('regional')}
+                        className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition text-left cursor-pointer space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-indigo-300">Blood Bank Ready</span>
+                          <Droplets className="h-3 w-3 text-indigo-300" />
+                        </div>
+                        <p className="text-[11px] text-white/80 font-medium leading-tight">
+                          Pre-op anemia &amp; PRBC crossmatch reserve
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveNav('ot-defense')}
+                        className="p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition text-left cursor-pointer space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-mono font-bold text-amber-300">80% Clinic Time Saved</span>
+                          <Sparkles className="h-3 w-3 text-amber-300" />
+                        </div>
+                        <p className="text-[11px] text-white/80 font-medium leading-tight">
+                          Tele-PAC fast-tracks healthy ASA I/II cases
+                        </p>
+                      </button>
+                    </div>
+                  </div>
 
                   {/* Multi-Pane Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1309,7 +1374,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* Live ECG Vector Strip with Grid */}
-                      <div className="rounded-2xl bg-gradient-to-b from-[#0F172A] to-[#0A0E1A] p-4 border border-slate-800 relative overflow-hidden shadow-inner">
+                      <div className="rounded-2xl bg-slate-950/40 backdrop-blur-md p-4 border border-white/15 relative overflow-hidden shadow-inner">
                         <div className="flex items-center justify-between text-emerald-400 text-[10px] font-mono pb-1.5 border-b border-white/10">
                           <div className="flex items-center gap-1.5">
                             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
@@ -1600,7 +1665,71 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   />
                 </div>
               )}
+
+              {/* Persistent Regulatory & Non-Diagnostic Legal Disclaimer Footer */}
+              <div className="mt-8 p-4 rounded-2xl border border-amber-400/30 bg-amber-950/20 backdrop-blur-md text-center">
+                <div className="flex items-center justify-center gap-2 mb-1.5 text-amber-300">
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                  <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider">
+                    Statutory CDS Notice · Physician Verification Mandate
+                  </span>
+                </div>
+                <p className="text-xs text-white/80 leading-relaxed font-sans max-w-4xl mx-auto">
+                  FOR DEMONSTRATION &amp; CLINICAL DECISION SUPPORT EVALUATION ONLY. Not for primary diagnosis or autonomous medical decisions. All surgical clearances and medication directives require independent physician verification under applicable regulatory frameworks (DHA § 3060(a) CDS / MOHAP).
+                </p>
+              </div>
             </main>
+
+            {/* Mobile Fixed Bottom Navigation Bar (Phone Viewports 375px-430px) */}
+            <nav
+              aria-label="Mobile Bottom Navigation"
+              className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-white/20 bg-[#071322]/95 backdrop-blur-xl px-1 pt-1.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.8)] w-full max-w-full overflow-hidden"
+            >
+              <div className="grid grid-cols-7 gap-0.5 items-center w-full max-w-md mx-auto">
+                {[
+                  { id: 'dashboard' as const, label: 'Dash', icon: Activity },
+                  { id: 'blood-labs' as const, label: 'Labs', icon: Droplets },
+                  { id: 'questionnaire' as const, label: 'Intake', icon: ClipboardCheck },
+                  { id: 'regional' as const, label: 'Spine', icon: Stethoscope },
+                  { id: 'ot-defense' as const, label: 'Defense', icon: Clock },
+                  { id: 'patients' as const, label: 'Roster', icon: Users, badge: patients.length },
+                  { id: 'notes' as const, label: 'Notes', icon: FileText },
+                ].map((tab) => {
+                  const isActive = activeNav === tab.id;
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveNav(tab.id);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
+                      className={`relative flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition min-h-[48px] active:scale-95 cursor-pointer ${
+                        isActive
+                          ? 'text-white font-bold bg-white/15 shadow-sm'
+                          : 'text-white/60 hover:text-white/90 hover:bg-white/5'
+                      }`}
+                    >
+                      {isActive && (
+                        <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 h-1 w-5 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+                      )}
+                      <div className="relative">
+                        <Icon className={`h-4 w-4 ${isActive ? 'text-sky-300' : 'text-white/70'}`} />
+                        {tab.badge !== undefined && (
+                          <span className="absolute -top-1.5 -right-2 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-sky-600 px-1 text-[8px] font-bold text-white shadow-xs">
+                            {tab.badge}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[9.5px] font-semibold mt-1 tracking-tight truncate leading-none">
+                        {tab.label}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </nav>
           </div>
         </div>
       </div>

@@ -90,20 +90,31 @@ button {
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(34, 49, 64, 0.35) #E4E9ED;
-  background-color: #E4E9ED;
+  scrollbar-color: rgba(255, 255, 255, 0.2) #0a0a0a;
+  background-color: #0a0a0a;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 body {
-  background-color: #E4E9ED;
-  color: #1E293B;
+  background-color: #0a0a0a;
+  color: #FFFFFF;
   font-family: var(--font-sans), "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
   position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
+}
+
+#app-root {
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 ::selection {
@@ -1740,31 +1751,32 @@ h4, .h4 { font-weight: 700; }
 .console-canvas {
   position: relative;
   isolation: isolate;
-  background: #171310;
+  background: transparent;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
-/* Apple material system — weight encodes hierarchy (apple-design §12):
-   shell/rail/header = heavy structural; panes/cards = medium;
-   inner wells = darker inset (never translucent-on-translucent);
-   only small chips/pills may float light-on-dark. */
+/* Mist translucent blue material system */
 :root {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-/* Base glass card — medium Apple material, thick blur + deep warm shadow */
+/* Base glass card — mist translucent blue card */
 .glass-console,
 .console-pane,
 .console-stat {
   position: relative;
-  background: linear-gradient(165deg, rgba(44, 45, 58, 0.52), rgba(17, 19, 26, 0.58));
-  backdrop-filter: blur(28px) saturate(150%);
-  -webkit-backdrop-filter: blur(28px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: linear-gradient(165deg, rgba(14, 34, 58, 0.45), rgba(8, 20, 36, 0.52));
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  border: 1px solid rgba(186, 230, 253, 0.20);
   border-radius: 20px;
   box-shadow:
-    0 24px 60px -22px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.13);
+    0 20px 50px -20px rgba(2, 10, 22, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20);
 }
 .console-pane::before,
 .console-stat::before {
@@ -1775,14 +1787,14 @@ h4, .h4 { font-weight: 700; }
   right: 20px;
   height: 1px;
   border-radius: 9999px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75) 30%, rgba(255, 255, 255, 0.75) 70%, transparent);
-  opacity: 0.7;
+  background: linear-gradient(90deg, transparent, rgba(186, 230, 253, 0.8) 30%, rgba(186, 230, 253, 0.8) 70%, transparent);
+  opacity: 0.75;
   pointer-events: none;
 }
 .console-pane:hover,
 .console-stat:hover {
-  background: linear-gradient(160deg, rgba(52, 54, 66, 0.6), rgba(22, 24, 32, 0.56));
-  border-color: rgba(255, 255, 255, 0.22);
+  background: linear-gradient(160deg, rgba(20, 48, 80, 0.55), rgba(12, 28, 52, 0.60));
+  border-color: rgba(186, 230, 253, 0.35);
 }
 .console-stat {
   overflow: hidden;
@@ -1792,80 +1804,84 @@ h4, .h4 { font-weight: 700; }
   position: absolute;
   inset: auto -30% -55% -30%;
   height: 70%;
-  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent 70%);
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.18), transparent 70%);
   pointer-events: none;
 }
 
-/* Strong glass — heavy structural material: shell, rail, header, dropdowns, modals.
-   Bigger surfaces read thicker: strongest blur + deepest shadow. */
-.glass-strong,
-.console-shell {
-  background: linear-gradient(165deg, rgba(26, 27, 36, 0.78), rgba(10, 11, 16, 0.76));
-  backdrop-filter: blur(34px) saturate(150%);
-  -webkit-backdrop-filter: blur(34px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.13);
+/* Strong glass — structural shell, rail, header */
+.glass-strong {
+  background: linear-gradient(165deg, rgba(12, 30, 52, 0.48), rgba(6, 18, 34, 0.55));
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(186, 230, 253, 0.22);
   box-shadow:
-    0 32px 90px -30px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    0 24px 60px -20px rgba(1, 8, 18, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
-/* Inset wells — inner cells sit DARKER than their parent (apple-design §12:
-   never stack light-on-light). Depth comes from inset shadow, not lift. */
+.console-shell {
+  background: transparent;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Inset wells — inner cells with mist blue depth */
 .glass-soft,
 .console-biomarker {
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(8, 22, 40, 0.38);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(186, 230, 253, 0.16);
   box-shadow:
-    inset 0 2px 10px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    inset 0 2px 8px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
   transition: transform 180ms var(--ease-out), border-color 180ms var(--ease-out), background-color 180ms var(--ease-out);
 }
 .glass-soft:hover,
 .console-biomarker:hover {
-  background: rgba(0, 0, 0, 0.22);
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(14, 34, 58, 0.50);
+  border-color: rgba(186, 230, 253, 0.35) !important;
 }
 
 /* Glass inputs — search, notes, ingestion fields */
 .glass-input {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: rgba(14, 34, 58, 0.40) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(186, 230, 253, 0.22) !important;
   color: #fff !important;
 }
 .glass-input::placeholder {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: rgba(186, 230, 253, 0.6) !important;
 }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18) !important;
+  background: rgba(20, 48, 80, 0.60) !important;
+  border-color: rgba(56, 189, 248, 0.7) !important;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25) !important;
   outline: none !important;
 }
 
 .console-roster-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: rgba(10, 26, 46, 0.40);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  border: 1px solid rgba(186, 230, 253, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
   transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out), border-color 180ms var(--ease-out), background-color 180ms var(--ease-out);
 }
 .console-roster-card:hover {
-  background: rgba(255, 255, 255, 0.10);
-  box-shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.6);
+  background: rgba(16, 44, 76, 0.52);
+  box-shadow: 0 12px 24px -12px rgba(2, 10, 22, 0.5);
+  border-color: rgba(186, 230, 253, 0.32);
 }
 .console-roster-card[data-active="true"] {
-  background: rgba(255, 255, 255, 0.13);
-  border-color: rgba(255, 255, 255, 0.35) !important;
+  background: rgba(20, 56, 96, 0.62);
+  border-color: rgba(56, 189, 248, 0.7) !important;
   box-shadow:
-    0 16px 36px -18px rgba(0, 0, 0, 0.7),
-    0 0 0 4px rgba(232, 98, 44, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 16px 36px -18px rgba(2, 10, 22, 0.6),
+    0 0 0 3px rgba(56, 189, 248, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .console-search:focus-within {

@@ -49,6 +49,7 @@ import {
   CURRENT_MED_PRESETS,
 } from '@/lib/rules-engine';
 import { usePatientStore } from '@/lib/store';
+import { useI18n, Locale } from '@/lib/i18n/context';
 
 interface PatientPreOpQuestionnaireProps {
   patientId?: string;
@@ -63,6 +64,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
   onSaved,
   isStandalonePage = false,
 }) => {
+  const { locale, setLocale } = useI18n();
   const { patients, currentPatientId, saveQuestionnaire, generateIntakeLink, requestFitness, setFitnessStatus } = usePatientStore();
   const activeId = patientId || currentPatientId;
   const currentPatient = patients.find((p) => p.id === activeId) || patients[0];
@@ -416,48 +418,66 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
   return (
     <div
-      className={
-        'w-full ' +
-        (isStandalonePage
-          ? 'max-w-5xl mx-auto py-6 px-4 text-white'
-          : 'bg-[#0a0a0a]/90 text-white rounded-2xl border border-white/15 backdrop-blur-xl shadow-2xl')
-      }
+      className="w-full max-w-5xl mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden"
     >
       {/* Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 bg-white/10 backdrop-blur-md px-6 py-4 rounded-t-2xl">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white font-bold shadow-md">
-            <ClipboardCheck className="h-5 w-5" />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/15 bg-white/10 backdrop-blur-md px-4 sm:px-6 py-3 sm:py-4">
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-emerald-600 text-white font-bold shadow-md shrink-0">
+            <ClipboardCheck className="h-4 w-4 sm:h-5 sm:w-5" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="font-serif text-base font-bold text-white tracking-tight">
-                Pre-Operative Medical Intake & Risk Questionnaire
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <h2 className="font-serif text-sm sm:text-base font-bold text-white tracking-tight break-words">
+                Pre-Operative Medical Intake & Risk Assessment
               </h2>
-              <span className="rounded bg-white/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300 border border-white/20">
-                Patient Self-Assessment / PAC Sync
+              <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold text-emerald-300 border border-white/20 shrink-0">
+                Self-Assessment
               </span>
             </div>
-            <p className="text-xs text-white/60">
-              Captures contraceptive VTE risks, antipsychotics, smoking status, cardiac conditions &
-              8-hour NPO status
+            <p className="text-[11px] sm:text-xs text-white/60 truncate">
+              Captures contraceptive VTE risks, medications, smoking, cardiac & NPO status
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full md:w-auto justify-start md:justify-end flex-wrap">
+          {/* Language Switcher */}
+          <div className="flex items-center rounded-xl bg-white/10 border border-white/20 p-0.5 backdrop-blur-md">
+            {(
+              [
+                { code: 'en', label: 'EN' },
+                { code: 'ar', label: 'العربية' },
+                { code: 'hi', label: 'हिन्दी' },
+              ] as const
+            ).map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                onClick={() => setLocale(lang.code as Locale)}
+                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition min-h-[38px] flex items-center justify-center cursor-pointer ${
+                  locale === lang.code
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {lang.label}
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={handleCopyShareLink}
-            className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-1.5 text-xs font-semibold text-white transition cursor-pointer backdrop-blur-md"
+            className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-semibold text-white transition cursor-pointer backdrop-blur-md min-h-[44px]"
           >
             {copiedLink ? (
               <Check className="h-3.5 w-3.5 text-emerald-400" />
             ) : (
               <Copy className="h-3.5 w-3.5" />
             )}
-            <span>{copiedLink ? 'Link Copied!' : 'Copy Patient Link'}</span>
+            <span>{copiedLink ? 'Link Copied!' : 'Copy Link'}</span>
           </button>
 
           <a
@@ -475,7 +495,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 text-xs font-semibold transition cursor-pointer shadow-md"
+            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold transition cursor-pointer shadow-md min-h-[44px]"
           >
             <Share2 className="h-3.5 w-3.5" />
             <span>Send WhatsApp</span>
@@ -485,9 +505,9 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-white/20 bg-white/10 p-1.5 text-white/70 hover:text-white hover:bg-white/20"
+              className="rounded-xl border border-white/20 bg-white/10 p-2.5 text-white/70 hover:text-white hover:bg-white/20 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             >
-              <XCircle className="h-5 w-5" />
+              <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
           )}
         </div>
@@ -496,7 +516,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       {/* Real-time Clearance Status Banner */}
       <div
         className={
-          'px-6 py-3 border-b flex flex-wrap items-center justify-between gap-3 backdrop-blur-md ' +
+          'px-4 sm:px-6 py-3 border-b flex flex-wrap items-center justify-between gap-3 backdrop-blur-md ' +
           (report.overallClearance === 'RED_HARD_STOP'
             ? 'bg-rose-950/40 border-rose-500/40 text-rose-200'
             : report.overallClearance === 'AMBER_CONDITIONAL'
@@ -535,7 +555,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
         <button
           type="button"
           onClick={handleApplyToPatientStore}
-          className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 text-xs font-bold transition shadow cursor-pointer"
+          className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-bold transition shadow cursor-pointer min-h-[38px]"
         >
           {isSavedSuccess ? (
             <Check className="h-3.5 w-3.5 text-white" />
@@ -547,14 +567,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       </div>
 
       {/* Step Navigation Tabs */}
-      <div className="flex overflow-x-auto border-b border-white/15 bg-white/5 px-4 sm:px-6 py-2.5 gap-2 text-xs backdrop-blur-md">
+      <div className="flex overflow-x-auto border-b border-white/15 bg-white/5 px-3 sm:px-6 py-2.5 gap-2 text-xs backdrop-blur-md scrollbar-none">
         {[
-          { step: 1, label: 'Patient & Demographics', icon: User },
+          { step: 1, label: 'Demographics', icon: User },
           { step: 2, label: 'Medical Issues', icon: ClipboardList },
-          { step: 3, label: 'Surgery & Anesthesia History', icon: History },
+          { step: 3, label: 'Surgery & Anesthesia', icon: History },
           { step: 4, label: 'Smoking & Vaping', icon: Cigarette },
           { step: 5, label: 'Contraceptives & HRT', icon: Pill },
-          { step: 6, label: 'Antipsychotics & Psych', icon: Activity },
+          { step: 6, label: 'Psych & Neuro', icon: Activity },
           { step: 7, label: 'Cardiac & Stents', icon: Heart },
           { step: 8, label: 'NPO & Summary', icon: Clock },
         ].map((tab) => {
@@ -567,7 +587,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               type="button"
               onClick={() => setActiveStep(tab.step)}
               className={
-                'flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-full border font-semibold transition shrink-0 cursor-pointer whitespace-nowrap backdrop-blur-md ' +
+                'flex items-center gap-1.5 sm:gap-2 pl-2 pr-3.5 py-2 rounded-full border font-semibold transition shrink-0 cursor-pointer whitespace-nowrap backdrop-blur-md min-h-[44px] ' +
                 (isActive
                   ? 'bg-emerald-600 border-emerald-500 text-white shadow-md'
                   : isDone
@@ -577,7 +597,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             >
               <span
                 className={
-                  'flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold ' +
+                  'flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full text-[10px] sm:text-[11px] font-bold ' +
                   (isActive
                     ? 'bg-white/20 text-white'
                     : isDone
@@ -585,7 +605,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     : 'bg-white/10 text-white/70')
                 }
               >
-                {isDone ? <Check className="h-3.5 w-3.5" /> : tab.step}
+                {isDone ? <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> : tab.step}
               </span>
               <Icon className="h-3.5 w-3.5" />
               <span>{tab.label}</span>
@@ -595,7 +615,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       </div>
 
       {/* Step Content */}
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* STEP 1: DEMOGRAPHICS */}
         {activeStep === 1 && (
           <div className="space-y-4">
@@ -1798,38 +1818,38 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       </div>
 
       {/* Footer Navigation Bar */}
-      <div className="flex items-center justify-between border-t border-white/15 bg-white/5 backdrop-blur-md px-6 py-4 rounded-b-2xl">
+      <div className="flex items-center justify-between border-t border-white/15 bg-white/5 backdrop-blur-md px-4 sm:px-6 py-3.5 sm:py-4 rounded-b-2xl gap-2">
         <button
           type="button"
           disabled={activeStep === 1}
           onClick={() => setActiveStep((prev) => Math.max(1, prev - 1))}
-          className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-white/80 hover:bg-white/20 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer backdrop-blur-md"
+          className="flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3.5 sm:px-4 py-2.5 text-xs font-semibold text-white/80 hover:bg-white/20 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer backdrop-blur-md min-h-[44px]"
         >
           <ChevronLeft className="h-4 w-4" />
-          <span>Previous Step</span>
+          <span>Previous</span>
         </button>
 
-        <div className="text-xs font-mono text-white/50">
-          Step {activeStep} of {totalSteps}
+        <div className="text-[11px] sm:text-xs font-mono text-white/60 text-center px-1">
+          {activeStep} / {totalSteps}
         </div>
 
         {activeStep < totalSteps ? (
           <button
             type="button"
             onClick={() => setActiveStep((prev) => Math.min(totalSteps, prev + 1))}
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 text-xs font-bold transition shadow-md cursor-pointer"
+            className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-5 py-2.5 text-xs font-bold transition shadow-md cursor-pointer min-h-[44px]"
           >
-            <span>Next Step</span>
+            <span>Next</span>
             <ChevronRight className="h-4 w-4" />
           </button>
         ) : (
           <button
             type="button"
             onClick={handleApplyToPatientStore}
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 text-xs font-bold transition shadow-lg cursor-pointer"
+            className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-6 py-2.5 text-xs font-bold transition shadow-lg cursor-pointer min-h-[44px]"
           >
             <ShieldCheck className="h-4 w-4" />
-            <span>Complete & Sync to Active OT Case</span>
+            <span>Complete & Sync</span>
           </button>
         )}
       </div>

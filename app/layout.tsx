@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n/context";
@@ -8,28 +8,24 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-serif",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
   style: ["normal", "italic"],
 });
 
@@ -44,25 +40,31 @@ const notoArabic = Noto_Sans_Arabic({
   subsets: ["arabic"],
   variable: "--font-arabic",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
 const notoDevanagari = Noto_Sans_Devanagari({
   subsets: ["devanagari"],
   variable: "--font-hindi",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
-  title: "Veracity — Autonomous Pre-Operative Assessment & Surgical Defense",
-  description: "Operational Clinical AI Platform for Autonomous Perioperative Clearance, Anesthesia Decision Support, and Zero-Delay Operating Theatre Defense for Dubai Day Surgery Centers.",
+  title: "Veracity (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
+  description: "Private Beta clinical decision support platform for perioperative risk assessment, anesthesia triage, and surgical delay prevention under DHA § 3060(a) guidelines.",
   icons: {
     icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E",
   },
   openGraph: {
-    title: "Veracity — Autonomous Pre-Operative Assessment & Surgical Defense",
-    description: "Enterprise Pre-Operative Assessment, Anesthesia Clearance, and Zero-Delay Surgical Defense Platform",
+    title: "Veracity (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
+    description: "Private Beta clinical decision support platform for perioperative assessment, anesthesia clearance workflows, and surgical safety defense.",
     type: "website",
   },
 };

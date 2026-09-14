@@ -248,12 +248,12 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
             >
               {isSigning ? (
                 <>
-                  <Fingerprint className="h-4 w-4 animate-spin text-white" />
+                  <Fingerprint className="h-4 w-4 animate-spin text-slate-900" />
                   <span>{t('attestation.computing')}</span>
                 </>
               ) : (
                 <>
-                  <Stamp className="h-4 w-4 text-white" />
+                  <Stamp className="h-4 w-4 text-slate-900" />
                   <span>{t('attestation.signAuthorize')}</span>
                 </>
               )}

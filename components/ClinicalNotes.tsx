@@ -105,7 +105,7 @@ export const ClinicalNotes: React.FC<ClinicalNotesProps> = ({ patientId }) => {
               disabled={!newNote.trim()}
               className="self-end rounded-xl bg-white hover:bg-white/85 px-4 py-2 text-xs font-bold text-slate-900 transition shadow-sm disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
-              <Plus className="h-4 w-4 text-white" />
+              <Plus className="h-4 w-4 text-slate-900" />
             </button>
           </div>
 

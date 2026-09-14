@@ -38,7 +38,7 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
   return (
     <div className="fixed inset-0 z-50 flex justify-end animate-fade-in">
       <div className="absolute inset-0 bg-slate-950/55 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative h-full w-full max-w-md border-l border-white/25 bg-white/15 shadow-2xl overflow-y-auto animate-slide-down text-white/90">
+      <div className="relative h-full w-full max-w-md border-l border-white/20 bg-[#091b30]/85 backdrop-blur-xl shadow-2xl overflow-y-auto animate-slide-down text-white/90">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/15 bg-white/10 backdrop-blur-md px-5 py-4">
           <div className="flex items-center gap-2.5">
             <History className="h-4 w-4 text-sky-200" />

@@ -74,7 +74,7 @@ const FishboneViewer: React.FC<FishboneViewerProps> = ({
             <span className="font-semibold text-white uppercase tracking-wider">Basic Metabolic Panel (Chem-7)</span>
             <span className="text-white/60 text-[10px]">Na | Cl | BUN / K | HCO3 | Cr &lt; Glu</span>
           </div>
-          <div className="mt-4 flex items-center justify-center p-3">
+          <div className="mt-4 flex items-center justify-center p-3 overflow-x-auto max-w-full">
             <div className="relative font-mono text-base select-none">
               <svg width="360" height="140" viewBox="0 0 360 140" className="overflow-visible" aria-hidden="true">
                 <line x1="20" y1="70" x2="280" y2="70" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />
@@ -100,7 +100,7 @@ const FishboneViewer: React.FC<FishboneViewerProps> = ({
             <span className="font-semibold text-white uppercase tracking-wider">Complete Blood Count (CBC)</span>
             <span className="text-white/60 text-[10px]">WBC \ Hgb / Hct / Plt</span>
           </div>
-          <div className="mt-4 flex items-center justify-center p-3">
+          <div className="mt-4 flex items-center justify-center p-3 overflow-x-auto max-w-full">
             <div className="relative font-mono text-base select-none">
               <svg width="340" height="140" viewBox="0 0 340 140" className="overflow-visible" aria-hidden="true">
                 <line x1="50" y1="20" x2="130" y2="70" stroke="#CBD5E1" strokeWidth="1.5" strokeLinecap="round" />

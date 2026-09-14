@@ -51,7 +51,7 @@ export const LabAuditTable: React.FC<LabAuditTableProps> = ({
           </div>
           <p className="mt-0.5 text-xs text-white/70">{t('labs.subtitle')}</p>
         </div>
-        <div className="flex items-center gap-1 rounded-xl border border-white/25 bg-slate-100/80 p-1" role="tablist" aria-label={t('labs.labViewMode')}>
+        <div className="flex items-center gap-1 rounded-xl border border-white/25 bg-white/10 p-1" role="tablist" aria-label={t('labs.labViewMode')}>
           <button
             type="button"
             role="tab"

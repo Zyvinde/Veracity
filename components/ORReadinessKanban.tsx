@@ -11,9 +11,9 @@ const ORReadinessKanban: React.FC = () => {
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case 'GREEN_CLEARED': return { label: t('kanban.cleared'), color: 'border-emerald-300/40 bg-white/15 text-emerald-100', dot: 'bg-emerald-600', icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-200" /> };
-      case 'AMBER_CONDITIONAL': return { label: t('kanban.conditional'), color: 'border-amber-300/40 bg-white/15 text-amber-800', dot: 'bg-amber-500', icon: <AlertTriangle className="h-3.5 w-3.5 text-amber-200" /> };
-      case 'RED_HARD_STOP': return { label: t('kanban.hardStop'), color: 'border-rose-300/40 bg-white/15 text-rose-800 font-bold', dot: 'bg-rose-600', icon: <OctagonAlert className="h-3.5 w-3.5 text-rose-200" /> };
+      case 'GREEN_CLEARED': return { label: t('kanban.cleared'), color: 'border-emerald-300/40 bg-emerald-500/20 text-emerald-100', dot: 'bg-emerald-600', icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-200" /> };
+      case 'AMBER_CONDITIONAL': return { label: t('kanban.conditional'), color: 'border-amber-300/40 bg-amber-500/20 text-amber-200', dot: 'bg-amber-500', icon: <AlertTriangle className="h-3.5 w-3.5 text-amber-200" /> };
+      case 'RED_HARD_STOP': return { label: t('kanban.hardStop'), color: 'border-rose-300/40 bg-rose-500/20 text-rose-200 font-bold', dot: 'bg-rose-600', icon: <OctagonAlert className="h-3.5 w-3.5 text-rose-200" /> };
       default: return { label: 'UNKNOWN', color: 'border-white/25 bg-white/15 text-white/75', dot: 'bg-slate-400', icon: null };
     }
   };

@@ -18,7 +18,7 @@ const MorningMedDirectives: React.FC<MorningMedDirectivesProps> = ({ patient }) 
     TAKE_WITH_SIP: { icon: <CheckCircle2 className="h-3.5 w-3.5 text-emerald-200" />, color: 'border-emerald-300/40 bg-emerald-500/20', label: t('morningMeds.take'), labelColor: 'text-emerald-200 bg-emerald-500/20 border-emerald-300/40 font-semibold' },
     HOLD: { icon: <AlertTriangle className="h-3.5 w-3.5 text-amber-200" />, color: 'border-amber-300/40 bg-amber-500/20', label: t('morningMeds.hold'), labelColor: 'text-amber-200 bg-amber-500/20 border-amber-300/40 font-semibold' },
     OMIT: { icon: <XCircle className="h-3.5 w-3.5 text-rose-200" />, color: 'border-rose-300/40 bg-rose-500/20', label: t('morningMeds.omit'), labelColor: 'text-rose-200 bg-rose-500/20 border-rose-300/40 font-bold' },
-    MODIFIED_DOSE: { icon: <Droplets className="h-3.5 w-3.5 text-sky-200" />, color: 'border-white/30 bg-sky-50/60', label: 'MODIFY', labelColor: 'text-white bg-white/15 border-white/30 font-semibold' },
+    MODIFIED_DOSE: { icon: <Droplets className="h-3.5 w-3.5 text-sky-200" />, color: 'border-sky-300/40 bg-sky-500/20', label: 'MODIFY', labelColor: 'text-sky-200 bg-sky-500/20 border-sky-300/40 font-semibold' },
   };
 
   return (

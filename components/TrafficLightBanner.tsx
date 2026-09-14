@@ -27,32 +27,32 @@ export const TrafficLightBanner: React.FC<TrafficLightBannerProps> = ({ patient 
       case 'GREEN_CLEARED':
         return {
           badgeClass: 'status-badge status-cleared',
-          dotClass: 'bg-emerald-500',
+          dotClass: 'bg-emerald-400',
           title: t('trafficLight.clearedTitle'),
           subtext: t('trafficLight.clearedSubtext'),
-          icon: <CheckCircle2 className="h-5 w-5 text-emerald-200 dark:text-emerald-400" aria-hidden="true" />,
-          accentColor: 'text-[#223140] dark:text-emerald-300',
-          directiveBorder: 'border-emerald-300/40 bg-[#F0FDF4] dark:border-emerald-500/25 dark:bg-emerald-500/[0.07]',
+          icon: <CheckCircle2 className="h-5 w-5 text-emerald-300" aria-hidden="true" />,
+          accentColor: 'text-emerald-200',
+          directiveBorder: 'border-emerald-400/30 bg-emerald-950/40 backdrop-blur-md',
         };
       case 'AMBER_CONDITIONAL':
         return {
           badgeClass: 'status-badge status-conditional',
-          dotClass: 'bg-amber-500',
+          dotClass: 'bg-amber-400',
           title: t('trafficLight.conditionalTitle'),
           subtext: t('trafficLight.conditionalSubtext'),
-          icon: <AlertTriangle className="h-5 w-5 text-amber-200 dark:text-amber-400" aria-hidden="true" />,
-          accentColor: 'text-amber-900 dark:text-amber-300',
-          directiveBorder: 'border-amber-300/40 bg-[#FFFBEB] dark:border-amber-500/25 dark:bg-amber-500/[0.07]',
+          icon: <AlertTriangle className="h-5 w-5 text-amber-300" aria-hidden="true" />,
+          accentColor: 'text-amber-200',
+          directiveBorder: 'border-amber-400/30 bg-amber-950/40 backdrop-blur-md',
         };
       case 'RED_HARD_STOP':
         return {
           badgeClass: 'status-badge status-stop',
-          dotClass: 'bg-rose-600',
+          dotClass: 'bg-rose-500',
           title: t('trafficLight.hardStopTitle'),
           subtext: t('trafficLight.hardStopSubtext'),
-          icon: <OctagonAlert className="h-5 w-5 text-rose-200 dark:text-rose-400" aria-hidden="true" />,
-          accentColor: 'text-rose-900 dark:text-rose-300',
-          directiveBorder: 'border-rose-300/40 bg-[#FEF2F2] dark:border-rose-500/25 dark:bg-rose-500/[0.07]',
+          icon: <OctagonAlert className="h-5 w-5 text-rose-300" aria-hidden="true" />,
+          accentColor: 'text-rose-200',
+          directiveBorder: 'border-rose-400/30 bg-rose-950/40 backdrop-blur-md',
         };
     }
   };
@@ -62,10 +62,10 @@ export const TrafficLightBanner: React.FC<TrafficLightBannerProps> = ({ patient 
       case 'LANE_1_VIRTUAL':
         return { label: t('trafficLight.lane1'), description: t('trafficLight.lane1Desc'), icon: <Video className="h-3.5 w-3.5 text-emerald-200" aria-hidden="true" />, badgeClass: 'border-emerald-300 bg-emerald-500/20 text-emerald-100 font-semibold' };
       case 'LANE_2_TELEPHONIC':
-        return { label: t('trafficLight.lane2'), description: t('trafficLight.lane2Desc'), icon: <PhoneCall className="h-3.5 w-3.5 text-amber-200" aria-hidden="true" />, badgeClass: 'border-amber-300 bg-amber-500/20 text-amber-800 font-semibold' };
+        return { label: t('trafficLight.lane2'), description: t('trafficLight.lane2Desc'), icon: <PhoneCall className="h-3.5 w-3.5 text-amber-200" aria-hidden="true" />, badgeClass: 'border-amber-300 bg-amber-500/20 text-amber-200 font-semibold' };
       case 'LANE_3_IN_PERSON':
       default:
-        return { label: t('trafficLight.lane3'), description: t('trafficLight.lane3Desc'), icon: <UserCheck className="h-3.5 w-3.5 text-rose-200" aria-hidden="true" />, badgeClass: 'border-rose-300 bg-rose-500/20 text-rose-800 font-semibold' };
+        return { label: t('trafficLight.lane3'), description: t('trafficLight.lane3Desc'), icon: <UserCheck className="h-3.5 w-3.5 text-rose-200" aria-hidden="true" />, badgeClass: 'border-rose-300 bg-rose-500/20 text-rose-200 font-semibold' };
     }
   };
 

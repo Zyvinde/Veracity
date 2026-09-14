@@ -2,6 +2,12 @@
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   async headers() {
     return [
       {

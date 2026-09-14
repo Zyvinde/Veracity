@@ -128,7 +128,7 @@ export const FHIRExport: React.FC<FHIRExportProps> = ({ patient }) => {
           onClick={handleDownload}
           className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-white/85 px-4 py-2 text-xs font-bold text-slate-900 transition shadow-sm cursor-pointer"
         >
-          <Download className="h-3.5 w-3.5 text-white" />
+          <Download className="h-3.5 w-3.5 text-slate-900" />
           <span>{t('newFeatures.downloadJson')}</span>
         </button>
         <button

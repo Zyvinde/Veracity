@@ -31,7 +31,7 @@ interface OTDelayPreventionHubProps {
   patient: PatientCase;
   onOpenIngestion?: () => void;
   onOpenWhatsApp?: () => void;
-  externalTab?: 'ALL' | 'MEDS' | 'FASTING' | 'TESTS';
+  externalTab?: 'ALL' | 'MEDS' | 'FASTING' | 'TESTS' | 'TELEPAC';
 }
 
 export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
@@ -43,8 +43,8 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
   const { t } = useI18n();
   const { updateAirway } = usePatientStore();
 
-  // Active Hub Tab: 'ALL' | 'MEDS' | 'FASTING' | 'TESTS'
-  const [activeTab, setActiveTab] = useState<'ALL' | 'MEDS' | 'FASTING' | 'TESTS'>('ALL');
+  // Active Hub Tab: 'ALL' | 'MEDS' | 'FASTING' | 'TESTS' | 'TELEPAC'
+  const [activeTab, setActiveTab] = useState<'ALL' | 'MEDS' | 'FASTING' | 'TESTS' | 'TELEPAC'>('ALL');
 
   React.useEffect(() => {
     if (externalTab) {
@@ -317,7 +317,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                 </span>
               </div>
               <p className="text-xs text-white/70 font-sans mt-0.5">
-                Surveillance for the #1 Causes of Same-Day OT Delays: Drug Interferences, 8h Fasting Violations, and Stat Test Bottlenecks
+                Surveillance for the #1 Causes of Same-Day OT Delays: Drug Interferences, 8h Fasting Violations, Blood Scrambles, and Clinic Bottlenecks
               </p>
             </div>
           </div>
@@ -350,6 +350,26 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                 </>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* 4-Pillar Economic Waste Prevention Summary Grid */}
+        <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-2.5 p-3 rounded-xl bg-black/20 border border-white/15">
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
+            <span className="text-[10px] font-mono font-bold text-sky-300 uppercase">120+ Min Delay Reduction</span>
+            <p className="text-[11px] text-white/85 font-medium leading-tight">GLP-1 &amp; DOAC hold times caught 7 days prior</p>
+          </div>
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
+            <span className="text-[10px] font-mono font-bold text-emerald-300 uppercase">Zero Day-of-Op Cancellations</span>
+            <p className="text-[11px] text-white/85 font-medium leading-tight">Pre-op intake fasting adherence &amp; airway triage</p>
+          </div>
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
+            <span className="text-[10px] font-mono font-bold text-indigo-300 uppercase">Morning Blood Bank Ready</span>
+            <p className="text-[11px] text-white/85 font-medium leading-tight">Crossmatch reservation &amp; anemia optimization</p>
+          </div>
+          <div className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-0.5">
+            <span className="text-[10px] font-mono font-bold text-amber-300 uppercase">80% Clinic Time Saved</span>
+            <p className="text-[11px] text-white/85 font-medium leading-tight">Tele-PAC fast-track for healthy ASA I/II cases</p>
           </div>
         </div>
 
@@ -391,7 +411,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
             }`}
           >
             <Utensils className="h-3.5 w-3.5" />
-            <span>2. 8-Hour NPO Fasting Clock</span>
+            <span>2. 8h Fasting Clock</span>
           </button>
 
           <button
@@ -404,7 +424,20 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
             }`}
           >
             <FlaskConical className="h-3.5 w-3.5" />
-            <span>3. Stat Lab Expediter ({diagnosticTests.length})</span>
+            <span>3. Stat Lab &amp; Blood Crossmatch ({diagnosticTests.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('TELEPAC')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition cursor-pointer ${
+              activeTab === 'TELEPAC'
+                ? 'bg-white text-slate-900 shadow-xs'
+                : 'text-white/75 hover:text-white hover:bg-white/10 border border-white/25'
+            }`}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>4. Tele-PAC Fast-Track</span>
           </button>
         </div>
       </div>
@@ -696,6 +729,85 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* PILLAR 4: TELE-PAC DIGITAL TRIAGE & ASA I/II FAST-TRACKING */}
+        {(activeTab === 'ALL' || activeTab === 'TELEPAC') && (
+          <div id="tele-pac" className="rounded-xl border border-white/25 bg-white/10 p-4 space-y-3.5 scroll-mt-28">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-white/15 pb-2.5 gap-2">
+              <div className="flex items-center gap-2">
+                <div className="h-6 w-6 rounded-lg bg-white/15 border border-white/25 flex items-center justify-center">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                </div>
+                <div>
+                  <h3 className="font-serif italic text-base font-bold tracking-tight text-white">
+                    Pillar 4 · Tele-PAC Digital Triage &amp; Clinic Optimization
+                  </h3>
+                  <p className="text-[11px] text-white/70">
+                    Fast-tracks low-risk ASA I/II elective outpatients via remote intake to liberate 80% of consultant anaesthesia clinic capacity
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="rounded-full bg-emerald-500/20 border border-emerald-300/40 px-2.5 py-0.5 text-[10px] font-mono font-bold text-emerald-200">
+                  {patient.asaStatus === 'ASA I' || patient.asaStatus === 'ASA II'
+                    ? 'Eligible for Tele-PAC Clearance'
+                    : 'Requires In-Person PAC (ASA III+)'}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="rounded-xl glass-input border p-3.5 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-white">ASA Classification</span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/15 text-white">
+                    {patient.asaStatus}
+                  </span>
+                </div>
+                <p className="text-xs text-white/80">
+                  {patient.asaStatus === 'ASA I' || patient.asaStatus === 'ASA II'
+                    ? 'Low anesthetic risk. Remote digital questionnaire + POC blood review sufficient for clearance.'
+                    : 'Complex physiological risk. Dedicated multidisciplinary in-person clinic consultation mandated.'}
+                </p>
+              </div>
+
+              <div className="rounded-xl glass-input border p-3.5 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-white">Clinic Time Efficiency</span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-300/40">
+                    80% Saved
+                  </span>
+                </div>
+                <p className="text-xs text-white/80">
+                  Automated questionnaire and guideline validation frees anaesthetists from routine charts to focus on ASA III/IV comorbid cases.
+                </p>
+              </div>
+
+              <div className="rounded-xl glass-input border p-3.5 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold text-white">WhatsApp &amp; SMS Dispatch</span>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-200 border border-sky-300/40">
+                    Live Channel
+                  </span>
+                </div>
+                <p className="text-xs text-white/80">
+                  Direct dispatch of preoperative instructions, NPO countdowns, and digital PAC questionnaires to patient mobile.
+                </p>
+                {onOpenWhatsApp && (
+                  <button
+                    type="button"
+                    onClick={onOpenWhatsApp}
+                    className="mt-2 w-full py-1.5 rounded-lg bg-white hover:bg-white/85 text-slate-900 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
+                  >
+                    <Send className="h-3 w-3" />
+                    <span>Dispatch WhatsApp PAC</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}

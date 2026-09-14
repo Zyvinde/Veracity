@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { usePatientStore } from '@/lib/store';
 import NovaCinematicLanding from '@/components/NovaCinematicLanding';
 import AttestationModal from '@/components/AttestationModal';
@@ -13,6 +13,10 @@ import MobileAnesthesiaBloodView from '@/components/MobileAnesthesiaBloodView';
 
 function PageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const directView = searchParams.get('view');
+  const mrnParam = searchParams.get('mrn');
+
   const {
     patients,
     getCurrentPatient,
@@ -30,32 +34,23 @@ function PageContent() {
 
   const [isAttestationOpen, setIsAttestationOpen] = useState(false);
   const [isWhatsAppOpen, setIsWhatsAppOpen] = useState(false);
-  const [directView, setDirectView] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const view = params.get('view');
-      const mrn = params.get('mrn');
-      // The OT console lives on its own page now — forward legacy links
-      if (view === 'dashboard') {
-        router.replace(mrn ? `/console?mrn=${encodeURIComponent(mrn)}` : '/console');
-        return;
-      }
-      if (view) setDirectView(view);
-      if (mrn) {
-        // Defer until patients hydrated from API/store
-        const t = setTimeout(() => {
-          try {
-            selectPatientByMrn(decodeURIComponent(mrn));
-          } catch {
-            selectPatientByMrn(mrn);
-          }
-        }, 600);
-        return () => clearTimeout(t);
-      }
+    if (directView === 'dashboard') {
+      router.replace(mrnParam ? `/console?mrn=${encodeURIComponent(mrnParam)}` : '/console');
+      return;
     }
-  }, [selectPatientByMrn, router]);
+    if (mrnParam) {
+      const t = setTimeout(() => {
+        try {
+          selectPatientByMrn(decodeURIComponent(mrnParam));
+        } catch {
+          selectPatientByMrn(mrnParam);
+        }
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [directView, mrnParam, selectPatientByMrn, router]);
 
   const currentPatient = getCurrentPatient();
   const currentAttestation = getCurrentAttestation();
@@ -85,8 +80,8 @@ function PageContent() {
     setIsAttestationOpen(false);
   };
 
-  // Guard: store hydrates async — show branded loader instead of crashing on undefined patient
-  if (!currentPatient || patients.length === 0) {
+  // Guard: for patient-specific sub-views, wait for patient store hydration
+  if ((directView === 'intake' || directView === 'questionnaire' || directView === 'blood' || directView === 'mobile') && (!currentPatient || patients.length === 0)) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
@@ -101,20 +96,19 @@ function PageContent() {
   // Patient self-assessment portal (?view=intake)
   if (directView === 'intake' || directView === 'questionnaire') {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 sm:p-8 text-white">
-        <div className="max-w-5xl mx-auto space-y-4">
-          <div className="flex items-center justify-between">
+      <div className="min-h-screen bg-[#0a0a0a] px-3 py-4 sm:p-8 text-white w-full overflow-x-hidden">
+        <div className="max-w-5xl mx-auto space-y-3 sm:space-y-4 w-full">
+          <div className="flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => {
-                setDirectView(null);
-                window.history.pushState({}, '', '/');
+                router.push('/');
               }}
-              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition"
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition shrink-0"
             >
               ← Back to Main Platform
             </button>
-            <span className="text-xs font-mono text-white/50">Patient Self-Assessment Portal</span>
+            <span className="text-[11px] sm:text-xs font-mono text-white/50 truncate">Patient Self-Assessment Portal</span>
           </div>
           <PatientPreOpQuestionnaire
             patientId={currentPatient?.id}
@@ -128,23 +122,25 @@ function PageContent() {
   // In-OT mobile viewport (?view=blood)
   if (directView === 'blood' || directView === 'mobile') {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] p-4 flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-[#0a0a0a] px-3 py-4 sm:p-6 flex flex-col items-center justify-center text-white w-full overflow-x-hidden">
         <div className="w-full max-w-md space-y-3">
-          <button
-            type="button"
-            onClick={() => {
-              setDirectView(null);
-              window.history.pushState({}, '', '/');
-            }}
-            className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition"
-          >
-            ← Back to Main Platform
-          </button>
+          <div className="flex items-center justify-between gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                router.push('/');
+              }}
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition shrink-0"
+            >
+              ← Back to Main Platform
+            </button>
+            <span className="text-[11px] sm:text-xs font-mono text-white/50 truncate">In-OT View</span>
+          </div>
           <MobileAnesthesiaBloodView
             patientId={currentPatient?.id}
             onOpenAttestation={() => setIsAttestationOpen(true)}
             onOpenWhatsApp={() => setIsWhatsAppOpen(true)}
-            onOpenQuestionnaire={() => setDirectView('intake')}
+            onOpenQuestionnaire={() => router.push('/?view=intake')}
           />
         </div>
 

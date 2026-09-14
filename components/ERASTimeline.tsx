@@ -19,7 +19,7 @@ const ERASTimeline: React.FC<ERASTimelineProps> = ({ patient }) => {
     MEDICATION: { color: 'text-white', bg: 'bg-white/15', border: 'border-white/30' },
     HYGIENE: { color: 'text-emerald-200', bg: 'bg-emerald-500/20', border: 'border-emerald-300/40' },
     EDUCATION: { color: 'text-white/85', bg: 'bg-white/15', border: 'border-white/25' },
-    PROMS: { color: 'text-purple-700', bg: 'bg-purple-50', border: 'border-purple-200' },
+    PROMS: { color: 'text-purple-200', bg: 'bg-purple-500/20', border: 'border-purple-300/40' },
   };
 
   const statusIcon = (status: string) => {
