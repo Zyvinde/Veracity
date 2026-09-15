@@ -4,7 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Anterior Healthcare Credentials',
+      name: 'House Health Credentials',
       credentials: {
         username: { label: 'Username', type: 'text', placeholder: 'coordinator or anesthesiologist' },
         password: { label: 'Password', type: 'password' },
@@ -61,5 +61,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || 'anterior-health-sovereign-pac-demo-secret-2026',
+  secret: process.env.NEXTAUTH_SECRET || 'house-health-sovereign-pac-demo-secret-2026',
 };

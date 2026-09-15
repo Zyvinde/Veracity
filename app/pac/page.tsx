@@ -1,25 +1,25 @@
 import type { Metadata } from 'next';
 import React, { Suspense } from 'react';
-import PatientPreOpQuestionnaire from '@/components/PatientPreOpQuestionnaire';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
+import PACInterviewWizard from '@/components/PACInterviewWizard';
 
 export const metadata: Metadata = {
-  title: 'Patient Pre-Op Assessment Portal — House Health Clinical Decision Support',
+  title: 'Quick PAC Interview — House Health',
   description:
-    'Sovereign patient pre-operative self-assessment portal: medical history, contraceptive VTE risks, medications, and surgical readiness.',
+    'Short plain-language pre-anesthesia interview: meds, fasting 8h, allergies, teeth and surgery-day do’s. Patient + clinic verify modes.',
 };
 
-export default function IntakePage() {
+export default function PACPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white w-full overflow-x-hidden selection:bg-emerald-500/30">
       <Suspense
         fallback={
           <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 font-serif italic text-2xl animate-pulse">
               V
             </div>
-            <p className="text-sm font-semibold text-white">Loading Pre-Op Questionnaire…</p>
+            <p className="text-sm font-semibold">Loading Quick PAC…</p>
           </div>
         }
       >
@@ -34,10 +34,10 @@ export default function IntakePage() {
             </Link>
             <div className="flex items-center gap-2">
               <Link
-                href="/pac"
-                className="text-xs font-mono text-emerald-300 hover:text-emerald-200 transition py-2 px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 min-h-[44px] flex items-center shrink-0"
+                href="/intake"
+                className="text-xs font-mono text-white/70 hover:text-white transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] flex items-center shrink-0"
               >
-                Quick PAC (3 min) →
+                Full intake →
               </Link>
               <Link
                 href="/console"
@@ -48,7 +48,7 @@ export default function IntakePage() {
             </div>
           </div>
 
-          <PatientPreOpQuestionnaire isStandalonePage />
+          <PACInterviewWizard />
         </div>
       </Suspense>
     </div>

@@ -310,7 +310,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a href="/" className="flex items-center gap-2">
                 <Hexagon size={22} strokeWidth={1.5} className="text-white shrink-0" />
-                <span className="text-base sm:text-xl font-medium tracking-tight text-white">veracity</span>
+                <span className="text-base sm:text-xl font-medium tracking-tight text-white">house health</span>
               </a>
               <span className="hidden sm:inline-block rounded-full border border-sky-400/40 bg-sky-500/15 px-2 py-0.5 font-mono text-[9px] font-bold tracking-wider text-sky-300 uppercase shrink-0">
                 Private Beta
@@ -351,7 +351,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <button
                 type="button"
                 onClick={goConsole}
-                className="rounded-full bg-white px-3 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-black transition-all duration-300 hover:bg-white/85 active:scale-95 sm:text-sm shadow-md min-h-[40px] flex items-center justify-center shrink-0"
+                className="rounded-full bg-white px-3 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-black transition-all duration-300 hover:bg-white/85 active:scale-95 sm:text-sm shadow-md min-h-[44px] flex items-center justify-center shrink-0"
               >
                 <span className="sm:hidden">Console</span>
                 <span className="hidden sm:inline">Open OT Console</span>
@@ -369,7 +369,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label="Toggle menu"
-                className="rounded-xl border border-white/20 bg-white/15 p-2 text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/25 md:hidden min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer shrink-0"
+                className="rounded-xl border border-white/20 bg-white/15 p-2 text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/25 md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shrink-0"
               >
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
@@ -507,7 +507,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
           {/* ── Mid spacer: room for the scroll scrub ── */}
           <div aria-hidden="true" className="h-[12vh] sm:h-[45vh]" />
 
-          {/* ── How Veracity works ── */}
+          {/* ── How House Health works ── */}
           <section id="pillars" className="scroll-mt-20 px-5 py-12 sm:py-16 sm:px-8 md:px-12">
             <div className="mx-auto max-w-5xl">
               <Reveal delay={100}>
@@ -554,7 +554,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                       <button
                         type="button"
                         onClick={step.onClick}
-                        className="mt-5 flex items-center gap-1 self-start text-xs font-medium text-white transition-colors duration-300 hover:text-sky-200 min-h-[36px]"
+                        className="mt-5 flex items-center gap-1 self-start text-xs font-medium text-white transition-colors duration-300 hover:text-sky-200 min-h-[44px]"
                       >
                         {step.action}
                         <ChevronRight size={14} />
@@ -595,7 +595,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 </Reveal>
                 <Reveal delay={320}>
                   <p className="mt-4 sm:mt-6 max-w-md text-xs sm:text-base text-white/80 drop-shadow-md">
-                    From raw lab reports to final pre-induction attestation, Veracity evaluates medication hold windows,
+                    From raw lab reports to final pre-induction attestation, House Health evaluates medication hold windows,
                     electrolytes, and NPO status transparently.
                   </p>
                 </Reveal>
@@ -641,7 +641,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                     {
                       index: '03',
                       title: 'Live Fasting Timers',
-                      body: 'NPO clocks track solids (8h) and clear fluids (2h) down to the minute.',
+                      body: 'NPO clocks track 8h solids / 2h minimum clears (3h preferred) down to the minute.',
                     },
                     {
                       index: '04',
@@ -662,7 +662,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                           <button
                             type="button"
                             onClick={() => setModal('BLOOD')}
-                            className="flex items-center gap-1 text-left text-sm sm:text-lg font-medium text-white min-h-[36px]"
+                            className="flex items-center gap-1 text-left text-sm sm:text-lg font-medium text-white min-h-[44px]"
                           >
                             {row.title}
                             <ChevronRight
@@ -700,7 +700,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               </Reveal>
               <Reveal delay={240}>
                 <p className="mt-4 max-w-2xl text-xs sm:text-base leading-relaxed text-white/70">
-                  Operating theatre downtime costs hospitals $60 to $100 per minute. Veracity eliminates avoidable morning cancellations and holding bay delays through verified, pre-induction protocol defense.
+                  Operating theatre downtime costs hospitals $60 to $100 per minute. House Health eliminates avoidable morning cancellations and holding bay delays through verified, pre-induction protocol defense.
                 </p>
               </Reveal>
 
@@ -716,7 +716,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   {
                     stat: '0%',
                     headline: 'Day-of-Surgery NPO Cancellations',
-                    detail: 'Automated pre-op intake screens strict 8h solid / 2h clear fluid adherence and flags difficult airway anatomy (Mallampati/OSA) days in advance.',
+                    detail: 'Automated pre-op intake screens 8h solids / 2h minimum clears (3h preferred) adherence and flags difficult airway anatomy (Mallampati/OSA) days in advance.',
                     tag: 'Aspiration & Airway Guard',
                   },
                   {
@@ -759,16 +759,16 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 ))}
               </div>
 
-              {/* Comparative Matrix: Traditional Pre-Op vs Veracity Defense */}
+              {/* Comparative Matrix: Traditional Pre-Op vs House Health Defense */}
               <Reveal delay={320} className="mt-8 sm:mt-12">
-                <div className="glass-specular rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 backdrop-blur-md">
+                <div className="glass-specular rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 backdrop-blur-md min-w-0 max-w-full overflow-hidden break-words">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-white/15">
                     <div>
                       <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-sky-300 font-bold">
                         Comparative Clinical Impact
                       </span>
                       <h3 className="font-serif italic text-lg sm:text-xl font-bold text-white mt-0.5">
-                        Traditional Pre-Op vs. Veracity OT Defense
+                        Traditional Pre-Op vs. House Health OT Defense
                       </h3>
                     </div>
                     <span className="self-start sm:self-auto text-[11px] font-mono text-white/70 bg-white/10 px-2.5 py-1 rounded-full border border-white/15">
@@ -776,7 +776,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                     </span>
                   </div>
 
-                  <div className="mt-4 divide-y divide-white/10 overflow-x-auto">
+                  <div className="mt-4 divide-y divide-white/10 overflow-x-auto max-w-full">
                     {[
                       {
                         dimension: 'Pharmacotherapy Holds (GLP-1 / DOAC)',
@@ -786,7 +786,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                       {
                         dimension: 'NPO Fasting Adherence',
                         legacy: 'Paper recall; high risk of pulmonary aspiration during induction',
-                        veracity: 'Minute-by-minute solids (8h) & clear liquids (2h) countdown telemetry',
+                        veracity: 'Minute-by-minute 8h solids / 2h minimum clears (3h preferred) countdown telemetry',
                       },
                       {
                         dimension: 'Blood Bank & Anemia Triage',
@@ -804,7 +804,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                         veracity: 'Automated bilingual WhatsApp & SMS digital intake directives',
                       },
                     ].map((row, idx) => (
-                      <div key={idx} className="py-3.5 grid grid-cols-1 md:grid-cols-12 gap-2 text-xs items-center">
+                      <div key={idx} className="py-3.5 grid grid-cols-1 md:grid-cols-12 gap-2 text-xs items-center min-w-0 break-words">
                         <div className="md:col-span-4 font-semibold text-white">
                           {row.dimension}
                         </div>
@@ -894,7 +894,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
             <Reveal delay={120}>
               <div className="mx-auto max-w-2xl text-center">
                 <h2 className="font-serif text-3xl font-normal leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
-                  Evaluate Veracity in your <span className="italic">theatre.</span>
+                  Evaluate House Health in your <span className="italic">theatre.</span>
                 </h2>
                 <p className="mt-4 text-sm leading-relaxed text-white/80 drop-shadow-md sm:text-base">
                   Currently accepting clinical evaluation partners for our Private Beta program. Explore the interactive OT Console or test a sample pre-op intake.
@@ -926,7 +926,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <div className="flex items-center gap-3">
                 <a href="/" className="flex items-center gap-2.5">
                   <Hexagon size={20} strokeWidth={1.5} className="text-white" />
-                  <span className="text-base font-medium tracking-tight text-white">veracity</span>
+                  <span className="text-base font-medium tracking-tight text-white">house health</span>
                 </a>
                 <span className="rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[8.5px] text-white/70">
                   v2.5 Beta
@@ -950,7 +950,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 ))}
               </nav>
               <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/50">
-                © 2026 Veracity Healthcare
+                © 2026 House Health
               </p>
             </div>
 
@@ -972,8 +972,8 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
 
       {/* ── Working modals: our real intake + blood views ── */}
       {modal === 'QUESTIONNAIRE' && activePatient && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-black/70 p-2 sm:p-4 backdrop-blur-sm">
-          <div className="relative my-4 sm:my-8 w-full max-w-4xl">
+        <div className="fixed inset-0 z-[60] flex items-start sm:items-center justify-center overflow-y-auto bg-black/70 p-0 sm:p-4 backdrop-blur-sm">
+          <div className="relative my-0 sm:my-8 w-full max-w-full sm:max-w-4xl min-h-screen sm:min-h-0 flex flex-col justify-start sm:justify-center">
             <button
               type="button"
               onClick={() => setModal('NONE')}
@@ -988,8 +988,8 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
       )}
 
       {modal === 'BLOOD' && activePatient && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-black/70 p-2 sm:p-4 backdrop-blur-sm">
-          <div className="relative my-4 sm:my-8 w-full max-w-md">
+        <div className="fixed inset-0 z-[60] flex items-start sm:items-center justify-center overflow-y-auto bg-black/70 p-0 sm:p-4 backdrop-blur-sm">
+          <div className="relative my-0 sm:my-8 w-full max-w-full sm:max-w-md min-h-screen sm:min-h-0 flex flex-col justify-start sm:justify-center">
             <button
               type="button"
               onClick={() => setModal('NONE')}

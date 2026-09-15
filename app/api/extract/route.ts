@@ -17,6 +17,10 @@ export async function POST(req: NextRequest) {
 
     const filename = file.name;
     const mimeType = file.type || 'application/pdf';
+    const rawCategory = (formData.get('category') as string) || 'OTHER';
+    const category = (['LAB', 'ECG', 'ECHO', 'CONSENT', 'OTHER'] as const).includes(rawCategory as any)
+      ? (rawCategory as 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER')
+      : 'OTHER';
     const arrayBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
 
@@ -24,7 +28,7 @@ export async function POST(req: NextRequest) {
     const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     const base64Data = Buffer.from(uint8Array).toString('base64');
     try {
-      saveUploadedFileDb(fileId, filename, mimeType, base64Data);
+      saveUploadedFileDb(fileId, filename, mimeType, base64Data, category);
     } catch (dbErr) {
       console.warn('File DB save skipped or failed:', dbErr);
     }
@@ -48,6 +52,7 @@ export async function POST(req: NextRequest) {
       success: true,
       fileId,
       filename,
+      category,
       fullText: extractionResult.fullText,
       pages: extractionResult.pages,
       isOcr: extractionResult.isOcr,

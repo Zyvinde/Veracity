@@ -139,8 +139,8 @@ export const DRUG_INTERACTION_MAP: Array<{
 ];
 
 export const NPO_GUIDELINES = {
-  solids: { minHours: 8, maxHours: 8, rule: 'Midnight NPO for solids (8h)' },
-  clearLiquids: { minHours: 3, maxHours: 3, rule: 'Clear carbohydrates up to 200ml until 3h pre-op' },
+  solids: { minHours: 8, maxHours: 8, rule: '8h solids / 2h minimum clears (3h preferred)' },
+  clearLiquids: { minHours: 2, preferredHours: 3, maxHours: 3, rule: '8h solids / 2h minimum clears (3h preferred)' },
   breastMilk: { minHours: 4, maxHours: 4, rule: 'Breast milk 4h, formula 6h' },
 };
 

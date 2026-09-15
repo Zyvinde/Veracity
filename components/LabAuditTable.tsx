@@ -42,7 +42,7 @@ export const LabAuditTable: React.FC<LabAuditTableProps> = ({
   };
 
   return (
-    <section aria-label="Lab results" className="glass-console rounded-2xl p-5 text-white/90 shadow-xs">
+    <section aria-label="Lab results" className="glass-console rounded-2xl p-5 text-white/90 shadow-xs min-w-0 max-w-full overflow-hidden break-words">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-3.5">
         <div>
           <div className="flex items-center gap-2">
@@ -85,8 +85,8 @@ export const LabAuditTable: React.FC<LabAuditTableProps> = ({
             <FishboneViewer labs={labs} selectedLabId={selectedLabId} onSelectLab={(id: string) => { onSelectLab(id); onOpenProvenanceDrawer?.(); }} />
           </div>
         ) : (
-          <div className="mt-3.5 overflow-x-auto">
-            <table className="w-full text-left border-collapse" role="table">
+          <div className="mt-3.5 overflow-x-auto max-w-full -mx-1 px-1">
+            <table className="w-full min-w-[560px] text-left border-collapse" role="table">
               <thead>
                 <tr className="border-b glass-soft text-[10.5px] font-mono uppercase tracking-wider text-white/70">
                   <th scope="col" className="py-2.5 px-3">{t('labs.biomarkerLoinc')}</th>

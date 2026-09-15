@@ -21,11 +21,20 @@ let dbInstance: any = null;
 let useMemoryFallback = false;
 
 // Resilient in-memory storage fallback for Vercel / serverless edge
+export type UploadedFileCategory = 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER';
+
+export interface StoredUploadedFile {
+  filename: string;
+  mimeType: string;
+  dataBase64: string;
+  category?: UploadedFileCategory;
+}
+
 const inMemoryStore = {
   patients: new Map<string, PatientCase>(MOCK_PATIENT_LIST.map((p) => [p.id, p])),
   attestations: new Map<string, AttestationRecord>(),
   auditLogs: [] as AuditLogEntry[],
-  uploadedFiles: new Map<string, { filename: string; mimeType: string; dataBase64: string }>(),
+  uploadedFiles: new Map<string, StoredUploadedFile>(),
 };
 
 export function getDb(): any {
@@ -90,7 +99,7 @@ function initTables(db: any) {
       );
     `);
 
-    // Uploaded files table
+    // Uploaded files table (SeamlessMD-lite: category for LAB/ECG/ECHO/CONSENT/OTHER)
     db.exec(`
       CREATE TABLE IF NOT EXISTS uploaded_files (
         id TEXT PRIMARY KEY,
@@ -100,6 +109,15 @@ function initTables(db: any) {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
     `);
+    // SQLite-compat migration: add column IF NOT EXISTS equivalent
+    try {
+      const cols = db.prepare(`PRAGMA table_info(uploaded_files)`).all() as { name: string }[];
+      if (!cols.some((c) => c.name === 'category')) {
+        db.exec(`ALTER TABLE uploaded_files ADD COLUMN category TEXT DEFAULT 'OTHER'`);
+      }
+    } catch {
+      // read-only FS or older sqlite — in-memory store already carries category
+    }
 
     const countStmt = db.prepare('SELECT COUNT(*) as count FROM patients');
     const count = (countStmt.get() as { count: number }).count;
@@ -276,30 +294,89 @@ export function saveAuditLogDb(entry: AuditLogEntry): void {
   }
 }
 
-export function saveUploadedFileDb(id: string, filename: string, mimeType: string, base64: string): void {
-  inMemoryStore.uploadedFiles.set(id, { filename, mimeType, dataBase64: base64 });
+export function saveUploadedFileDb(id: string, filename: string, mimeType: string, base64: string, category: UploadedFileCategory = 'OTHER'): void {
+  inMemoryStore.uploadedFiles.set(id, { filename, mimeType, dataBase64: base64, category });
   const db = getDb();
   if (!db) return;
   try {
-    const stmt = db.prepare(`
-      INSERT OR REPLACE INTO uploaded_files (id, filename, mime_type, data_base64)
-      VALUES (?, ?, ?, ?)
-    `);
-    stmt.run(id, filename, mimeType, base64);
+    // Prefer category column; fall back to filename-prefix compat if migration unavailable
+    try {
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO uploaded_files (id, filename, mime_type, data_base64, category)
+        VALUES (?, ?, ?, ?, ?)
+      `);
+      stmt.run(id, filename, mimeType, base64, category);
+    } catch {
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO uploaded_files (id, filename, mime_type, data_base64)
+        VALUES (?, ?, ?, ?)
+      `);
+      stmt.run(id, `[${category}] ${filename}`, mimeType, base64);
+    }
   } catch (e) {
-    // Memory store updated
+    // Memory store already updated
   }
 }
 
-export function getUploadedFileDb(id: string): { filename: string; mimeType: string; dataBase64: string } | null {
+export function getUploadedFileDb(id: string): StoredUploadedFile | null {
   const db = getDb();
   if (!db) {
     return inMemoryStore.uploadedFiles.get(id) || null;
   }
   try {
-    const row = db.prepare('SELECT filename, mime_type as mimeType, data_base64 as dataBase64 FROM uploaded_files WHERE id = ?').get(id) as { filename: string; mimeType: string; dataBase64: string } | undefined;
-    return row || inMemoryStore.uploadedFiles.get(id) || null;
+    try {
+      const row = db.prepare('SELECT filename, mime_type as mimeType, data_base64 as dataBase64, category FROM uploaded_files WHERE id = ?').get(id) as StoredUploadedFile | undefined;
+      if (row) return row;
+    } catch {
+      const row = db.prepare('SELECT filename, mime_type as mimeType, data_base64 as dataBase64 FROM uploaded_files WHERE id = ?').get(id) as StoredUploadedFile | undefined;
+      if (row) {
+        const m = /^\[(LAB|ECG|ECHO|CONSENT|OTHER)\]\s*/.exec(row.filename || '');
+        return { ...row, category: (m?.[1] as UploadedFileCategory) || 'OTHER' };
+      }
+    }
+    return inMemoryStore.uploadedFiles.get(id) || null;
   } catch (e) {
     return inMemoryStore.uploadedFiles.get(id) || null;
+  }
+}
+
+export interface UploadedFileListItem {
+  id: string;
+  filename: string;
+  mimeType: string;
+  category: UploadedFileCategory;
+  createdAt?: string;
+}
+
+function categoryFromFilename(filename: string): UploadedFileCategory {
+  const m = /^\[(LAB|ECG|ECHO|CONSENT|OTHER)\]\s*/.exec(filename || '');
+  return (m?.[1] as UploadedFileCategory) || 'OTHER';
+}
+
+export function listUploadedFilesDb(): UploadedFileListItem[] {
+  const db = getDb();
+  if (!db) {
+    return Array.from(inMemoryStore.uploadedFiles.entries()).map(([id, f]) => ({
+      id,
+      filename: f.filename,
+      mimeType: f.mimeType,
+      category: f.category || categoryFromFilename(f.filename),
+    }));
+  }
+  try {
+    try {
+      const rows = db.prepare('SELECT id, filename, mime_type as mimeType, category, created_at as createdAt FROM uploaded_files ORDER BY created_at DESC LIMIT 100').all() as UploadedFileListItem[];
+      return rows.map((r) => ({ ...r, category: r.category || categoryFromFilename(r.filename) }));
+    } catch {
+      const rows = db.prepare('SELECT id, filename, mime_type as mimeType, created_at as createdAt FROM uploaded_files ORDER BY created_at DESC LIMIT 100').all() as UploadedFileListItem[];
+      return rows.map((r) => ({ ...r, category: categoryFromFilename(r.filename) }));
+    }
+  } catch (e) {
+    return Array.from(inMemoryStore.uploadedFiles.entries()).map(([id, f]) => ({
+      id,
+      filename: f.filename,
+      mimeType: f.mimeType,
+      category: f.category || categoryFromFilename(f.filename),
+    }));
   }
 }

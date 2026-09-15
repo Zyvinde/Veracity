@@ -149,10 +149,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden font-sans">
+    <div className="w-full max-w-full sm:max-w-md mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden overflow-x-clip font-sans min-w-0 break-words">
       {/* Top Phone In-OT Header */}
-      <div className="bg-white/10 backdrop-blur-md border-b border-white/15 p-3.5 sm:p-4">
-        <div className="flex items-center justify-between gap-2 mb-2.5">
+      <div className="bg-white/10 backdrop-blur-md border-b border-white/15 p-3.5 sm:p-4 min-w-0 max-w-full overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2 min-w-0">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold shadow-md shrink-0">
               <Droplets className="h-4 w-4" />
@@ -225,12 +225,12 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       </div>
 
       {/* View Tabs */}
-      <div className="grid grid-cols-3 border-b border-white/15 bg-white/5 text-center text-xs backdrop-blur-md">
+      <div className="grid grid-cols-3 border-b border-white/15 bg-white/5 text-center backdrop-blur-md min-w-0 max-w-full overflow-hidden">
         <button
           type="button"
           onClick={() => setActiveTab('STAT_LABS')}
           className={
-            'py-3 font-bold border-b-2 transition min-h-[44px] flex items-center justify-center cursor-pointer ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'STAT_LABS'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
@@ -242,7 +242,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           type="button"
           onClick={() => setActiveTab('CLINICAL_HISTORY')}
           className={
-            'py-3 font-bold border-b-2 transition min-h-[44px] flex items-center justify-center cursor-pointer ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'CLINICAL_HISTORY'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
@@ -254,7 +254,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           type="button"
           onClick={() => setActiveTab('NPO_MEDS')}
           className={
-            'py-3 font-bold border-b-2 transition min-h-[44px] flex items-center justify-center cursor-pointer ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'NPO_MEDS'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
@@ -362,7 +362,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Platelets & Coagulation Grid */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
             {/* Platelets */}
             <div className="rounded-xl border border-white/10 bg-white/5 p-2.5 backdrop-blur-md">
               <div className="text-[11px] font-bold text-white/70">Platelets (PLT)</div>
@@ -389,7 +389,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Renal & Troponin Grid */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
             {/* Creatinine */}
             <div className="rounded-xl border border-white/10 bg-white/5 p-2.5 backdrop-blur-md">
               <div className="text-[11px] font-bold text-white/70">Creatinine / eGFR</div>
@@ -450,7 +450,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Blood Bank Strip */}
-          <div className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex items-center justify-between backdrop-blur-md">
+          <div className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words">
             <div className="flex items-center gap-2">
               <div className="flex h-6 w-6 items-center justify-center rounded bg-emerald-600 text-white font-black text-xs">
                 {bloodBankData.bloodGroup}
@@ -704,12 +704,12 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                 <span>8-Hour NPO Fasting Clock:</span>
               </span>
               <span className="rounded bg-emerald-600 px-2 py-0.5 text-[9px] font-bold text-white">
-                {(q?.lastSolidFoodHoursAgo ?? 12) >= 8 && (q?.lastClearFluidHoursAgo ?? 4) >= 3
-                  ? 'Fasting Met'
+                {(q?.lastSolidFoodHoursAgo ?? 12) >= 8 && (q?.lastClearFluidHoursAgo ?? 4) >= 2
+                  ? 'Fasting Met (8h solids / 2h min clears)'
                   : 'NOT FASTED'}
               </span>
             </div>
-            <div className="grid grid-cols-2 gap-2 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-center min-w-0">
               <div className="p-2 rounded-lg bg-black/30 border border-white/10">
                 <div className="text-[10px] text-white/50">Solids Fasting</div>
                 <div className="text-sm font-black text-emerald-400 mt-0.5">
@@ -753,10 +753,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             {currentPatient.medications.map((med) => (
               <div
                 key={med.id}
-                className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex items-center justify-between backdrop-blur-md"
+                className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words"
               >
-                <div>
-                  <div className="font-bold text-white text-xs">{med.drugName}</div>
+                <div className="min-w-0 flex-1">
+                  <div className="font-bold text-white text-xs break-words">{med.drugName}</div>
                   <div className="text-[10px] text-white/50 font-mono">
                     Hold required: {med.requiredHoldHours}h · Last dose: {med.lastDoseHoursAgo}h ago
                   </div>
@@ -781,10 +781,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                 {q.currentMedications.map((med) => (
                   <div
                     key={med.name}
-                    className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex items-center justify-between backdrop-blur-md"
+                    className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words"
                   >
-                    <div>
-                      <div className="font-bold text-white text-xs">{med.name}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-bold text-white text-xs break-words">{med.name}</div>
                       <div className="text-[10px] text-white/50 font-mono">
                         {med.category.replace('_', ' ')}
                         {med.dose ? ` · ${med.dose}` : ''}
@@ -822,7 +822,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
           <button
             type="button"
             onClick={handle1TapClearance}

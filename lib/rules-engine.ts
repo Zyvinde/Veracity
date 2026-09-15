@@ -884,7 +884,7 @@ export function generateERASTimeline(patient: PatientCase): ERASTimelineEvent[] 
       timeLabel: 'T-8h',
       hoursBeforeSurgery: 8,
       title: 'Midnight NPO — Stop All Food',
-      description: 'No solid food, milk, or non-clear liquids after midnight. Clear water permitted until 3h before surgery.',
+      description: 'No solid food, milk, or non-clear liquids after midnight. 8h solids / 2h minimum clears (3h preferred); clear water only in the window.',
       status: 'UPCOMING',
       category: 'FASTING',
     },
@@ -900,7 +900,7 @@ export function generateERASTimeline(patient: PatientCase): ERASTimelineEvent[] 
       timeLabel: 'T-2h',
       hoursBeforeSurgery: 2,
       title: 'Clear Carb Drink + CHG Prep',
-      description: 'Drink 200ml clear carbohydrate beverage (e.g. pre-surgery drink). CHG wipe of surgical site. NPO cutoff for clear liquids.',
+      description: 'Drink 200ml clear carbohydrate beverage (e.g. pre-surgery drink). CHG wipe of surgical site. 2h minimum NPO cutoff for clear liquids (3h preferred).',
       status: 'UPCOMING',
       category: 'FASTING',
     },
@@ -1041,13 +1041,16 @@ export function computeFastingCompliance(surgeryTimeIso: string, now: Date = new
   npoLiquidsCompliant: boolean;
   solidsDeadline: string;
   liquidsDeadline: string;
+  liquidsPreferredDeadline: string;
   recommendation: string;
 } {
   const surgeryTime = new Date(surgeryTimeIso);
   const hoursUntilSurgery = Math.max(0, (surgeryTime.getTime() - now.getTime()) / (1000 * 60 * 60));
 
   const solidsDeadline = new Date(surgeryTime.getTime() - 8 * 3600 * 1000);
-  const liquidsDeadline = new Date(surgeryTime.getTime() - 3 * 3600 * 1000);
+  // Standard: 8h solids / 2h minimum clears (3h preferred)
+  const liquidsDeadline = new Date(surgeryTime.getTime() - 2 * 3600 * 1000);
+  const liquidsPreferredDeadline = new Date(surgeryTime.getTime() - 3 * 3600 * 1000);
 
   const npoSolidsCompliant = now >= solidsDeadline;
   const npoLiquidsCompliant = now >= liquidsDeadline;
@@ -1055,12 +1058,14 @@ export function computeFastingCompliance(surgeryTimeIso: string, now: Date = new
   let recommendation = '';
   if (!npoSolidsCompliant) {
     const hoursRemaining = Math.max(0, (solidsDeadline.getTime() - now.getTime()) / (1000 * 60 * 60));
-    recommendation = `Patient must remain NPO for solids for ${hoursRemaining.toFixed(1)} more hours.`;
+    recommendation = `Patient must remain NPO for solids for ${hoursRemaining.toFixed(1)} more hours (8h solids / 2h minimum clears, 3h preferred).`;
   } else if (!npoLiquidsCompliant) {
     const hoursRemaining = Math.max(0, (liquidsDeadline.getTime() - now.getTime()) / (1000 * 60 * 60));
-    recommendation = `Clear carbohydrate drink cutoff in ${hoursRemaining.toFixed(1)} hours. Patient may still drink.`;
+    recommendation = `Clear-liquid minimum cutoff in ${hoursRemaining.toFixed(1)} hours (2h minimum, 3h preferred). Patient may still drink.`;
+  } else if (now < liquidsPreferredDeadline) {
+    recommendation = 'Past 2h minimum for clears; 3h preferred window still open — avoid further intake.';
   } else {
-    recommendation = 'Patient is past all NPO cutoffs. Ready for induction fasting protocol.';
+    recommendation = 'Patient is past all NPO cutoffs (8h solids / 2h minimum clears, 3h preferred). Ready for induction fasting protocol.';
   }
 
   return {
@@ -1069,6 +1074,7 @@ export function computeFastingCompliance(surgeryTimeIso: string, now: Date = new
     npoLiquidsCompliant,
     solidsDeadline: solidsDeadline.toISOString(),
     liquidsDeadline: liquidsDeadline.toISOString(),
+    liquidsPreferredDeadline: liquidsPreferredDeadline.toISOString(),
     recommendation,
   };
 }
@@ -1989,22 +1995,30 @@ export function evaluateQuestionnaireFull(
     }
   }
 
-  // 6. Fasting NPO
+  // 6. Fasting NPO — standard: 8h solids / 2h minimum clears (3h preferred).
+  // Engine: hard stop <2h clears, caution 2-3h clears.
   const solidsHours = data.lastSolidFoodHoursAgo ?? 12;
   const fluidsHours = data.lastClearFluidHoursAgo ?? 4;
-  const npoFastingCompliant = solidsHours >= 8 && fluidsHours >= 3;
+  const npoSolidsOk = solidsHours >= 8;
+  const npoFluidsMinimumOk = fluidsHours >= 2;
+  const npoFluidsPreferredOk = fluidsHours >= 3;
+  const npoFastingCompliant = npoSolidsOk && npoFluidsMinimumOk;
   if (!npoFastingCompliant) {
-    if (solidsHours < 8) {
+    if (!npoSolidsOk) {
       hardStopFlags.push(
         `NPO FASTING BREACH: Patient ate solid food ${solidsHours} hours ago (<8 hours required). High aspiration risk. Delay case until 8-hour window is complete.`
       );
-    } else if (fluidsHours < 3) {
-      conditionalFlags.push(
-        `NPO Fluid window: Patient ingested liquids ${fluidsHours} hours ago (<3 hours). Hold induction for ${3 - fluidsHours} hours.`
+    } else if (!npoFluidsMinimumOk) {
+      hardStopFlags.push(
+        `NPO CLEAR-LIQUID HARD STOP: Patient ingested clears ${fluidsHours} hours ago (<2h minimum; 3h preferred). Hold induction for ${(2 - fluidsHours).toFixed(1)} hours minimum.`
       );
     }
+  } else if (!npoFluidsPreferredOk) {
+    conditionalFlags.push(
+      `NPO clears caution: liquids ${fluidsHours}h ago — inside 2-3h window (2h minimum met, 3h preferred). Prefer waiting until 3h or confirm with gastric POCUS.`
+    );
   } else {
-    greenClearancePoints.push(`8-Hour NPO Fasting verified (Solids: ${solidsHours}h ago, Liquids: ${fluidsHours}h ago)`);
+    greenClearancePoints.push(`8h solids / 2h minimum clears (3h preferred) verified (Solids: ${solidsHours}h ago, Liquids: ${fluidsHours}h ago)`);
   }
 
   // 7. Malignant Hyperthermia
@@ -2046,5 +2060,177 @@ export function evaluateQuestionnaireFull(
     fitnessResult,
     npoFastingCompliant,
     mhRiskFlag,
+  };
+}
+
+// -------------------------------------------------------------
+// CONCISE PAC INTERVIEW EVALUATION (/pac — short ask-the-questions flow)
+// Reuses existing evaluators; no new guideline logic.
+// -------------------------------------------------------------
+export interface PACInterviewEvaluation {
+  overallClearance: ClearanceStatus;
+  primaryActionDirective: string;
+  hardStopFlags: string[];
+  conditionalFlags: string[];
+  greenPoints: string[];
+  fastingHoursSinceFood: number | null;
+  fastingHoursSinceFluid: number | null;
+  fastingCompliant: boolean | null;
+  morningMeds: string[];
+  bmi: number | null;
+}
+
+export function evaluatePACInterview(
+  data: Partial<import('./types').PACInterview>,
+  surgeryTimeIso?: string
+): PACInterviewEvaluation {
+  const hardStopFlags: string[] = [];
+  const conditionalFlags: string[] = [];
+  const greenPoints: string[] = [];
+  const morningMeds: string[] = [];
+
+  // BMI
+  let bmi: number | null = null;
+  if (data.weightKg && data.heightCm && data.heightCm > 0) {
+    const m = data.heightCm / 100;
+    bmi = Math.round((data.weightKg / (m * m)) * 10) / 10;
+    if (bmi >= 40) conditionalFlags.push(`BMI ${bmi}: morbid obesity — plan difficult mask ventilation, positioning aids, DVT prophylaxis.`);
+    else greenPoints.push(`BMI ${bmi} recorded`);
+  }
+
+  // Meds
+  const cats = data.medCategories || [];
+  if (data.takesAnyMeds && cats.length === 0 && !(data.medsFreeText || '').trim()) {
+    conditionalFlags.push('Patient takes medicines but gave no details — reconcile exact names/doses on arrival.');
+  }
+  if (cats.includes('BLOOD_THINNER')) {
+    hardStopFlags.push('BLOOD THINNER reported: confirm exact drug (aspirin/clopidogrel/warfarin/DOAC), last dose + indication (stent/AF). Do NOT induce until hold window verified per ASRA 2025.');
+    morningMeds.push('Blood thinner: HOLD per cardiology/ASRA plan — confirm last-dose time.');
+  }
+  if (cats.includes('DIABETES')) {
+    conditionalFlags.push('Diabetes medicine: do NOT take on morning of surgery. Team manages glucose (target 140–180 mg/dL).');
+    morningMeds.push('Diabetes tablets/insulin: SKIP morning of surgery.');
+  }
+  if (cats.includes('THYROID')) {
+    morningMeds.push('Thyroid tablet: TAKE morning of surgery with a sip of water.');
+    greenPoints.push('Thyroid morning-dose rule given');
+  }
+  if (cats.includes('BP')) {
+    morningMeds.push('BP pills: TAKE beta-blocker/CCB; HOLD ACE-I/ARB + diuretic morning of surgery. Recheck BP (delay elective if ≥180/110).');
+  }
+  if (cats.includes('GLP1_WEIGHTLOSS')) {
+    conditionalFlags.push(`GLP-1/weight-loss injection (${data.glp1LastDoseText || 'dose time unclear'}): needs ≥168h weekly hold. If within a week → gastric POCUS + RSI plan.`);
+    morningMeds.push('GLP-1 weekly: HOLD ≥7 days before surgery.');
+  }
+  if (cats.includes('CONTRACEPTIVE_HRT')) {
+    conditionalFlags.push('Estrogen pill/HRT: VTE risk — SCDs in OT + early ambulation; LMWH if major surgery + immobilization.');
+  }
+  if (cats.includes('PAINKILLER_NSAID')) {
+    conditionalFlags.push('NSAID/painkiller: hold per bleeding risk; plan paracetamol-based multimodal analgesia.');
+  }
+  if (cats.includes('STEROID')) {
+    conditionalFlags.push('Steroid use: assess stress-dose cover need (adrenal suppression) + glucose/K+ monitoring.');
+  }
+  if (data.takesHerbalsOTC) {
+    conditionalFlags.push(`Herbal/OTC/supplement (${(data.herbalsFreeText || 'unspecified').slice(0, 120)}): hold fish oil/ginkgo/garlic/ginseng 7 days (bleeding); hold St. John's Wort 5 days (CYP interactions).`);
+  }
+  if (!data.takesAnyMeds) greenPoints.push('No daily medicines reported');
+
+  // Body check
+  if (data.recentFeverColdCough) {
+    hardStopFlags.push('Fever/cold/cough within 2 weeks: rule out active infection. If febrile ≥38°C or purulent sputum/wheeze on day → postpone elective case 2–4 weeks.');
+  } else greenPoints.push('No recent fever/cold/cough');
+  if (data.chestPainOrBreathless) {
+    conditionalFlags.push('Chest pain / breathless on 2 flights (<4 METs): ECG + functional workup; cardiology if unstable angina, failure, murmur+syncope.');
+  }
+  if (data.loudSnoring) {
+    conditionalFlags.push('Loud snoring/daytime sleepiness: possible OSA — plan difficult-airway trolley, avoid deep sedation, CPAP post-op.');
+  }
+  const chronic = data.chronicFlags || [];
+  if (chronic.length > 0) {
+    conditionalFlags.push(`Chronic illness (${chronic.join(', ')}): needs recent reports + specialist fitness if major (heart/kidney/liver). Bring prescriptions + ECG/echo.`);
+  }
+  if (data.bleedingOrTransfusionHx) {
+    conditionalFlags.push('Bleeding/transfusion history: check CBC, PT/INR, platelets; type & screen; ask about bruises, gum/nose bleeds, heavy periods.');
+  }
+  if (data.pregnancyStatus === 'POSSIBLY_PREGNANT' || data.pregnancyStatus === 'PREGNANT') {
+    hardStopFlags.push('Pregnancy possible/confirmed: β-hCG test mandatory. If pregnant → obstetric anesthesia consult, aspiration prophylaxis, drug/radiation plan.');
+  }
+  if (data.hasAllergyAlert) {
+    conditionalFlags.push(`Allergy alert (${(data.allergySummary || 'see details').slice(0, 160)}): band chart, confirm rash vs swelling vs breathing trouble; keep anaphylaxis kit + latex-free setup if latex.`);
+  } else greenPoints.push('No allergy alarm reported');
+
+  // Airway self-screen
+  const dental = data.dentalFlags || [];
+  const dentalRisk = dental.some((d) => d !== 'NONE');
+  if (dentalRisk) conditionalFlags.push(`Teeth (${dental.join(', ')}): remove dentures/aligners before induction; document loose tooth position; gentle laryngoscopy + tooth guard.`);
+  if (data.mouthOpensWide === false) conditionalFlags.push('Mouth does not open wide / neck stiff: anticipate difficult laryngoscopy — videolaryngoscope + bougie + LMA ready.');
+  if (data.mouthOpensWide && data.neckMovesFully && !dentalRisk) greenPoints.push('Mouth + neck + teeth: no red flags reported');
+
+  // Fasting — exact datetimes
+  let fastingHoursSinceFood: number | null = null;
+  let fastingHoursSinceFluid: number | null = null;
+  let fastingCompliant: boolean | null = null;
+  const nowMs = Date.now();
+  if (data.lastFoodIso) {
+    fastingHoursSinceFood = Math.max(0, Math.round(((nowMs - new Date(data.lastFoodIso).getTime()) / 3600000) * 10) / 10);
+  }
+  if (data.lastFluidIso) {
+    fastingHoursSinceFluid = Math.max(0, Math.round(((nowMs - new Date(data.lastFluidIso).getTime()) / 3600000) * 10) / 10);
+  }
+  if (surgeryTimeIso && (data.lastFoodIso || data.lastFluidIso)) {
+    const sxMs = new Date(surgeryTimeIso).getTime();
+    if (data.lastFoodIso) {
+      const foodGapHrs = (sxMs - new Date(data.lastFoodIso).getTime()) / 3600000;
+      if (foodGapHrs < 8) hardStopFlags.push(`Fasting breach at planned time: last food only ${foodGapHrs.toFixed(1)}h before surgery (<8h). Delay induction until 8h window complete.`);
+    }
+    if (data.lastFluidIso) {
+      // Standard: 8h solids / 2h minimum clears (3h preferred) — hard stop <2h, caution 2-3h.
+      const fluidGapHrs = (sxMs - new Date(data.lastFluidIso).getTime()) / 3600000;
+      if (fluidGapHrs < 2) hardStopFlags.push(`Clear-fluid HARD STOP: last water ${fluidGapHrs.toFixed(1)}h before surgery (<2h minimum; 3h preferred). Hold induction ${Math.ceil(2 - fluidGapHrs)}h minimum.`);
+      else if (fluidGapHrs < 3) conditionalFlags.push(`Clear-fluid caution: last water ${fluidGapHrs.toFixed(1)}h before surgery (2h minimum met, 3h preferred). Prefer waiting until 3h or gastric POCUS.`);
+    }
+    fastingCompliant =
+      (!data.lastFoodIso || (sxMs - new Date(data.lastFoodIso).getTime()) / 3600000 >= 8) &&
+      (!data.lastFluidIso || (sxMs - new Date(data.lastFluidIso).getTime()) / 3600000 >= 2);
+    if (fastingCompliant) {
+      const fluidGap = data.lastFluidIso ? (sxMs - new Date(data.lastFluidIso).getTime()) / 3600000 : 99;
+      if (fluidGap >= 3) greenPoints.push('Fasting window vs surgery time: compliant (8h solids / 2h minimum clears, 3h preferred)');
+      else greenPoints.push('Fasting minimum met (≥8h food, ≥2h water); 3h preferred — consider POCUS');
+    }
+  }
+
+  // Instruction acks
+  const missingAck: string[] = [];
+  if (!data.ackFasting) missingAck.push('fasting rule');
+  if (!data.ackDiabetesHold) missingAck.push('diabetes-hold rule');
+  if (!data.ackThyroidTake) missingAck.push('thyroid-take rule');
+  if (!data.ackBringList) missingAck.push('bring-list');
+  if (!data.ackEscort) missingAck.push('escort plan');
+  if (missingAck.length > 0 && data.teachBackName) {
+    conditionalFlags.push(`Instructions not fully ticked (${missingAck.join(', ')}) — re-counsel on arrival with teach-back.`);
+  }
+
+  let overallClearance: ClearanceStatus = 'GREEN_CLEARED';
+  let primaryActionDirective = 'PAC interview complete. No hard stops from patient answers — verify on arrival.';
+  if (hardStopFlags.length > 0) {
+    overallClearance = 'RED_HARD_STOP';
+    primaryActionDirective = hardStopFlags[0];
+  } else if (conditionalFlags.length > 0) {
+    overallClearance = 'AMBER_CONDITIONAL';
+    primaryActionDirective = conditionalFlags[0];
+  }
+
+  return {
+    overallClearance,
+    primaryActionDirective,
+    hardStopFlags,
+    conditionalFlags,
+    greenPoints,
+    fastingHoursSinceFood,
+    fastingHoursSinceFluid,
+    fastingCompliant,
+    morningMeds,
+    bmi,
   };
 }

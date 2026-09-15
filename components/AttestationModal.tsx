@@ -93,10 +93,10 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 backdrop-blur-xs p-3 sm:p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-2xl overflow-hidden glass-strong rounded-2xl shadow-2xl my-6 animate-scale-in text-white/90">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div className="relative w-full max-w-full sm:max-w-2xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15">
               <ShieldCheck className="h-5 w-5 text-sky-200" />
@@ -121,10 +121,10 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="max-h-[75vh] overflow-y-auto p-6 space-y-4 text-xs font-sans">
+        <div className="max-h-[75vh] overflow-y-auto overflow-x-clip p-4 sm:p-6 space-y-4 text-xs font-sans min-w-0 break-words">
           {/* Case Summary Callout */}
           <div className="rounded-xl border border-white/25 bg-white/10 p-4">
-            <div className="grid grid-cols-2 gap-3 text-white/85 font-mono text-[11px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-white/85 font-mono text-[11px] min-w-0">
               <div>
                 <span className="text-white/60">{t('attestation.patient')}</span> <strong className="text-white">{patient.name}</strong> ({patient.mrn})
               </div>
@@ -148,6 +148,26 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Soft warning: Quick PAC interview not done yet (non-blocking) */}
+          {!patient.pacCompleted && (
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5 flex items-start gap-2.5">
+              <AlertTriangle className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
+              <div className="text-xs">
+                <div className="font-bold text-amber-200">Quick PAC interview not completed (recommended, not blocking)</div>
+                <p className="text-white/75 mt-0.5">
+                  Patient hasn’t finished the 3-min ask-the-questions flow (meds, 8h fasting, allergies, escort).
+                  You can still sign — consider sending the link first.
+                </p>
+                <a
+                  href={`/pac?mrn=${encodeURIComponent(patient.mrn)}&mode=self`}
+                  className="inline-flex items-center gap-1 mt-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 text-[11px] font-bold transition"
+                >
+                  Open Quick PAC →
+                </a>
+              </div>
+            </div>
+          )}
 
           {/* Statutory Oath & Required Affirmations */}
           <div className="space-y-2.5">
@@ -221,7 +241,7 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
             <Lock className="h-3.5 w-3.5 text-sky-200" />
             <span>{t('attestation.sha256')}</span>

@@ -113,7 +113,7 @@ export default function VeracityConsole({
       <header className="h-14 bg-white border border-[#D3DCE2] rounded-xl px-5 mx-6 mt-4 flex items-center justify-between shadow-xs shrink-0 gap-3">
         <div className="flex items-center gap-2.5 shrink-0 min-w-0">
           <Activity className="h-5 w-5 text-[#B3871C] shrink-0" aria-hidden="true" />
-          <span className="font-bold text-sm text-[#223140] font-sans whitespace-nowrap">Veracity OT Console</span>
+          <span className="font-bold text-sm text-[#223140] font-sans whitespace-nowrap">House Health OT Console</span>
           <span className="hidden md:inline bg-[#EFF3F6] text-[#5B6B78] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D3DCE2] whitespace-nowrap">
             DHA §3060(a) Validated
           </span>

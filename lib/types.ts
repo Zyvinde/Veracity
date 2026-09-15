@@ -114,6 +114,10 @@ export interface PatientCase {
   intakeLinkToken?: string;
   intakeLinkExpiresAtIso?: string;
   fitnessReferrals?: SpecialistReferral[];
+  // Concise PAC interview (patient self-fill + clinician verify) — see /pac
+  pacInterview?: PACInterview;
+  pacInterviewUpdatedAtIso?: string;
+  pacCompleted?: boolean;
 }
 
 export type FitnessReferralStatus = 'REQUESTED' | 'RECEIVED' | 'CLEARED' | 'NOT_CLEARED';
@@ -143,7 +147,7 @@ export interface AttestationRecord {
 export interface AuditLogEntry {
   id: string;
   timestamp: string;
-  action: 'PATIENT_VIEWED' | 'LAB_INSPECTED' | 'ATTESTATION_SIGNED' | 'PAC_PRINTED' | 'PAC_WHATSAPP_SENT' | 'INGESTION_STARTED' | 'INGESTION_COMPLETE' | 'AIRWAY_MODIFIED' | 'OVERRIDE_APPLIED';
+  action: 'PATIENT_VIEWED' | 'LAB_INSPECTED' | 'ATTESTATION_SIGNED' | 'PAC_PRINTED' | 'PAC_WHATSAPP_SENT' | 'INGESTION_STARTED' | 'INGESTION_COMPLETE' | 'AIRWAY_MODIFIED' | 'OVERRIDE_APPLIED' | 'PAC_INTERVIEW_COMPLETED' | 'PAC_INTERVIEW_VERIFIED';
   patientId: string;
   userId: string;
   details: string;
@@ -421,5 +425,74 @@ export interface PatientPreOpQuestionnaire {
   // Summary
   riskFlags: string[];
   clearanceStatus: ClearanceStatus;
+}
+
+// Concise PAC interview — plain-language ask-the-questions flow (/pac).
+// Kept intentionally short (~22 inputs, 5 steps) so patients actually finish it.
+export type PACMedCategory =
+  | 'BLOOD_THINNER'
+  | 'BP'
+  | 'DIABETES'
+  | 'THYROID'
+  | 'PAINKILLER_NSAID'
+  | 'PSYCH_NEURO'
+  | 'STEROID'
+  | 'CONTRACEPTIVE_HRT'
+  | 'GLP1_WEIGHTLOSS'
+  | 'OTHER';
+
+export interface PACInterview {
+  id: string;
+  patientId: string;
+  completedAtIso: string;
+  mode: 'SELF' | 'CLINIC';
+  source: 'PAC_QUICK_LINK' | 'CLINIC_VERIFY';
+  // Step 1 — you + surgery
+  escortName?: string;
+  escortPhone?: string;
+  weightKg?: number;
+  heightCm?: number;
+  // Step 2 — meds
+  takesAnyMeds: boolean;
+  medCategories: PACMedCategory[];
+  medsFreeText?: string;
+  takesHerbalsOTC: boolean;
+  herbalsFreeText?: string;
+  medsLast24h?: string;
+  // Step 3 — body check
+  recentFeverColdCough: boolean;
+  chestPainOrBreathless: boolean;
+  loudSnoring: boolean;
+  chronicFlags: string[]; // e.g. HEART, BP, DIABETES, KIDNEY, LIVER, THYROID, SEIZURE
+  bleedingOrTransfusionHx: boolean;
+  pregnancyStatus?: 'NOT_APPLICABLE' | 'NOT_PREGNANT' | 'POSSIBLY_PREGNANT' | 'PREGNANT' | 'BREASTFEEDING';
+  lmpOrWeeks?: string;
+  allergySummary?: string;
+  hasAllergyAlert: boolean;
+  // Step 4 — mouth/teeth + fasting
+  dentalFlags: string[]; // DENTURES, LOOSE_TOOTH, BRACES, CAPS_CROWNS, NONE
+  mouthOpensWide: boolean;
+  neckMovesFully: boolean;
+  lastFoodIso?: string;
+  lastFluidIso?: string;
+  glp1LastDoseText?: string;
+  // Step 5 — do's + confirm
+  ackFasting: boolean;
+  ackDiabetesHold: boolean;
+  ackThyroidTake: boolean;
+  ackBringList: boolean;
+  ackEscort: boolean;
+  teachBackName?: string;
+  // Clinic verify (mode=CLINIC only)
+  clinicVerified?: {
+    npoVerified: boolean;
+    airwaySeen: boolean;
+    medsReconciled: boolean;
+    allergyBanded: boolean;
+    consentExplained: boolean;
+    planSelected?: 'GA' | 'SPINAL' | 'REGIONAL' | 'MAC' | 'COMBINED' | 'UNDECIDED';
+    verifierName?: string;
+    notes?: string;
+  };
 }
 

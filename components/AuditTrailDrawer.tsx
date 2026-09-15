@@ -23,6 +23,9 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
     LAB_INSPECTED: { label: t('auditTrail.labInspected'), color: 'text-white font-bold' },
     ATTESTATION_SIGNED: { label: t('auditTrail.attestationSigned'), color: 'text-emerald-200 font-bold' },
     PAC_PRINTED: { label: t('auditTrail.pacPrinted'), color: 'text-sky-800 font-bold' },
+    PAC_WHATSAPP_SENT: { label: t('auditTrail.whatsappSent'), color: 'text-emerald-200 font-bold' },
+    PAC_INTERVIEW_COMPLETED: { label: 'PAC Interview Completed', color: 'text-emerald-200 font-bold' },
+    PAC_INTERVIEW_VERIFIED: { label: 'PAC Interview Verified (Clinic)', color: 'text-emerald-200 font-bold' },
     INGESTION_STARTED: { label: t('auditTrail.ingestionStarted'), color: 'text-amber-200 font-bold' },
     INGESTION_COMPLETE: { label: t('auditTrail.ingestionComplete'), color: 'text-emerald-200 font-bold' },
     AIRWAY_MODIFIED: { label: t('auditTrail.airwayModified'), color: 'text-amber-200 font-bold' },
@@ -38,7 +41,7 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
   return (
     <div className="fixed inset-0 z-50 flex justify-end animate-fade-in">
       <div className="absolute inset-0 bg-slate-950/55 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative h-full w-full max-w-md border-l border-white/20 bg-[#091b30]/85 backdrop-blur-xl shadow-2xl overflow-y-auto animate-slide-down text-white/90">
+      <div className="relative h-full w-full max-w-full sm:max-w-md border-l border-white/20 bg-[#091b30]/85 backdrop-blur-xl shadow-2xl overflow-y-auto overflow-x-clip animate-slide-down text-white/90 min-w-0">
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/15 bg-white/10 backdrop-blur-md px-5 py-4">
           <div className="flex items-center gap-2.5">
             <History className="h-4 w-4 text-sky-200" />

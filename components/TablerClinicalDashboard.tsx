@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
 import { usePatientStore } from '@/lib/store';
 import { useI18n } from '@/lib/i18n/context';
 import { checkDrugInteractions } from '@/lib/rules-engine';
@@ -29,9 +29,13 @@ import BiomarkerSafetyCutoffs from '@/components/BiomarkerSafetyCutoffs';
 import FishboneViewer from '@/components/FishboneViewer';
 import OTDelayPreventionHub from '@/components/OTDelayPreventionHub';
 import PatientPreOpQuestionnaire from '@/components/PatientPreOpQuestionnaire';
+import PreAnesthesiaCheckup from '@/components/PreAnesthesiaCheckup';
 import MobileAnesthesiaBloodView from '@/components/MobileAnesthesiaBloodView';
 import { CommandPalette } from '@/components/CommandPalette';
 import { toast } from 'sonner';
+
+const PostOpMonitor = lazy(() => import('@/components/PostOpMonitor'));
+const QualityAnalytics = lazy(() => import('@/components/QualityAnalytics'));
 
 import {
   Activity,
@@ -116,6 +120,9 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const [showAllMeds, setShowAllMeds] = useState(false);
+  const [pacViewMode, setPacViewMode] = useState<'clinician-pac' | 'patient-portal'>('clinician-pac');
+  const [isPostOpOpen, setIsPostOpOpen] = useState(false);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
 
   const currentPatient = getCurrentPatient();
   const selectedLab = getSelectedLab();
@@ -332,10 +339,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   }
 
   return (
-    <div className="console-canvas w-full min-h-screen p-0 m-0 text-white/90 font-sans selection:bg-sky-500 selection:text-white">
+    <div className="console-canvas w-full max-w-full min-w-0 overflow-x-clip min-h-screen p-0 m-0 text-white/90 font-sans selection:bg-sky-500 selection:text-white">
       {/* Outer Shell: edge-to-edge full width translucent console workspace */}
-      <div className="console-shell w-full min-h-screen rounded-none border-0 overflow-hidden">
-        <div className="flex flex-col md:flex-row min-h-screen w-full">
+      <div className="console-shell w-full max-w-full min-w-0 min-h-screen rounded-none border-0 overflow-hidden">
+        <div className="flex flex-col md:flex-row min-h-screen w-full max-w-full min-w-0 overflow-x-clip">
           {/* Tabler Slim Icon Rail (76px) */}
           <aside
             className="glass-strong hidden md:flex w-[76px] shrink-0 flex-col items-center justify-between border-r border-white/20 z-30 py-4"
@@ -346,10 +353,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
               <a
                 href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/' || '/'}
                 className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-600 to-blue-700 text-white font-serif italic text-xl font-bold shadow-md shadow-sky-600/20"
-                title="Back to Veracity home"
-                aria-label="Back to Veracity home"
+                title="Back to House Health home"
+                aria-label="Back to House Health home"
               >
-                V
+                H
               </a>
 
               {/* Rail Navigation */}
@@ -358,7 +365,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   [
                     { id: 'dashboard', label: 'Dashboard', icon: Activity },
                     { id: 'blood-labs', label: 'Blood Labs', icon: Droplets },
-                    { id: 'questionnaire', label: 'Intake', icon: ClipboardCheck },
+                    { id: 'questionnaire', label: 'PAC & Intake', icon: ClipboardCheck },
                     { id: 'regional', label: 'Regional', icon: Stethoscope },
                     { id: 'ot-defense', label: 'Defense', icon: Clock },
                     { id: 'patients', label: 'Roster', icon: Users },
@@ -454,15 +461,15 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
           </aside>
 
           {/* Tabler Main Body & Top Navigation Bar */}
-          <div className="flex-1 flex flex-col transparent min-w-0">
+          <div className="flex-1 flex flex-col transparent min-w-0 w-full max-w-full overflow-x-clip">
             {/* Top Command Bar */}
             <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full overflow-hidden">
               {/* Left: Return to Landing + Console Wordmark + Global Search */}
               <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
                 <a
                   href={(process.env.NEXT_PUBLIC_BASE_PATH || '') + '/' || '/'}
-                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 hover:text-white text-xs font-semibold transition shrink-0 shadow-xs min-h-[36px]"
-                  title="Return to Veracity Landing Page"
+                  className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full border border-sky-400/30 bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 hover:text-white text-xs font-semibold transition shrink-0 shadow-xs min-h-[44px] sm:min-h-[36px]"
+                   title="Return to House Health Landing Page"
                 >
                   <ChevronRight className="h-3.5 w-3.5 rotate-180" />
                   <span className="hidden sm:inline">Landing Page</span>
@@ -545,7 +552,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   onClick={toggleTheme}
                   title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                   aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-                  className="p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                  className="p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-[36px] sm:min-w-[36px] flex items-center justify-center"
                 >
                   {isDark ? <Sun className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-200" /> : <Moon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
                 </button>
@@ -558,7 +565,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       setIsNotificationsOpen(!isNotificationsOpen);
                       setIsProfileMenuOpen(false);
                     }}
-                    className="relative p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                    className="relative p-1.5 sm:p-2 rounded-full bg-white/10 border border-white/25 text-white/75 hover:text-white hover:bg-white/15 transition cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-[36px] sm:min-w-[36px] flex items-center justify-center"
                     aria-label="Clinical Notifications"
                   >
                     <Bell className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -569,7 +576,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
                   {/* Notification Dropdown */}
                   {isNotificationsOpen && (
-                    <div className="glass-strong menu-pop absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl shadow-2xl p-4 z-50">
+                    <div className="glass-strong menu-pop absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl p-4 z-50">
                       <div className="flex items-center justify-between pb-3 border-b border-white/15">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-xs text-white uppercase tracking-wider font-mono">
@@ -637,7 +644,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       setIsProfileMenuOpen(!isProfileMenuOpen);
                       setIsNotificationsOpen(false);
                     }}
-                    className="flex items-center gap-1.5 pl-1 pr-2 py-0.5 sm:py-1 rounded-full bg-white/10 border border-white/25 hover:border-white/50 transition cursor-pointer min-h-[36px]"
+                    className="flex items-center gap-1.5 pl-1 pr-2 py-0.5 sm:py-1 rounded-full bg-white/10 border border-white/25 hover:border-white/50 transition cursor-pointer min-h-[44px] sm:min-h-[36px]"
                   >
                     <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 font-bold text-[10px] sm:text-xs flex items-center justify-center ring-1.5 sm:ring-2 ring-white/60 shrink-0 shadow-xs">
                       TM
@@ -650,7 +657,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
                   {/* Profile Dropdown */}
                   {isProfileMenuOpen && (
-                    <div className="glass-strong menu-pop absolute right-0 mt-2 w-64 rounded-2xl shadow-2xl p-3 z-50">
+                    <div className="glass-strong menu-pop absolute right-0 mt-2 w-64 max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl p-3 z-50">
                       <div className="p-2 border-b border-white/15">
                         <div className="text-xs font-extrabold text-white">
                           Dr. Tariq Mansoor, MD
@@ -736,11 +743,11 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             </header>
 
             {/* Main Content Area */}
-            <main className="px-3 sm:px-8 py-3.5 sm:py-6 pb-28 md:pb-8 space-y-4 sm:space-y-6 overflow-y-auto w-full">
+            <main className="px-3 sm:px-8 py-3.5 sm:py-6 pb-28 md:pb-8 space-y-4 sm:space-y-6 overflow-y-auto overflow-x-clip w-full max-w-full min-w-0">
               {/* Hero Stat Strip (4 tiles) */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 {/* Tile 1: Cases Today */}
-                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Cases Today
@@ -760,7 +767,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 2: Active Holds */}
-                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       Active Holds
@@ -778,7 +785,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 3: NPO Fasting */}
-                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       NPO Fasting
@@ -796,7 +803,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 </div>
 
                 {/* Tile 4: PAC Attestation */}
-                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden">
+                <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
                       PAC Attestation
@@ -816,8 +823,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
               {/* Active Surgical Day Roster Strip */}
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-3 min-w-0 flex-wrap">
                     <span className="console-title font-serif italic text-lg sm:text-[22px] font-bold tracking-tight text-white">
                       Active Surgical Day Roster
                     </span>
@@ -828,7 +835,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   <button
                     type="button"
                     onClick={handleOpenIngestion}
-                    className="btn-press text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 cursor-pointer bg-white hover:bg-white/85 border border-white/60 px-3 py-1.5 rounded-full shadow-md shadow-black/40"
+                    className="btn-press text-xs font-bold text-slate-900 hover:text-slate-700 flex items-center gap-1 cursor-pointer bg-white hover:bg-white/85 border border-white/60 px-3 py-1.5 rounded-full shadow-md shadow-black/40 min-h-[44px] sm:min-h-0 shrink-0"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Ingest Case</span>
@@ -851,7 +858,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         type="button"
                         onClick={() => selectPatient(p.id)}
                         data-active={isSelected}
-                        className={`console-roster-card btn-press shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] sm:min-w-[260px] border cursor-pointer transition-all ${
+                        className={`console-roster-card btn-press shrink-0 snap-start rounded-2xl p-3 flex items-center gap-3 text-left min-w-[240px] max-w-[calc(100vw-2rem)] sm:min-w-[260px] border cursor-pointer transition-all ${
                           isSelected
                             ? 'bg-white/20 text-white border-sky-400/80 shadow-[0_0_16px_rgba(56,189,248,0.25)] glass-specular'
                             : 'bg-white/10 border-white/20 text-white/85 hover:border-white/40 hover:bg-white/15 shadow-xs glass-specular'
@@ -939,7 +946,57 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
               {activeNav === 'questionnaire' && (
                 <div className="space-y-6">
-                  <PatientPreOpQuestionnaire patientId={currentPatient.id} />
+                  {/* PAC Sub-Navigation Header: Switch between Clinician PAC Checklist & Patient Intake Questionnaire */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl border border-white/20 bg-white/10 glass-specular">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-sky-300 font-bold bg-sky-500/20 border border-sky-400/30 px-2 py-0.5 rounded-full">
+                          Pre-Anesthesia Assessment (PAC)
+                        </span>
+                        <span className="text-xs text-white/60 font-mono hidden sm:inline">{currentPatient.mrn} · {currentPatient.name}</span>
+                      </div>
+                      <h3 className="font-serif italic text-lg sm:text-2xl font-bold text-white mt-1">
+                        Pre-Anesthesia Checkup &amp; Clinical Questions
+                      </h3>
+                      <p className="text-xs text-white/70 mt-0.5">
+                        Interactive clinical questions for airway, fasting, drug holds, allergy cross-reactivity, and patient history.
+                      </p>
+                    </div>
+
+                    {/* Segmented Controller */}
+                    <div className="inline-flex rounded-xl bg-slate-950/60 p-1 border border-white/15 self-start sm:self-auto shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setPacViewMode('clinician-pac')}
+                        className={`btn-press px-3.5 py-2 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 min-h-[44px] ${
+                          pacViewMode === 'clinician-pac'
+                            ? 'bg-sky-500 text-slate-950 shadow-md'
+                            : 'text-white/70 hover:text-white'
+                        }`}
+                      >
+                        <Stethoscope className="h-4 w-4" />
+                        <span>Doctor PAC Checklist</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPacViewMode('patient-portal')}
+                        className={`btn-press px-3.5 py-2 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 min-h-[44px] ${
+                          pacViewMode === 'patient-portal'
+                            ? 'bg-sky-500 text-slate-950 shadow-md'
+                            : 'text-white/70 hover:text-white'
+                        }`}
+                      >
+                        <ClipboardCheck className="h-4 w-4" />
+                        <span>Patient Intake Portal</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {pacViewMode === 'clinician-pac' ? (
+                    <PreAnesthesiaCheckup patient={currentPatient} />
+                  ) : (
+                    <PatientPreOpQuestionnaire patientId={currentPatient.id} />
+                  )}
                 </div>
               )}
 
@@ -986,7 +1043,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
 
               {activeNav === 'patients' && (
                 <div className="space-y-6">
-                  <div className="glass-console rounded-2xl p-6 shadow-xs">
+                  <div className="glass-console rounded-2xl p-4 sm:p-6 shadow-xs min-w-0 max-w-full overflow-hidden break-words">
                     <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                       <div>
                         <h3 className="font-serif italic text-lg font-bold tracking-tight text-white">
@@ -1002,7 +1059,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                             key={filter}
                             type="button"
                             onClick={() => setPatientFilter(filter)}
-                            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer ${
+                            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer min-h-[44px] sm:min-h-0 ${
                               patientFilter === filter
                                 ? 'bg-white text-slate-900 shadow-xs'
                                 : 'bg-white/15 text-white/75 hover:bg-white/20'
@@ -1014,8 +1071,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
                     </div>
 
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs">
+                    <div className="overflow-x-auto max-w-full -mx-1 px-1">
+                      <table className="w-full min-w-[600px] text-left text-xs">
                         <thead className="border-b border-white/25 text-white/70 font-bold uppercase tracking-wider bg-white/10">
                           <tr>
                             <th className="py-3 px-3">Patient</th>
@@ -1068,7 +1125,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                                     selectPatient(p.id);
                                     setActiveNav('dashboard');
                                   }}
-                                  className="rounded-full bg-white hover:bg-white/85 text-slate-900 px-3 py-1 text-[11px] font-bold transition cursor-pointer shadow-xs"
+                                  className="rounded-full bg-white hover:bg-white/85 text-slate-900 px-3 py-1 text-[11px] font-bold transition cursor-pointer shadow-xs min-h-[44px] sm:min-h-0"
                                 >
                                   View Case
                                 </button>
@@ -1089,7 +1146,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   <TrafficLightBanner patient={currentPatient} />
 
                   {/* OT Waste & Delay Prevention Quick-Action Strip */}
-                  <div className="rounded-2xl border border-white/20 bg-white/10 p-4 space-y-3">
+                  <div className="rounded-2xl border border-white/20 bg-white/10 p-4 space-y-3 min-w-0 max-w-full break-words overflow-hidden">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-white/10 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-sky-500/20 text-sky-200 border border-sky-300/30 shrink-0 font-bold text-xs font-mono">
@@ -1107,14 +1164,14 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       <button
                         type="button"
                         onClick={() => setActiveNav('ot-defense')}
-                        className="self-start sm:self-auto flex items-center gap-1 text-[11px] font-mono font-bold text-sky-200 hover:text-white transition px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 cursor-pointer"
+                        className="self-start sm:self-auto flex items-center gap-1 text-[11px] font-mono font-bold text-sky-200 hover:text-white transition px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 cursor-pointer min-h-[44px] sm:min-h-0"
                       >
                         <span>Open Defense Hub</span>
                         <ChevronRight className="h-3 w-3" />
                       </button>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                       <button
                         type="button"
                         onClick={() => setActiveNav('ot-defense')}
@@ -1176,7 +1233,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   {/* Multi-Pane Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Pane 1: STAT Blood Investigation Console */}
-                    <div className="lg:col-span-7 console-pane rounded-2xl border border-white/25 p-6 shadow-xs space-y-4 transition">
+                    <div className="lg:col-span-7 console-pane rounded-2xl border border-white/25 p-4 sm:p-6 shadow-xs space-y-4 transition min-w-0 max-w-full overflow-hidden break-words">
                       <div className="flex items-center justify-between pb-3 border-b border-white/15">
                         <div>
                           <h3 className="flex items-center gap-2 font-serif italic text-base font-bold text-white">
@@ -1198,7 +1255,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* Biomarker Grid */}
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {/* K+ */}
                         {(() => {
                           const val = kLab ? kLab.value : 4.2;
@@ -1412,14 +1469,14 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                           <button
                             type="button"
                             onClick={() => setActiveNav('blood-labs')}
-                            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/20 text-white/85 text-xs font-bold transition cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/20 text-white/85 text-xs font-bold transition cursor-pointer min-h-[44px] sm:min-h-0"
                           >
                             Fishbone View
                           </button>
                           <button
                             type="button"
                             onClick={() => setActiveNav('blood-labs')}
-                            className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/85 text-slate-900 text-xs font-bold transition shadow-xs cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-white/85 text-slate-900 text-xs font-bold transition shadow-xs cursor-pointer min-h-[44px] sm:min-h-0"
                           >
                             POC Console View
                           </button>
@@ -1428,7 +1485,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     </div>
 
                     {/* Pane 2: Vital Signs & Live Telemetry */}
-                    <div className="lg:col-span-5 console-pane rounded-2xl border border-white/25 p-6 shadow-xs space-y-4 transition">
+                    <div className="lg:col-span-5 console-pane rounded-2xl border border-white/25 p-4 sm:p-6 shadow-xs space-y-4 transition min-w-0 max-w-full overflow-hidden break-words">
                       <div className="flex items-center justify-between pb-3 border-b border-white/15">
                         <div>
                           <h3 className="flex items-center gap-2 font-serif italic text-base font-bold text-white">
@@ -1471,7 +1528,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         </div>
 
                         {/* Telemetry Metrics */}
-                        <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/10 text-center">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-white/10 text-center">
                           <div>
                             <div className="text-[9px] font-mono text-white/50">HR</div>
                             <div className="text-sm font-extrabold text-white font-mono">
@@ -1501,7 +1558,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* Haemodynamic Status Bar */}
-                      <div className="flex items-center justify-between text-xs font-semibold text-white/85 bg-white/10 p-3 rounded-xl border border-white/20">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-white/85 bg-white/10 p-3 rounded-xl border border-white/20 min-w-0 break-words">
                         <span className="flex items-center gap-1.5">
                           <CheckCircle2 className="h-4 w-4 text-emerald-200" />
                           <span>Sinus Rhythm · Hemodynamically Stable</span>
@@ -1513,8 +1570,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     </div>
 
                     {/* Pane 3: Pre-Op Medication & Drug Hold Tracker */}
-                    <div className="lg:col-span-6 console-pane rounded-2xl border border-white/25 p-6 shadow-xs space-y-4 transition">
-                      <div className="flex items-center justify-between pb-3 border-b border-white/15">
+                    <div className="lg:col-span-6 console-pane rounded-2xl border border-white/25 p-4 sm:p-6 shadow-xs space-y-4 transition min-w-0 max-w-full overflow-hidden break-words">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/15">
                         <div>
                           <h3 className="flex items-center gap-2 font-serif italic text-base font-bold text-white">
                             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/20 text-amber-200 border border-amber-300/30 shrink-0"><Pill className="h-4 w-4" /></span>
@@ -1571,7 +1628,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                               <button
                                 type="button"
                                 onClick={() => setShowAllMeds((v) => !v)}
-                                className="w-full py-2 rounded-xl border border-white/25 bg-white/10 text-xs font-bold text-white hover:bg-white/15 transition cursor-pointer"
+                                className="w-full py-2 rounded-xl border border-white/25 bg-white/10 text-xs font-bold text-white hover:bg-white/15 transition cursor-pointer min-h-[44px]"
                               >
                                 {showAllMeds ? 'Show fewer holds' : `Show all ${currentPatient.medications.length} holds`}
                               </button>
@@ -1601,14 +1658,14 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                         )}
 
                         {/* NPO Fasting Status Box */}
-                        <div className="p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-300/40 flex items-center justify-between">
+                        <div className="p-3.5 rounded-xl bg-emerald-500/20 border border-emerald-300/40 flex flex-wrap items-center justify-between gap-2 min-w-0 break-words">
                           <div>
                             <div className="text-xs font-bold text-white flex items-center gap-1.5">
                               <Utensils className="h-3.5 w-3.5 text-emerald-200" />
                               <span>NPO Fasting Status: Cleared</span>
                             </div>
                             <div className="text-[11px] text-emerald-200 font-mono mt-0.5">
-                              Solids: 12h 00m (Target ≥8h) · Clear Liquids: 3h 30m (Target ≥3h)
+                              Solids: 12h 00m (Target ≥8h) · Clear Liquids: 3h 30m (Target ≥2h min, 3h preferred)
                             </div>
                           </div>
                           <span className="rounded-full bg-emerald-600 px-2.5 py-1 text-[9px] font-bold text-white shadow-xs">
@@ -1619,8 +1676,8 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     </div>
 
                     {/* Pane 4: Airway & Perioperative Risk Scores */}
-                    <div className="lg:col-span-6 console-pane rounded-2xl border border-white/25 p-6 shadow-xs space-y-4 transition">
-                      <div className="flex items-center justify-between pb-3 border-b border-white/15">
+                    <div className="lg:col-span-6 console-pane rounded-2xl border border-white/25 p-4 sm:p-6 shadow-xs space-y-4 transition min-w-0 max-w-full overflow-hidden break-words">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/15">
                         <div>
                           <h3 className="flex items-center gap-2 font-serif italic text-base font-bold text-white">
                             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-100 border border-indigo-300/30 shrink-0"><ShieldCheck className="h-4 w-4" /></span>
@@ -1636,7 +1693,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* 4 Risk Metrics Cards */}
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {/* Mallampati */}
                         <div className="p-3.5 rounded-xl bg-white/10 border border-white/20 space-y-1">
                           <div className="text-[10px] font-mono text-white/70 uppercase">Mallampati Class</div>
@@ -1698,7 +1755,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </div>
 
                       {/* 1-Tap DHA Attestation & WhatsApp PAC Dispatch Buttons */}
-                      <div className="pt-3 border-t border-white/15 flex items-center gap-3">
+                      <div className="pt-3 border-t border-white/15 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
                         <button
                           type="button"
                           onClick={handleOpenAttestation}
@@ -1724,6 +1781,60 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
                     <SurgeryCountdown patient={currentPatient} />
                     <CountdownTimers medications={currentPatient.medications} />
+                  </div>
+
+                  {/* SeamlessMD-lite: Post-Op PRO Day 0-7 (lazy, collapsible) */}
+                  <div className="rounded-2xl border border-white/25 bg-white/10 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setIsPostOpOpen((v) => !v)}
+                      aria-expanded={isPostOpOpen}
+                      className="flex w-full items-center justify-between gap-2 p-4 text-left transition hover:bg-white/5 cursor-pointer"
+                    >
+                      <div>
+                        <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300">
+                          SeamlessMD-lite · Post-op Day 0–7
+                        </div>
+                        <div className="font-serif italic text-sm font-bold text-white">
+                          Post-Op PRO Monitor (pain / fever / wound)
+                        </div>
+                      </div>
+                      <ChevronDown className={`h-4 w-4 text-white/70 transition-transform ${isPostOpOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isPostOpOpen && (
+                      <div className="border-t border-white/15 p-4">
+                        <Suspense fallback={<div className="text-xs font-mono text-white/60">Loading PRO monitor…</div>}>
+                          <PostOpMonitor patientId={currentPatient.id} patientName={currentPatient.name} />
+                        </Suspense>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SeamlessMD-lite: Quality analytics (lazy, collapsible) */}
+                  <div className="rounded-2xl border border-white/25 bg-white/10 overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setIsAnalyticsOpen((v) => !v)}
+                      aria-expanded={isAnalyticsOpen}
+                      className="flex w-full items-center justify-between gap-2 p-4 text-left transition hover:bg-white/5 cursor-pointer"
+                    >
+                      <div>
+                        <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-sky-300">
+                          SeamlessMD-lite · Console quality
+                        </div>
+                        <div className="font-serif italic text-sm font-bold text-white">
+                          Quality Analytics (clearance · lanes · ASA · NPO · risk)
+                        </div>
+                      </div>
+                      <ChevronDown className={`h-4 w-4 text-white/70 transition-transform ${isAnalyticsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isAnalyticsOpen && (
+                      <div className="border-t border-white/15 p-4">
+                        <Suspense fallback={<div className="text-xs font-mono text-white/60">Loading analytics…</div>}>
+                          <QualityAnalytics />
+                        </Suspense>
+                      </div>
+                    )}
                   </div>
 
                   {drugInteractions.length > 0 && (

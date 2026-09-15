@@ -193,6 +193,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
   }, [patient]);
 
   // 2. 8-Hour NPO Fasting & Gastric Clearance Evaluation
+  // Standard: 8h solids / 2h minimum clears (3h preferred) — hard stop <2h, caution 2-3h.
   const fastingEvaluation = useMemo(() => {
     const solidHours = lastSolidHoursAgo;
     const fluidHours = lastClearFluidHoursAgo;
@@ -212,14 +213,19 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
       delayMinutesNeeded = Math.round((8.0 - solidHours) * 60);
       headline = `BORDERLINE FASTING: Solid Food ${solidHours.toFixed(1)}h Ago (Target 8h)`;
       directive = `Light meal may be acceptable, but heavy/fried food requires 8 full hours. Options: (A) Push OT start time by ${delayMinutesNeeded} minutes, OR (B) Perform Bedside Gastric POCUS to verify empty stomach (antral cross-sectional area < 3.5 cm²).`;
+    } else if (fluidHours < 2.0) {
+      status = 'HARD_STOP';
+      delayMinutesNeeded = Math.round((2.0 - fluidHours) * 60);
+      headline = `Clear-Fluid HARD STOP: Ingested ${fluidHours.toFixed(1)}h Ago (2h minimum, 3h preferred)`;
+      directive = `Hold induction ${delayMinutesNeeded} minutes minimum (until 2h elapsed); 3h preferred. If emergent, RSI with cricoid pressure.`;
     } else if (fluidHours < 3.0) {
       status = 'CONDITIONAL';
       delayMinutesNeeded = Math.round((3.0 - fluidHours) * 60);
-      headline = `Clear Fluids Ingested ${fluidHours.toFixed(1)}h Ago (Requires 3h)`;
-      directive = `Wait ${delayMinutesNeeded} minutes before induction to ensure gastric emptying of fluids.`;
+      headline = `Clear-Fluid Caution: Ingested ${fluidHours.toFixed(1)}h Ago (2h met, 3h preferred)`;
+      directive = `2h minimum satisfied; prefer waiting ${delayMinutesNeeded} minutes until 3h preferred, or confirm empty stomach with bedside gastric POCUS.`;
     } else {
       status = 'CLEARED';
-      headline = `8-Hour NPO Fasting Protocol Satisfied (${solidHours.toFixed(1)}h Solids, ${fluidHours.toFixed(1)}h Fluids)`;
+      headline = `8h solids / 2h minimum clears (3h preferred) Satisfied (${solidHours.toFixed(1)}h Solids, ${fluidHours.toFixed(1)}h Fluids)`;
       directive = 'Stomach physiologically cleared of particulate matter. Standard perioperative induction permitted without aspiration delay.';
     }
 
@@ -531,7 +537,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                     Pillar 2 · 8-Hour NPO Fasting &amp; Gastric Aspiration Guard
                   </h3>
                   <p className="text-[11px] text-white/70">
-                    Mandatory 8h solids / 2h clear liquids fasting protocol to eliminate pulmonary aspiration
+                    Mandatory 8h solids / 2h minimum clears (3h preferred) fasting protocol to eliminate pulmonary aspiration
                   </p>
                 </div>
               </div>
@@ -586,7 +592,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                       <span>Last Clear Fluid (Water/Tea):</span>
                     </span>
                     <span className="text-white font-bold font-mono">
-                      {lastClearFluidHoursAgo.toFixed(1)} hours ago (Target: ≥2.0h)
+                      {lastClearFluidHoursAgo.toFixed(1)} hours ago (Target: ≥2.0h minimum, 3h preferred)
                     </span>
                   </div>
                   <input
@@ -600,7 +606,7 @@ export const OTDelayPreventionHub: React.FC<OTDelayPreventionHubProps> = ({
                   />
                   <div className="flex justify-between text-[10px] font-mono text-white/70 mt-0.5">
                     <span>30m</span>
-                    <span className="text-white font-bold">2h (Cleared)</span>
+                    <span className="text-white font-bold">2h min (3h preferred)</span>
                     <span>6h</span>
                   </div>
                 </div>

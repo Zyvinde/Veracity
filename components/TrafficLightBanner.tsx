@@ -76,7 +76,7 @@ export const TrafficLightBanner: React.FC<TrafficLightBannerProps> = ({ patient 
     <section
       role="status"
       aria-label={`Clearance status: ${patient.overallStatus.replace(/_/g, ' ')}`}
-      className="glass-console rounded-2xl p-5 sm:p-6 shadow-xs text-white/90"
+      className="glass-console rounded-2xl p-5 sm:p-6 shadow-xs text-white/90 min-w-0 max-w-full overflow-hidden break-words"
     >
       <div className="flex flex-col gap-3.5 md:flex-row md:items-center md:justify-between">
         <div className="flex items-start gap-3 sm:gap-3.5">
@@ -114,7 +114,7 @@ export const TrafficLightBanner: React.FC<TrafficLightBannerProps> = ({ patient 
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 pt-4 border-t border-white/15">
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-4 border-t border-white/15">
         <div className="rounded-xl border border-white/20 bg-white/10 p-3.5">
           <div className="flex items-center justify-between text-xs font-semibold text-white/70 font-mono">
             <span>{t('trafficLight.asaStatus')}</span>

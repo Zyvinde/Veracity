@@ -282,7 +282,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       recentUrtiWithin2Weeks: recentCold,
       lastSolidFoodHoursAgo: lastSolidHours,
       lastClearFluidHoursAgo: lastFluidHours,
-      isNpoFastingAdequate: lastSolidHours >= 8 && lastFluidHours >= 3,
+      isNpoFastingAdequate: lastSolidHours >= 8 && lastFluidHours >= 2,
       personalMhHistory: personalMh,
       familyMhHistory: familyMh,
       difficultAirwayHistory: difficultAirway,
@@ -418,7 +418,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
   return (
     <div
-      className="w-full max-w-5xl mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden"
+      className="w-full max-w-full sm:max-w-5xl mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden overflow-x-clip min-w-0 break-words"
     >
       {/* Header Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/15 bg-white/10 backdrop-blur-md px-4 sm:px-6 py-3 sm:py-4">
@@ -456,7 +456,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 key={lang.code}
                 type="button"
                 onClick={() => setLocale(lang.code as Locale)}
-                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition min-h-[38px] flex items-center justify-center cursor-pointer ${
+                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition min-h-[44px] flex items-center justify-center cursor-pointer ${
                   locale === lang.code
                     ? 'bg-emerald-600 text-white shadow-sm'
                     : 'text-white/70 hover:text-white hover:bg-white/10'
@@ -555,7 +555,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
         <button
           type="button"
           onClick={handleApplyToPatientStore}
-          className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-bold transition shadow cursor-pointer min-h-[38px]"
+          className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-bold transition shadow cursor-pointer min-h-[44px]"
         >
           {isSavedSuccess ? (
             <Check className="h-3.5 w-3.5 text-white" />
@@ -848,7 +848,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     addCurrentMed(newMedName, newMedCategory);
                     setNewMedName('');
                   }}
-                  className="flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 text-xs font-bold transition cursor-pointer shadow-md"
+                  className="flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 text-xs font-bold transition cursor-pointer shadow-md min-h-[44px]"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add</span>
@@ -861,10 +861,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 {currentMedications.map((med) => (
                   <div
                     key={med.name}
-                    className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex items-center justify-between backdrop-blur-md"
+                    className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words"
                   >
-                    <div>
-                      <div className="font-bold text-white text-xs">{med.name}</div>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-bold text-white text-xs break-words">{med.name}</div>
                       <div className="text-[10px] text-white/50">{med.category.replace('_', ' ')}</div>
                     </div>
                     <button
@@ -872,7 +872,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                       onClick={() =>
                         setCurrentMedications(currentMedications.filter((m) => m.name !== med.name))
                       }
-                      className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer"
+                      className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
                       aria-label={`Remove ${med.name}`}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -954,7 +954,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                       onClick={() =>
                         setPreviousSurgeries(previousSurgeries.filter((_, i) => i !== idx))
                       }
-                      className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer"
+                      className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
                       aria-label="Remove surgery"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -987,7 +987,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 <button
                   type="button"
                   onClick={addPreviousSurgery}
-                  className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-bold transition cursor-pointer shadow-md"
+                  className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-bold transition cursor-pointer shadow-md min-h-[44px]"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add surgery</span>
@@ -1492,7 +1492,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
             {hasCardiacHistory && (
               <div className="space-y-4 pt-2">
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 min-w-0">
                   {[
                     { id: 'MYOCARDIAL_INFARCTION' as CardiacCondition, label: 'Prior Heart Attack (MI)' },
                     { id: 'CORONARY_STENT_DES' as CardiacCondition, label: 'Drug-Eluting Stent (DES)' },
@@ -1604,7 +1604,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Hours Since Last Clear Liquids (Target ≥ 3h)
+                  Hours Since Last Clear Liquids (≥2h minimum, 3h preferred)
                 </label>
                 <input
                   type="number"
@@ -1713,7 +1713,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                         <button
                           type="button"
                           onClick={() => currentPatient && requestFitness(currentPatient.id, s.specialty, s.reason)}
-                          className="rounded-xl bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 text-xs font-bold transition cursor-pointer shrink-0 shadow-md"
+                          className="rounded-xl bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 text-xs font-bold transition cursor-pointer shrink-0 shadow-md min-h-[44px] sm:min-h-0"
                         >
                           Request fitness
                         </button>
@@ -1818,7 +1818,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
       </div>
 
       {/* Footer Navigation Bar */}
-      <div className="flex items-center justify-between border-t border-white/15 bg-white/5 backdrop-blur-md px-4 sm:px-6 py-3.5 sm:py-4 rounded-b-2xl gap-2">
+      <div className="flex flex-wrap items-center justify-between border-t border-white/15 bg-white/5 backdrop-blur-md px-4 sm:px-6 py-3.5 sm:py-4 rounded-b-2xl gap-2 min-w-0">
         <button
           type="button"
           disabled={activeStep === 1}

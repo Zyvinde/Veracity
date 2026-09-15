@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import ConsoleWorkspace, { ConsoleBackdrop } from '@/components/ConsoleWorkspace';
 
 export const metadata: Metadata = {
-  title: 'OT Console (Private Beta) — Veracity Clinical Decision Support',
+  title: 'OT Console (Private Beta) — House Health Clinical Decision Support',
   description:
-    'Veracity OT Console (Private Beta): Pre-operative assessment, anesthesia decision support, and surgical delay prevention under DHA § 3060(a) CDS guidelines.',
+    'House Health OT Console (Private Beta): Pre-operative assessment, anesthesia decision support, and surgical delay prevention under DHA § 3060(a) CDS guidelines.',
 };
 
 export default function ConsolePage() {

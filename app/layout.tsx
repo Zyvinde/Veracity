@@ -58,13 +58,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Veracity (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
+  title: "House Health (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
   description: "Private Beta clinical decision support platform for perioperative risk assessment, anesthesia triage, and surgical delay prevention under DHA § 3060(a) guidelines.",
   icons: {
     icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E",
   },
   openGraph: {
-    title: "Veracity (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
+    title: "House Health (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
     description: "Private Beta clinical decision support platform for perioperative assessment, anesthesia clearance workflows, and surgical safety defense.",
     type: "website",
   },
@@ -90,10 +90,10 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-screen bg-[#0a0a0a] text-white font-sans antialiased selection:bg-white/20 dark:bg-[#0A0B0E] dark:text-slate-200 dark:selection:bg-[#10B981] dark:selection:text-[#06281C]">
+      <body className="min-h-screen w-full max-w-full overflow-x-clip bg-[#0a0a0a] text-white font-sans antialiased selection:bg-white/20 dark:bg-[#0A0B0E] dark:text-slate-200 dark:selection:bg-[#10B981] dark:selection:text-[#06281C]">
         <I18nProvider>
           <ToastProvider>
-            <div id="app-root">
+            <div id="app-root" className="w-full max-w-full min-w-0 overflow-x-clip">
               {children}
             </div>
             <Toaster richColors theme="dark" position="bottom-right" closeButton />

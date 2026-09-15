@@ -100,16 +100,16 @@ function ConsoleWorkspaceContent() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-          V
+          H
         </div>
-        <p className="text-sm font-semibold text-white">Loading Veracity surgical roster…</p>
+        <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
         <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
       </div>
     );
   }
 
   return (
-    <div className="relative z-10 w-full min-h-screen">
+    <div className="relative z-10 w-full max-w-full min-w-0 overflow-x-clip min-h-screen">
       <TablerClinicalDashboard
         onOpenIngestion={() => setIsIngestionOpen(true)}
         onOpenAttestation={() => setIsAttestationOpen(true)}
@@ -170,11 +170,11 @@ export default function ConsoleWorkspace() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
+      <div className="min-h-screen w-full max-w-full min-w-0 overflow-x-clip flex flex-col items-center justify-center gap-4 px-4 py-8 sm:p-8 text-center text-white">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-            V
+            H
           </div>
-          <p className="text-sm font-semibold text-white">Loading Veracity console…</p>
+          <p className="text-sm font-semibold text-white">Loading House Health console…</p>
         </div>
       }
     >

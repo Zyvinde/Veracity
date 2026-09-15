@@ -189,7 +189,7 @@ const CHECKUP_SECTIONS = [
       {
         id: 'npo',
         question: 'NPO status verified and documented?',
-        detail: 'Confirm last solid food intake ≥8h, last clear liquid intake ≥3h. If emergency, RSI with cricoid pressure consideration.',
+        detail: 'Confirm 8h solids / 2h minimum clears (3h preferred). If emergency, RSI with cricoid pressure consideration.',
         category: 'airway',
         critical: true,
       },

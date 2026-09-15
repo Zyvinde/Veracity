@@ -22,7 +22,7 @@ const config: Config = {
       colors: {
         background: "#000000",
         foreground: "#FFFFFF",
-        /* Veracity mist + slate semantic tokens (default light theme) */
+        /* House Health mist + slate semantic tokens (default light theme) */
         cream: {
           DEFAULT: "#E4E9ED",
           deep: "#EFF3F6",

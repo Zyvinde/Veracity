@@ -1,13 +1,13 @@
 {
   "common": {
-    "appName": "एंटीरियर हेल्थ",
+    "appName": "House Health",
     "appVersion": "AXIOM BIO PAC v2.5",
     "sovereign": "संप्रभु पेरिऑपरेटिव इंटेलिजेंस और सर्जिकल क्लियरेंस इंजन",
     "hostedOn": "Azure UAE North (दुबई) पर होस्ट किया गया • संप्रभु एन्क्लेव",
     "safeHarbor": "कानूनी सुरक्षित बंदरगाह गैर-डिवाइस CDS § 3060(a)",
     "realtimeStream": "रीयलटाइम PAC स्ट्रीम",
     "fhirSync": "FHIR R4 / DICOM सिंक: OK",
-    "copyright": "एंटीरियर हेल्थ (एक्सियम बायो) © 2026",
+    "copyright": "House Health © 2026",
     "jurisdiction": "संप्रभु एन्क्लेव: UAE Azure North (दुबई)",
     "statutoryHarbor": "कानूनी सुरक्षित बंदरगाह: गैर-डिवाइस CDS § 3060(a)",
     "fhirDicom": "HL7 FHIR R4 और DICOM अनुपालन",
@@ -446,7 +446,7 @@
   "printSlip": {
     "title": "आधिकारिक डिजिटल PAC क्लियरेंस स्लिप पूर्वावलोकन",
     "printExport": "प्रिंट / PDF निर्यात",
-    "anteriorHealth": "एंटीरियर हेल्थ",
+    "anteriorHealth": "House Health",
     "axiomBio": "एक्सियम बायो नैदानिक बुद्धिमत्ता",
     "certificate": "संप्रभु पेरिऑपरेटिव मूल्यांकन और एनेस्थेसिया क्लियरेंस प्रमाणपत्र",
     "certNo": "PAC प्रमाणपत्र संख्या",
@@ -538,7 +538,7 @@
     "copiedMsg": "संदेश कॉपी हो गया!",
     "copyText": "टेक्स्ट कॉपी करें",
     "openWhatsApp": "वास्तविक WhatsApp में खोलें",
-    "antHealthBot": "एंटीरियर हेल्थ PAC बॉट",
+    "antHealthBot": "House Health PAC",
     "verifiedBot": "सत्यापित नैदानिक निर्णय सहायता बॉट",
     "online": "ऑनलाइन",
     "official": "आधिकारिक"

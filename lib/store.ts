@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { PatientCase, AirwayExam, AttestationRecord, ExtractedLabItem, PatientPreOpQuestionnaire, SpecialistReferral } from './types';
+import { PatientCase, AirwayExam, AttestationRecord, ExtractedLabItem, PatientPreOpQuestionnaire, SpecialistReferral, PACInterview } from './types';
 import { MOCK_PATIENT_LIST } from './mock-data';
-import { evaluateOverallClearance, determinePACSwimLane, evaluateAirwayRisk, evaluateQuestionnaireFull } from './rules-engine';
+import { evaluateOverallClearance, determinePACSwimLane, evaluateAirwayRisk, evaluateQuestionnaireFull, evaluatePACInterview } from './rules-engine';
 import { logAuditEvent } from './audit-logger';
 
 export type UserRole = 'coordinator' | 'anesthesiologist';
@@ -30,6 +30,7 @@ interface PatientStore {
   selectLab: (id: string) => void;
   updatePatient: (patientId: string, updates: Partial<PatientCase>) => void;
   saveQuestionnaire: (patientId: string, questionnaire: PatientPreOpQuestionnaire) => void;
+  savePACInterview: (patientId: string, interview: PACInterview) => void;
   generateIntakeLink: (patientId: string) => string;
   requestFitness: (patientId: string, specialty: string, reason: string) => void;
   setFitnessStatus: (
@@ -173,6 +174,58 @@ export const usePatientStore = create<PatientStore>()(
           'PATIENT_VIEWED',
           patientId,
           `Pre-op questionnaire synced (${questionnaire.source}): ${report.overallClearance} — ${report.hardStopFlags.length} hard stops, ${report.conditionalFlags.length} conditionals`
+        );
+      },
+
+      savePACInterview: (patientId, interview) => {
+        const existing = get().patients.find((p) => p.id === patientId);
+        const report = evaluatePACInterview(interview, existing?.scheduledTimeIso);
+        let updatedPatientToSave: PatientCase | null = null;
+        set((state) => ({
+          patients: state.patients.map((p) => {
+            if (p.id !== patientId) return p;
+            const updated: PatientCase = {
+              ...p,
+              pacInterview: interview,
+              pacInterviewUpdatedAtIso: new Date().toISOString(),
+              pacCompleted: true,
+              // PAC interview informs triage but never downgrades a harder stop
+              // already set by full questionnaire / labs.
+              overallStatus:
+                report.overallClearance === 'RED_HARD_STOP'
+                  ? 'RED_HARD_STOP'
+                  : p.questionnaire
+                    ? p.overallStatus
+                    : report.overallClearance,
+              primaryActionDirective: p.questionnaire
+                ? p.primaryActionDirective
+                : report.primaryActionDirective,
+              ...(interview.weightKg ? { weightKg: interview.weightKg } : {}),
+              ...(interview.heightCm ? { heightCm: interview.heightCm } : {}),
+              ...(interview.weightKg && interview.heightCm
+                ? {
+                    bmi: Math.round((interview.weightKg / Math.pow(interview.heightCm / 100, 2)) * 10) / 10,
+                  }
+                : {}),
+            };
+            const lane = determinePACSwimLane(updated);
+            updatedPatientToSave = { ...updated, swimLane: lane };
+            return updatedPatientToSave;
+          }),
+        }));
+
+        if (updatedPatientToSave) {
+          fetch(`/api/patients/${patientId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedPatientToSave),
+          }).catch((err) => console.warn('Sync PAC interview to DB failed:', err));
+        }
+
+        logAuditEvent(
+          interview.mode === 'CLINIC' ? 'PAC_INTERVIEW_VERIFIED' : 'PAC_INTERVIEW_COMPLETED',
+          patientId,
+          `PAC interview ${interview.mode === 'CLINIC' ? 'verified' : 'completed'} (${interview.source}): ${report.overallClearance} — ${report.hardStopFlags.length} hard stops, ${report.conditionalFlags.length} conditionals`
         );
       },
 

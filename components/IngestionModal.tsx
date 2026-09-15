@@ -72,6 +72,30 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
   const [parsedLabsResult, setParsedLabsResult] = useState<ExtractedLabItem[]>([]);
   const [constructedPatient, setConstructedPatient] = useState<PatientCase | null>(null);
 
+  // SeamlessMD-lite: document category (LAB/ECG/ECHO/CONSENT/OTHER) + local library
+  type DocCategory = 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER';
+  const [docCategory, setDocCategory] = useState<DocCategory>('LAB');
+  const [docFilter, setDocFilter] = useState<'ALL' | DocCategory>('ALL');
+  const [docLibrary, setDocLibrary] = useState<{ id: string; filename: string; category: DocCategory; atIso: string }[]>(() => {
+    try {
+      if (typeof window === 'undefined') return [];
+      const raw = window.localStorage.getItem('veracity-doc-library');
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const persistDocLibrary = (next: { id: string; filename: string; category: DocCategory; atIso: string }[]) => {
+    setDocLibrary(next);
+    try {
+      window.localStorage.setItem('veracity-doc-library', JSON.stringify(next.slice(-50)));
+    } catch {
+      // localStorage unavailable — keep in-memory only
+    }
+  };
+
   if (!isOpen) return null;
 
   const handleFileSelect = (file: File) => {
@@ -130,6 +154,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         formData.append('file', selectedFile);
         formData.append('age', String(patientForm.age));
         formData.append('gender', patientForm.gender);
+        formData.append('category', docCategory);
 
         try {
           const res = await fetch('/api/extract', {
@@ -219,6 +244,16 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
       setParsedLabsResult(labs);
       setConstructedPatient(newPatient);
 
+      persistDocLibrary([
+        ...docLibrary,
+        {
+          id: `doc-${Date.now().toString(36)}`,
+          filename,
+          category: docCategory,
+          atIso: new Date().toISOString(),
+        },
+      ]);
+
       setPipelineStep(4);
       setLogs((prev) => [
         ...prev,
@@ -248,10 +283,10 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 backdrop-blur-xs p-3 sm:p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-4xl overflow-hidden glass-strong rounded-2xl shadow-2xl my-6 animate-scale-in text-white/90">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-sky-200">
               <UploadCloud className="h-5 w-5" />
@@ -281,7 +316,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-5 text-xs font-sans max-h-[78vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-5 text-xs font-sans max-h-[78vh] overflow-y-auto overflow-x-clip min-w-0 break-words">
           {/* Mode Switcher: Real PDF Upload vs Demo Lab Presets */}
           <div className="flex items-center gap-2 border-b border-white/15 pb-3.5">
             <button
@@ -371,6 +406,27 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                   </span>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* SeamlessMD-lite: document category select */}
+          {ingestMode === 'UPLOAD' && (
+            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/25 bg-white/10 p-3">
+              <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-white/70">
+                Document category
+              </span>
+              <select
+                value={docCategory}
+                onChange={(e) => setDocCategory(e.target.value as 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER')}
+                className="rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:outline-none min-h-[44px]"
+              >
+                {(['LAB', 'ECG', 'ECHO', 'CONSENT', 'OTHER'] as const).map((c) => (
+                  <option key={c} value={c} className="bg-slate-900">{c}</option>
+                ))}
+              </select>
+              <span className="text-[10.5px] font-mono text-white/60">
+                Stored with upload (SQLite + device fallback)
+              </span>
             </div>
           )}
 
@@ -523,7 +579,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
                 <div>
                   <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Age</label>
                   <input
@@ -602,6 +658,45 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
             </div>
           </div>
 
+          {/* SeamlessMD-lite: document library with category filter */}
+          <div className="rounded-2xl border border-white/25 bg-white/10 p-4 space-y-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+                Document library ({docLibrary.filter((d) => docFilter === 'ALL' || d.category === docFilter).length})
+              </span>
+              <div className="flex items-center gap-1.5">
+                {(['ALL', 'LAB', 'ECG', 'ECHO', 'CONSENT', 'OTHER'] as const).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setDocFilter(f)}
+                    className={`rounded-full px-2.5 py-1 text-[10px] font-mono font-bold transition cursor-pointer ${
+                      docFilter === f ? 'bg-white text-slate-900' : 'bg-white/15 text-white/70 hover:text-white'
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {docLibrary.filter((d) => docFilter === 'ALL' || d.category === docFilter).length === 0 ? (
+              <p className="text-[11px] font-mono text-white/60">No documents yet — uploads appear here with their category.</p>
+            ) : (
+              <div className="max-h-28 space-y-1.5 overflow-y-auto">
+                {docLibrary
+                  .filter((d) => docFilter === 'ALL' || d.category === docFilter)
+                  .slice(-10)
+                  .reverse()
+                  .map((d) => (
+                    <div key={d.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/10 border border-white/15 px-3 py-1.5 text-[11px] font-mono text-white/80">
+                      <span className="truncate">{d.filename}</span>
+                      <span className="shrink-0 rounded-full bg-white/15 border border-white/25 px-2 py-0.5 text-[9px] font-bold text-white">{d.category}</span>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+
           {/* Real Telemetry Stepper & Terminal */}
           {pipelineStep > 0 && (
             <div className="rounded-2xl border border-white/30 bg-white/15 p-4 space-y-3 animate-fade-in">
@@ -637,7 +732,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                   <div className="text-[11px] font-mono text-white/75 uppercase tracking-wider mb-2 font-bold">
                     Extracted Biomarkers ({parsedLabsResult.length} verified):
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 min-w-0">
                     {parsedLabsResult.slice(0, 8).map((lab) => (
                       <div
                         key={lab.id}
@@ -668,7 +763,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between border-t border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
             <ShieldCheck className="h-4 w-4 text-sky-200" />
             <span>Zero Data Leakage · SHA-256 Provenance Bounding Box Audited</span>

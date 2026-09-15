@@ -51,6 +51,8 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
   const [sendStep, setSendStep] = useState<number>(0);
   const [isDelivered, setIsDelivered] = useState(false);
   const [copied, setCopied] = useState(false);
+  // SeamlessMD-lite: Day 0-7 post-op follow-up template reusing the same send flow
+  const [template, setTemplate] = useState<'PREOP' | 'POSTOP'>('PREOP');
 
   if (!isOpen) return null;
 
@@ -77,7 +79,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
     if (language === 'ar') {
       return {
         greeting: `مرحباً ${patient.name}،`,
-        title: `*تصريح التقييم قبل التخدير والجراحة (PAC) - Anterior Health*`,
+        title: `*تصريح التقييم قبل التخدير والجراحة (PAC) - House Health*`,
         status: isCleared
           ? '🟢 *الحالة: مصرح للجراحة (CLEARED)*'
           : isAmber
@@ -97,15 +99,15 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
           .join('\n'),
         directiveTitle: `⚠️ *توجيهات الفريق الطبي:*`,
         directiveText: patient.primaryActionDirective,
-        verifyLink: `🔗 رابط التحقق من التصريح الرقمي: https://pac.anterior.health/v/${patient.mrn}`,
-        footer: `تم إصدار هذا التصريح الرقمي المعتمد برقم شهادة: ${certNumber}\n🔒 مدعوم بنظام الذكاء الاصطناعي السيادي Anterior Health`,
+        verifyLink: `🔗 رابط التحقق من التصريح الرقمي: https://pac.house.health/v/${patient.mrn}`,
+        footer: `تم إصدار هذا التصريح الرقمي المعتمد برقم شهادة: ${certNumber}\n🔒 مدعوم بنظام الذكاء الاصطناعي السيادي House Health`,
       };
     }
 
     if (language === 'hi') {
       return {
         greeting: `नमस्ते ${patient.name},`,
-        title: `*प्री-ऑपरेटिव एनेस्थीसिया क्लीयरेंस (PAC) - Anterior Health*`,
+        title: `*प्री-ऑपरेटिव एनेस्थीसिया क्लीयरेंस (PAC) - House Health*`,
         status: isCleared
           ? '🟢 *स्थिति: सर्जरी के लिए स्वीकृत (CLEARED)*'
           : isAmber
@@ -125,15 +127,15 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
           .join('\n'),
         directiveTitle: `⚠️ *मुख्य निर्देश:*`,
         directiveText: patient.primaryActionDirective,
-        verifyLink: `🔗 डिजिटल प्रमाणपत्र सत्यापन: https://pac.anterior.health/v/${patient.mrn}`,
-        footer: `प्रमाणपत्र संख्या: ${certNumber}\n🔒 प्रमाणित डिजिटल मेडिकल रिकॉर्ड Anterior Health`,
+        verifyLink: `🔗 डिजिटल प्रमाणपत्र सत्यापन: https://pac.house.health/v/${patient.mrn}`,
+        footer: `प्रमाणपत्र संख्या: ${certNumber}\n🔒 प्रमाणित डिजिटल मेडिकल रिकॉर्ड House Health`,
       };
     }
 
     if (language === 'kn') {
       return {
         greeting: `ನಮಸ್ಕಾರ ${patient.name},`,
-        title: `*ಅರಿವಳಿಕೆ ಪೂರ್ವ ಮೌಲ್ಯಮಾಪನ ಕ್ಲಿಯರೆನ್ಸ್ (PAC) - Anterior Health*`,
+        title: `*ಅರಿವಳಿಕೆ ಪೂರ್ವ ಮೌಲ್ಯಮಾಪನ ಕ್ಲಿಯರೆನ್ಸ್ (PAC) - House Health*`,
         status: isCleared
           ? '🟢 *ಸ್ಥಿತಿ: ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಗೆ ಅನುಮೋದಿಸಲಾಗಿದೆ (CLEARED)*'
           : isAmber
@@ -153,8 +155,8 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
           .join('\n'),
         directiveTitle: `⚠️ *ಪ್ರಮುಖ ನಿರ್ದೇಶನಗಳು:*`,
         directiveText: patient.primaryActionDirective,
-        verifyLink: `🔗 ಡಿಜಿಟಲ್ ಪ್ರಮಾಣಪತ್ರ ಪರಿಶೀಲನೆ ಲಿಂಕ್: https://pac.anterior.health/v/${patient.mrn}`,
-        footer: `ಪ್ರಮಾಣಪತ್ರ ಸಂಖ್ಯೆ: ${certNumber}\n🔒 Anterior Health ಸಾಫ್ಟ್ವೇರ್`,
+        verifyLink: `🔗 ಡಿಜಿಟಲ್ ಪ್ರಮಾಣಪತ್ರ ಪರಿಶೀಲನೆ ಲಿಂಕ್: https://pac.house.health/v/${patient.mrn}`,
+        footer: `ಪ್ರಮಾಣಪತ್ರ ಸಂಖ್ಯೆ: ${certNumber}\n🔒 House Health ಸಾಫ್ಟ್ವೇರ್`,
       };
     }
 
@@ -174,7 +176,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
         `👨‍⚕️ *Anesthesiologist:* ${patient.anesthesiologist}`,
       ],
       fastingTitle: `🕒 *Preoperative Fasting (NPO) Rules:*`,
-      fastingText: `• No solid food, milk, or heavy meals for 8 hours before surgery.\n• Clear liquids (water/apple juice up to 200ml) permitted until 3 hours before surgery.\n• Do NOT take diabetes medicine on day of surgery.\n• TAKE thyroid medicine on day of surgery with a sip of water.`,
+      fastingText: `• 8h solids / 2h minimum clears (3h preferred).\n• No solid food, milk, or heavy meals for 8 hours before surgery.\n• Clear liquids (water/apple juice up to 200ml): 2h minimum, 3h preferred.\n• Do NOT take diabetes medicine on day of surgery.\n• TAKE thyroid medicine on day of surgery with a sip of water.`,
       medsTitle: `💊 *Medication Hold Instructions:*`,
       medsText: patient.medications
         .map((m) => `• *${m.drugName}*: ${m.clinicalAction}`)
@@ -185,19 +187,51 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
       fitnessText: (patient.fitnessReferrals || []).length > 0
         ? (patient.fitnessReferrals || []).map((r) => `• ${r.specialty}: ${r.status.replace('_', ' ')} — ${r.reason}`).join('\n')
         : `• No outside specialist fitness required.`,
-      verifyLink: `🔗 *View Cryptographic Digital PAC Slip:* https://pac.anterior.health/v/${patient.mrn}`,
-      footer: `Certificate No: ${certNumber} | Hash: ${attestationRecord?.signatureHash?.substring(0, 18) || '0x7f83b165...'}...\n🔒 Anterior Health Sovereign Healthcare Gateway`,
+      verifyLink: `🔗 *View Cryptographic Digital PAC Slip:* https://pac.house.health/v/${patient.mrn}`,
+      pacInterviewLink: `📝 *Complete your 3-min Quick PAC (meds, 8h fasting, allergies, escort):* ${typeof window !== 'undefined' ? window.location.origin : ''}/pac?mrn=${encodeURIComponent(patient.mrn)}&mode=self`,
+      footer: `Certificate No: ${certNumber} | Hash: ${attestationRecord?.signatureHash?.substring(0, 18) || '0x7f83b165...'}...\n🔒 House Health Sovereign Healthcare Gateway`,
     };
   };
 
   const msg = getMessageContent();
+  const pacLinkBlock =
+    (msg as { pacInterviewLink?: string }).pacInterviewLink ||
+    `📝 Quick PAC (3 min): ${typeof window !== 'undefined' ? window.location.origin : ''}/pac?mrn=${encodeURIComponent(patient.mrn)}&mode=self`;
   const fitnessBlock = (() => {
     const m = msg as { fitnessTitle?: string; fitnessText?: string };
     if (!m.fitnessText || !m.fitnessText.trim()) return '';
     return `\n${m.fitnessTitle || `🏥 *Doctor Fitness (Major Illness):*`}\n${m.fitnessText}\n`;
   })();
 
-  const fullTextMessage = `*ANTERIOR HEALTH — DIGITAL PAC CLEARANCE PASSPORT*
+  const fullTextMessage = template === 'POSTOP'
+    ? `*HOUSE HEALTH — DAY 0-7 POST-OP CHECK-IN*
+============================================
+
+${msg.greeting}
+
+*Post-op follow-up (Day 0-7): ${patient.procedureName}*
+${isCleared ? '🟢 *Recovery on track* — keep ERAS plan.' : isAmber ? '🟡 *Recovery watch* — reply with scores below.' : '🔴 *Surgeon review advised* — reply TODAY.'}
+
+🏥 *Facility:* ${patient.facility.split(',')[0]}
+👨‍⚕️ *Surgeon:* ${patient.surgeon}
+
+📋 *Reply with these 5 (takes 1 min):*
+1) Pain 0-10 right now?
+2) Fever? (temp °C if taken)
+3) Wound: redness spreading? any discharge/pus?
+4) Nausea/vomiting? opioid tablets in last 24h?
+5) Walked/mobilised today? (yes/no)
+
+🚦 *Traffic-light guide:*
+• GREEN: pain ≤4, no fever, wound settled → continue plan
+• AMBER: pain 5-7, temp 37.8-38.4, redness only, nausea, or not mobilised → nurse callback 24h
+• RED: pain ≥8, temp ≥38.5, redness WITH discharge, or heavy opioid use → contact team TODAY / ED if rigors, chest pain, breathlessness
+
+${msg.verifyLink}
+
+------------------------------------------
+${msg.footer}`
+    : `*HOUSE HEALTH — DIGITAL PAC CLEARANCE PASSPORT*
 ============================================
 
 ${msg.greeting}
@@ -215,7 +249,7 @@ ${msg.medsText}
 
 ${msg.directiveTitle}
 ${msg.directiveText}
-${fitnessBlock}
+${fitnessBlock}${pacLinkBlock}
 ${msg.verifyLink}
 
 ------------------------------------------
@@ -250,7 +284,9 @@ ${msg.footer}`;
       setIsDelivered(true);
       onLogAudit?.(
         'PAC_WHATSAPP_SENT',
-        `Dispatched digital PAC clearance slip via WhatsApp to ${phoneNumber} in language [${language.toUpperCase()}]`
+        template === 'POSTOP'
+          ? `Dispatched Day 0-7 post-op follow-up (pain/fever/wound) via WhatsApp to ${phoneNumber} in language [${language.toUpperCase()}]`
+          : `Dispatched digital PAC clearance slip via WhatsApp to ${phoneNumber} in language [${language.toUpperCase()}]`
       );
 
       try {
@@ -266,10 +302,10 @@ ${msg.footer}`;
   const isRTL = language === 'ar';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 backdrop-blur-xs p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-4xl overflow-hidden glass-strong rounded-2xl shadow-2xl my-6 animate-scale-in text-white/90">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-sky-200">
               <MessageSquare className="h-5 w-5" />
@@ -302,7 +338,7 @@ ${msg.footer}`;
         {/* Modal Grid: Left Controls (5 cols) & Right WhatsApp UI Canvas (7 cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[75vh] overflow-y-auto">
           {/* Controls Column */}
-          <div className="lg:col-span-5 p-6 border-b lg:border-b-0 lg:border-r border-white/15 space-y-4 bg-white/10 font-sans text-xs">
+          <div className="lg:col-span-5 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-white/15 space-y-4 bg-white/10 font-sans text-xs min-w-0 break-words">
             {/* Patient Header Summary */}
             <div className="rounded-xl border border-white/25 bg-white/15 p-4 shadow-2xs">
               <div className="flex items-center justify-between text-white/85 font-mono text-xs">
@@ -350,11 +386,11 @@ ${msg.footer}`;
                 <Globe2 className="h-3.5 w-3.5 text-sky-200" />
                 {t('whatsapp.languageSelect')}
               </label>
-              <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs min-w-0">
                 <button
                   type="button"
                   onClick={() => setLanguage('en')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     language === 'en'
                       ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
                       : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
@@ -365,7 +401,7 @@ ${msg.footer}`;
                 <button
                   type="button"
                   onClick={() => setLanguage('ar')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     language === 'ar'
                       ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
                       : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
@@ -376,7 +412,7 @@ ${msg.footer}`;
                 <button
                   type="button"
                   onClick={() => setLanguage('hi')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     language === 'hi'
                       ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
                       : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
@@ -387,7 +423,7 @@ ${msg.footer}`;
                 <button
                   type="button"
                   onClick={() => setLanguage('kn')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     language === 'kn'
                       ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
                       : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
@@ -396,6 +432,40 @@ ${msg.footer}`;
                   <span>🇮🇳 ಕನ್ನಡ (KN)</span>
                 </button>
               </div>
+            </div>
+
+            {/* Template Selector: Pre-op clearance vs Day 0-7 follow-up */}
+            <div>
+              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-white/70 mb-1.5">
+                Message template
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs min-w-0">
+                <button
+                  type="button"
+                  onClick={() => setTemplate('PREOP')}
+                  className={`rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
+                    template === 'PREOP'
+                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
+                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <span>Pre-op clearance</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTemplate('POSTOP')}
+                  className={`rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
+                    template === 'POSTOP'
+                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
+                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <span>Day 0–7 follow-up</span>
+                </button>
+              </div>
+              <p className="mt-1 text-[10px] text-white/60 font-mono">
+                Follow-up asks pain / fever / wound + reuses the same send flow.
+              </p>
             </div>
 
             {/* Included Attachments Info */}
@@ -453,7 +523,7 @@ ${msg.footer}`;
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 font-bold text-white shadow">
-                      VER
+                      HH
                     </div>
                     <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-500 border-2 border-white" />
                   </div>
@@ -595,7 +665,7 @@ ${msg.footer}`;
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-6 py-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
             <Lock className="h-3.5 w-3.5 text-sky-200" />
             <span>{t('whatsapp.azureGateway')}</span>

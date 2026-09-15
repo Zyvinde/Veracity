@@ -15,7 +15,7 @@ function generateFHIRBundle(patient: PatientCase): Record<string, unknown> {
     type: 'collection',
     timestamp: new Date().toISOString(),
     meta: {
-      source: 'Anterior Health PAC Platform v2.5',
+      source: 'House Health PAC Platform v2.5',
       profile: ['http://hl7.org/fhir/StructureDefinition/Patient'],
     },
     entry: [

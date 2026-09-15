@@ -108,9 +108,9 @@ export const MedicareSidebarRail: React.FC<MedicareSidebarRailProps> = ({
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
           className="group relative flex h-11 w-11 items-center justify-center rounded-xl bg-white text-black hover:bg-neutral-200 transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-          title="Veracity Autonomous Surgical Defense"
+          title="House Health Autonomous Surgical Defense"
         >
-          <span className="font-serif font-black text-xl tracking-tighter text-black">V</span>
+          <span className="font-serif font-black text-xl tracking-tighter text-black">H</span>
           <span className="absolute -bottom-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-[#07080B]">
             <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
           </span>

@@ -110,10 +110,10 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8">
           <a href="#" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#223140] text-lg font-bold text-white shadow-[0_4px_12px_rgba(34,49,64,0.3)]">
-              V
+              H
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-serif text-[20px] font-bold tracking-tight text-[#223140]">Veracity</span>
+              <span className="font-serif text-[20px] font-bold tracking-tight text-[#223140]">House Health</span>
               <span className="-mt-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
                 Perioperative Defense
               </span>
@@ -245,7 +245,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               <span className="italic text-[#223140]">perioperative defense.</span>
             </h1>
             <p className="mt-6 max-w-[560px] text-[17px] font-normal leading-relaxed text-[#475569]">
-              Join surgical teams partnered with Veracity to succeed with autonomous
+              Join surgical teams partnered with House Health to succeed with autonomous
               clearance — actionable contraindication insights, fasting verification,
               and mobile blood triage before the patient enters theatre.
             </p>
@@ -302,7 +302,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               <div className="flex items-center justify-between border-b border-[#D3DCE2] px-6 py-4">
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#223140] text-sm font-bold text-white">
-                    V
+                    H
                   </div>
                   <span className="text-sm font-bold text-[#111827]">OT Defense Console</span>
                 </div>
@@ -381,7 +381,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               The operating system for <span className="italic text-[#223140]">perioperative defense.</span>
             </h2>
             <p className="mx-auto max-w-[600px] text-[17px] leading-relaxed text-[#475569]">
-              Veracity combines the screening, workflows, and attestation needed to
+              House Health combines the screening, workflows, and attestation needed to
               make zero-delay surgery perform at scale.
             </p>
           </div>
@@ -461,7 +461,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               Program strategy you <span className="italic text-[#223140]">can bank on.</span>
             </h2>
             <p className="max-w-[600px] text-[17px] leading-relaxed text-[#475569]">
-              Leverage Veracity&apos;s portfolio of clearance pathways to maximize
+              Leverage House Health&apos;s portfolio of clearance pathways to maximize
               throughput and mitigate day-of-surgery exposure.
             </p>
           </div>
@@ -648,7 +648,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
         <div className="mx-auto max-w-[860px] px-4 text-center sm:px-6">
           <p className="text-[15px] font-bold tracking-[0.3em] text-[#223140]">★★★★★</p>
           <blockquote className="mt-5 font-serif text-[26px] font-normal leading-snug text-[#111827] sm:text-[33px]">
-            “Our partnership with <span className="italic text-[#223140]">Veracity</span> has deepened our
+            “Our partnership with <span className="italic text-[#223140]">House Health</span> has deepened our
             tech-enablement capabilities — our network now delivers{' '}
             <span className="italic text-[#223140]">quality care</span> with zero day-of-surgery delays.”
           </blockquote>
@@ -692,7 +692,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               </div>
             </div>
             <p className="mt-5 max-w-[900px] text-[13px] leading-relaxed text-slate-600">
-              Veracity operates under the statutory non-device CDS safe harbor. All
+              House Health operates under the statutory non-device CDS safe harbor. All
               recommendations display underlying guidelines (ASA 2023, ASRA 2024,
               ACOG 2024, ACC/AHA) and require final licensed anesthesiologist
               attestation. Data remains encrypted within sovereign UAE infrastructure.
@@ -722,7 +722,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
               Bring <span className="italic text-amber-200">clarity</span> to perioperative defense.
             </h2>
             <p className="mx-auto mt-4 max-w-[520px] text-[15px] leading-relaxed text-white/70">
-              Join surgical teams using Veracity to lead the transition to zero-delay,
+              Join surgical teams using House Health to lead the transition to zero-delay,
               fully attested clearance. Start with a complimentary list analysis.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -751,15 +751,15 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
           <div>
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white font-bold text-[#223140]">
-                V
+                H
               </div>
-              <span className="font-serif text-[18px] font-bold text-white">Veracity</span>
+              <span className="font-serif text-[18px] font-bold text-white">House Health</span>
             </div>
             <p className="mt-4 max-w-[300px] leading-relaxed">
-              Veracity partners with surgical teams to succeed with autonomous
+              House Health partners with surgical teams to succeed with autonomous
               clearance through screening, analytics and attestation.
             </p>
-            <p className="mt-4">care@veracity.health</p>
+            <p className="mt-4">care@house.health</p>
           </div>
           <div>
             <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Solutions</p>
@@ -781,7 +781,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
           <div>
             <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Company</p>
             <ul className="mt-4 space-y-2.5">
-              <li><a href="#pillars" className="transition-colors hover:text-white">About Veracity</a></li>
+              <li><a href="#pillars" className="transition-colors hover:text-white">About House Health</a></li>
               <li><a href="/nova" className="transition-colors hover:text-white">Cinematic Experience</a></li>
               <li><a href="#contact" className="transition-colors hover:text-white">Contact Us</a></li>
               <li>
@@ -794,7 +794,7 @@ export const VeracityHeroLanding: React.FC<VeracityHeroLandingProps> = ({
         </div>
         <div className="mx-auto mt-12 flex max-w-[1280px] flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 font-mono text-[11px] sm:flex-row">
           <span>All data processing complies with HIPAA and DHA governance.</span>
-          <span>© 2026 Veracity. All rights reserved.</span>
+          <span>© 2026 House Health. All rights reserved.</span>
         </div>
       </footer>
 

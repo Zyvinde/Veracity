@@ -85,9 +85,9 @@ function PageContent() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-          V
+          H
         </div>
-        <p className="text-sm font-semibold text-white">Loading Veracity surgical roster…</p>
+        <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
         <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
       </div>
     );
@@ -183,9 +183,9 @@ export default function Home() {
       fallback={
         <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#223140] text-white font-bold text-xl shadow-lg animate-pulse">
-            V
+            H
           </div>
-          <p className="text-sm font-semibold text-white">Loading Veracity Platform…</p>
+          <p className="text-sm font-semibold text-white">Loading House Health Platform…</p>
         </div>
       }
     >

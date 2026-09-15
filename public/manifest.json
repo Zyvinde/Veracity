@@ -1,6 +1,6 @@
 {
-  "name": "Anterior Health",
-  "short_name": "AnteriorPAC",
+  "name": "House Health",
+  "short_name": "HouseHealth",
   "description": "Sovereign Perioperative Intelligence & Digital PAC Platform",
   "start_url": "/",
   "display": "standalone",

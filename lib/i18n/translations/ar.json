@@ -1,13 +1,13 @@
 {
   "common": {
-    "appName": "أنتيريور هيلث",
+    "appName": "House Health",
     "appVersion": "AXIOM BIO PAC v2.5",
     "sovereign": "محرك الذكاء السريري السيادي والتوصية الجراحية",
     "hostedOn": "مستضاف على أزور شمال الإمارات (دبي) • ملاذ سيادي",
     "safeHarbor": "safe harbor القانوني للقرار غير الأجهزة § 3060(a)",
     "realtimeStream": "بث PAC في الوقت الفعلي",
     "fhirSync": "FHIR R4 / DICOM متزامن: موافق",
-    "copyright": "أنتيريور هيلث (أكسيوم بايو) © 2026",
+    "copyright": "House Health © 2026",
     "jurisdiction": "الملاذ السيادي: أزور شمال الإمارات (دبي)",
     "statutoryHarbor": "safe harbor القانوني: قرار غير الأجهزة § 3060(a)",
     "fhirDicom": "متوافق مع HL7 FHIR R4 و DICOM",
@@ -446,7 +446,7 @@
   "printSlip": {
     "title": "معاينة تصريح PAC الرقمي الرسمي",
     "printExport": "طباعة / تصدير PDF",
-    "anteriorHealth": "أنتيريور هيلث",
+    "anteriorHealth": "House Health",
     "axiomBio": "الذكاء السريري لأكسيوم بايو",
     "certificate": "شهادة التقييم قبل الجراحة والتصريح التخديري السيادية",
     "certNo": "رقم شهادة PAC",
@@ -538,7 +538,7 @@
     "copiedMsg": "تم نسخ الرسالة!",
     "copyText": "نسخ النص",
     "openWhatsApp": "فتح في واتساب الحقيقي",
-    "antHealthBot": "بوت أنتيريور هيلث PAC",
+    "antHealthBot": "House Health PAC",
     "verifiedBot": "بوت الدعم السريري الموثق",
     "online": "متصل",
     "official": "رسمي"

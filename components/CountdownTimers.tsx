@@ -49,7 +49,7 @@ export const CountdownTimers: React.FC<CountdownTimersProps> = ({ medications })
   return (
     <section
       aria-label="Medication hold timers"
-      className="glass-console rounded-2xl p-5 shadow-xs text-white/90 font-sans"
+      className="glass-console rounded-2xl p-5 shadow-xs text-white/90 font-sans min-w-0 max-w-full overflow-hidden break-words"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-3.5">
         <div>

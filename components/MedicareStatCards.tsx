@@ -143,7 +143,7 @@ export const MedicareStatCards: React.FC<MedicareStatCardsProps> = ({ onCardClic
           </div>
 
           <div className="mt-3 flex items-center justify-between text-[11px] font-mono border-t border-white/[0.06] pt-2.5">
-            <span className="text-neutral-400">GLP-1 7d · DOAC 48h</span>
+            <span className="text-neutral-400">GLP-1 7d · DOAC 48h GA / 72h neuraxial</span>
             <span className="inline-flex items-center gap-1 text-amber-400 font-semibold">
               <AlertTriangle className="h-3 w-3" />
               0 Breaches

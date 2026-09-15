@@ -106,7 +106,7 @@ export const HeaderComplianceBar: React.FC<HeaderComplianceBarProps> = ({
             <div>
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="font-serif text-lg sm:text-xl text-white font-medium tracking-tight">
-                  Veracity
+                  House Health
                 </span>
                 <span className="rounded-[3px] bg-white px-1.5 py-0.2 text-[9px] sm:text-[9.5px] font-mono font-bold text-black border border-white">
                   CLINICAL CONSOLE

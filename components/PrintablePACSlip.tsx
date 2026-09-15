@@ -64,10 +64,10 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="print-slip-title"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto animate-fade-in"
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-900/60 p-0 sm:p-4 backdrop-blur-xs overflow-y-auto animate-fade-in"
     >
-      <div className="relative w-full max-w-3xl rounded-2xl border border-slate-200 bg-white shadow-2xl my-8 animate-scale-in text-slate-900 overflow-hidden">
-        <div className="no-print flex items-center justify-between border-b border-slate-100 bg-slate-50/80 px-6 py-4 rounded-t-2xl">
+      <div className="relative w-full max-w-full sm:max-w-3xl rounded-none sm:rounded-2xl border border-slate-200 bg-white shadow-2xl my-0 sm:my-8 min-h-screen sm:min-h-0 animate-scale-in text-slate-900 overflow-hidden">
+        <div className="no-print flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4 sm:px-6 py-4 rounded-t-none sm:rounded-t-2xl">
           <div className="flex items-center gap-2.5">
             <Printer className="h-4 w-4 text-sky-600" />
             <span id="print-slip-title" className="font-serif italic text-base tracking-wide text-slate-900 font-bold">
@@ -97,7 +97,7 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
 
         <div
           id="printable-pac-slip"
-          className="p-8 bg-white text-slate-900 font-sans text-xs leading-relaxed max-h-[85vh] overflow-y-auto"
+          className="p-4 sm:p-8 bg-white text-slate-900 font-sans text-xs leading-relaxed max-h-[85vh] overflow-y-auto overflow-x-clip min-w-0 break-words"
         >
           <div className="border-b-2 border-slate-900 pb-4 flex justify-between items-start">
             <div>
@@ -120,7 +120,7 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
             </div>
           </div>
 
-          <div className="my-4 grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-[11px] font-sans">
+          <div className="my-4 grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-[11px] font-sans min-w-0">
             <div>
               <div className="text-slate-500 text-[10px] font-mono uppercase">{t('printSlip.patientName')}</div>
               <div className="font-serif text-base font-bold text-slate-900">{patient.name}</div>
@@ -143,7 +143,7 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
             <p className="mt-1 font-mono text-xs font-semibold">{patient.primaryActionDirective}</p>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 my-4 text-center font-mono text-[10px]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 my-4 text-center font-mono text-[10px] min-w-0">
             <div className="border border-slate-300 p-2 rounded bg-slate-50">
               <span className="text-slate-500 block">{t('printSlip.asaTier')}</span>
               <strong className="text-xs text-slate-900">{patient.asaStatus}</strong>
@@ -183,7 +183,7 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
             </div>
           </div>
 
-          <div className="my-4 grid grid-cols-2 gap-3 border border-slate-300 rounded-lg p-3 font-mono text-[10px]">
+          <div className="my-4 grid grid-cols-1 sm:grid-cols-2 gap-3 border border-slate-300 rounded-lg p-3 font-mono text-[10px] min-w-0">
             <div>
               <h5 className="font-bold text-slate-900 uppercase">{t('printSlip.airwayAnatomy')}</h5>
               <div>• Mallampati: <strong>{patient.airway.mallampati}</strong></div>
@@ -199,7 +199,27 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
             </div>
           </div>
 
-          <div className="mt-6 pt-4 border-t-2 border-slate-900 grid grid-cols-3 gap-4 items-center">
+          <div className="my-4 border border-slate-300 rounded-lg p-3 font-mono text-[10px]">
+            <h4 className="font-serif font-bold text-xs uppercase text-slate-900 border-b border-slate-200 pb-1">
+              Quick PAC interview {patient.pacCompleted ? '✓ completed' : '— pending'}
+            </h4>
+            {patient.pacInterview ? (
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-slate-700 min-w-0">
+                <div>• Escort: <strong>{patient.pacInterview.escortName || '—'}{patient.pacInterview.escortPhone ? ` (${patient.pacInterview.escortPhone})` : ''}</strong></div>
+                <div>• BMI (PAC): <strong>{patient.pacInterview.weightKg && patient.pacInterview.heightCm ? `${(patient.pacInterview.weightKg / Math.pow(patient.pacInterview.heightCm / 100, 2)).toFixed(1)} (${patient.pacInterview.weightKg}kg/${patient.pacInterview.heightCm}cm)` : '—'}</strong></div>
+                <div>• Last food: <strong>{patient.pacInterview.lastFoodIso ? new Date(patient.pacInterview.lastFoodIso).toLocaleString() : '—'}</strong></div>
+                <div>• Last water: <strong>{patient.pacInterview.lastFluidIso ? new Date(patient.pacInterview.lastFluidIso).toLocaleString() : '—'}</strong></div>
+                <div>• Meds: <strong>{patient.pacInterview.takesAnyMeds ? (patient.pacInterview.medCategories || []).join(', ') || (patient.pacInterview.medsFreeText || 'reported').slice(0, 80) : 'none reported'}</strong></div>
+                <div>• Allergy: <strong>{patient.pacInterview.hasAllergyAlert ? (patient.pacInterview.allergySummary || 'see chart').slice(0, 80) : 'none reported'}</strong></div>
+                <div>• Acks: <strong>{[patient.pacInterview.ackFasting && 'fasting', patient.pacInterview.ackDiabetesHold && 'diabetes-hold', patient.pacInterview.ackThyroidTake && 'thyroid-take', patient.pacInterview.ackBringList && 'bring-list', patient.pacInterview.ackEscort && 'escort'].filter(Boolean).join(', ') || '—'}</strong></div>
+                <div>• Mode: <strong>{patient.pacInterview.mode}{patient.pacInterview.clinicVerified?.planSelected ? ` / plan ${patient.pacInterview.clinicVerified.planSelected}` : ''}</strong></div>
+              </div>
+            ) : (
+              <p className="mt-2 text-slate-500">Patient hasn’t completed the 3-min Quick PAC yet. Send link: /pac?mrn={patient.mrn}</p>
+            )}
+          </div>
+
+          <div className="mt-6 pt-4 border-t-2 border-slate-900 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center min-w-0">
             <div className="col-span-2">
               <div className="font-serif font-bold text-xs uppercase text-slate-900">{t('printSlip.attestingAnesthesiologist')}</div>
               <div className="font-mono text-xs font-semibold text-slate-900 mt-1">
