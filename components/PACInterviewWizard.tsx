@@ -20,23 +20,24 @@ import {
 import { PACInterview, PACMedCategory } from '@/lib/types';
 import { evaluatePACInterview } from '@/lib/rules-engine';
 import { usePatientStore } from '@/lib/store';
+import { useI18n } from '@/lib/i18n/context';
 
 interface PACInterviewWizardProps {
   patientId?: string;
   initialMode?: 'SELF' | 'CLINIC';
 }
 
-const MED_CHIPS: { id: PACMedCategory; label: string; hint: string }[] = [
-  { id: 'BLOOD_THINNER', label: 'Blood thinner', hint: 'Aspirin, clopidogrel, warfarin, apixaban' },
-  { id: 'BP', label: 'BP tablets', hint: 'Pressure pills' },
-  { id: 'DIABETES', label: 'Diabetes / insulin', hint: 'Sugar tablets or insulin' },
-  { id: 'THYROID', label: 'Thyroid', hint: 'Thyroxine / carbimazole' },
-  { id: 'PAINKILLER_NSAID', label: 'Painkillers', hint: 'Ibuprofen, diclofenac, aspirin' },
-  { id: 'PSYCH_NEURO', label: 'Brain / sleep / fits', hint: 'Seizure, anxiety, depression, sleep' },
-  { id: 'STEROID', label: 'Steroids', hint: 'Prednisolone, inhalers with steroid' },
-  { id: 'CONTRACEPTIVE_HRT', label: 'Hormone pill / HRT', hint: 'OCP, patch, injection, HRT' },
-  { id: 'GLP1_WEIGHTLOSS', label: 'Weight injection', hint: 'Ozempic, Wegovy, Mounjaro' },
-  { id: 'OTHER', label: 'Other daily pill', hint: 'Anything else daily' },
+const MED_CHIP_IDS: PACMedCategory[] = [
+  'BLOOD_THINNER',
+  'BP',
+  'DIABETES',
+  'THYROID',
+  'PAINKILLER_NSAID',
+  'PSYCH_NEURO',
+  'STEROID',
+  'CONTRACEPTIVE_HRT',
+  'GLP1_WEIGHTLOSS',
+  'OTHER',
 ];
 
 const CHRONIC_CHIPS = ['HEART', 'BP', 'DIABETES', 'ASTHMA', 'KIDNEY', 'LIVER', 'THYROID', 'SEIZURE'];
@@ -52,6 +53,7 @@ function toLocalInputValue(iso?: string): string {
 
 export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientId, initialMode }) => {
   const { patients, currentPatientId, selectPatientByMrn } = usePatientStore();
+  const { t, locale, setLocale } = useI18n();
   const store = usePatientStore();
   const savePACInterview = store.savePACInterview;
 
@@ -277,7 +279,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
               : 'border-white/15 bg-white/5 text-white/70 hover:text-white hover:border-white/30'
           }`}
         >
-          {opt ? 'Yes' : 'No'}
+          {opt ? t('common.yes') : t('common.no')}
         </button>
       ))}
     </div>
@@ -304,11 +306,11 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
   );
 
   const steps = [
-    { n: 1, label: mode === 'CLINIC' ? 'Patient + escort' : 'You + surgery', icon: User },
-    { n: 2, label: 'Meds', icon: Pill },
-    { n: 3, label: 'Body check', icon: Heart },
-    { n: 4, label: 'Mouth + fasting', icon: Clock },
-    { n: 5, label: mode === 'CLINIC' ? 'Verify + plan' : 'Do’s + done', icon: ClipboardCheck },
+    { n: 1, label: mode === 'CLINIC' ? t('pacWizard.step1PatientEscort') : t('pacWizard.step1YouSurgery'), icon: User },
+    { n: 2, label: t('pacWizard.step2Meds'), icon: Pill },
+    { n: 3, label: t('pacWizard.step3Body'), icon: Heart },
+    { n: 4, label: t('pacWizard.step4MouthFasting'), icon: Clock },
+    { n: 5, label: mode === 'CLINIC' ? t('pacWizard.step5VerifyPlan') : t('pacWizard.step5Dos'), icon: ClipboardCheck },
   ];
 
   return (
@@ -321,16 +323,29 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
           </div>
           <div className="min-w-0">
             <h2 className="font-serif text-sm sm:text-base font-bold tracking-tight">
-              Quick PAC — {mode === 'CLINIC' ? 'Clinic verify' : 'Ask-the-questions'}
-              {currentPatient?.pacCompleted && <span className="ml-2 rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold">DONE</span>}
+              {t('pacWizard.title')} — {mode === 'CLINIC' ? t('pacWizard.clinicVerify') : t('pacWizard.askQuestions')}
+              {currentPatient?.pacCompleted && <span className="ml-2 rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold">{t('pacWizard.doneBadge')}</span>}
             </h2>
             <p className="text-[11px] sm:text-xs text-white/60 truncate">
-              {currentPatient ? `${currentPatient.name} • ${currentPatient.mrn} • ${currentPatient.procedureName}` : 'No case loaded'}
-              {urlMrn ? ` • link MRN ${urlMrn}` : ''}
+              {currentPatient ? `${currentPatient.name} • ${currentPatient.mrn} • ${currentPatient.procedureName}` : t('pacWizard.noCase')}
+              {urlMrn ? ` • ${t('pacWizard.linkMrn', { mrn: urlMrn })}` : ''}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex rounded-xl bg-white/10 border border-white/20 p-0.5" role="group" aria-label="Language">
+            {(['en', 'ar', 'hi', 'ur', 'ml'] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLocale(l)}
+                aria-pressed={locale === l}
+                className={`px-2 py-1.5 text-[10px] font-mono font-bold rounded-lg transition min-h-[44px] cursor-pointer ${locale === l ? 'bg-emerald-600 text-white shadow' : 'text-white/70 hover:text-white'}`}
+              >
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
           <div className="flex rounded-xl bg-white/10 border border-white/20 p-0.5" role="group" aria-label="Mode">
             {(['SELF', 'CLINIC'] as const).map((m) => (
               <button
@@ -340,16 +355,16 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 aria-pressed={mode === m}
                 className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition min-h-[44px] cursor-pointer ${mode === m ? 'bg-emerald-600 text-white shadow' : 'text-white/70 hover:text-white'}`}
               >
-                {m === 'SELF' ? 'Patient' : 'Clinic'}
+                {m === 'SELF' ? t('pacWizard.modePatient') : t('pacWizard.modeClinic')}
               </button>
             ))}
           </div>
           <button type="button" onClick={handleCopy} className="flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 px-3 py-2 text-xs font-semibold transition cursor-pointer min-h-[44px]">
             {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-            <span>{copied ? 'Copied!' : 'Copy link'}</span>
+            <span>{copied ? t('pacWizard.copied') : t('pacWizard.copyLink')}</span>
           </button>
           <a
-            href={currentPatient ? `https://wa.me/?text=${encodeURIComponent(`Please complete your Quick PAC (2-3 min) before surgery: ${shareUrl()}`)}` : '#'}
+            href={currentPatient ? `https://wa.me/?text=${encodeURIComponent(t('pacWizard.waShare', { url: shareUrl() }))}` : '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 text-xs font-semibold transition min-h-[44px]"
@@ -370,12 +385,12 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
           : report.overallClearance === 'AMBER_CONDITIONAL' ? <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0" />
           : <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0" />}
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-wider">Live: {report.overallClearance.replace(/_/g, ' ')}</div>
+            <div className="text-[11px] font-bold uppercase tracking-wider">{t('pacWizard.live')}: {report.overallClearance.replace(/_/g, ' ')}</div>
             <p className="text-xs mt-0.5 text-white/90 max-w-xl">{report.primaryActionDirective}</p>
           </div>
         </div>
         <button type="button" onClick={handleSave} className="rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
-          {savedOk ? 'Saved!' : mode === 'CLINIC' ? 'Verify + save' : 'Save + done'}
+          {savedOk ? t('pacWizard.savedBtn') : mode === 'CLINIC' ? t('pacWizard.verifySave') : t('pacWizard.saveDone')}
         </button>
       </div>
 
@@ -399,77 +414,77 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
       <div className="p-4 sm:p-6 space-y-5">
         {step === 1 && (
           <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">Who are you, who brings you home?</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{t('pacWizard.s1Title')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Escort name (adult taking you home)</label>
-                <input value={escortName} onChange={(e) => setEscortName(e.target.value)} placeholder="e.g. Ahmed, husband"
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.escortName')}</label>
+                <input value={escortName} onChange={(e) => setEscortName(e.target.value)} placeholder={t('pacWizard.escortNamePh')}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Escort phone</label>
-                <input value={escortPhone} onChange={(e) => setEscortPhone(e.target.value)} placeholder="+971 ..." inputMode="tel"
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.escortPhone')}</label>
+                <input value={escortPhone} onChange={(e) => setEscortPhone(e.target.value)} placeholder={t('pacWizard.escortPhonePh')} inputMode="tel"
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Weight (kg)</label>
-                <input type="number" value={weightKg} onChange={(e) => setWeightKg(e.target.value === '' ? '' : Number(e.target.value))} placeholder="e.g. 72" inputMode="decimal"
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.weight')}</label>
+                <input type="number" value={weightKg} onChange={(e) => setWeightKg(e.target.value === '' ? '' : Number(e.target.value))} placeholder={t('pacWizard.weightPh')} inputMode="decimal"
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Height (cm)</label>
-                <input type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value === '' ? '' : Number(e.target.value))} placeholder="e.g. 165" inputMode="decimal"
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.height')}</label>
+                <input type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value === '' ? '' : Number(e.target.value))} placeholder={t('pacWizard.heightPh')} inputMode="decimal"
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
             </div>
-            {report.bmi != null && <p className="text-xs text-white/70">BMI auto: <strong className="text-white">{report.bmi}</strong> — used for drug doses + airway plan.</p>}
-            <p className="text-xs text-white/60">No driving for 24h after anesthesia. You MUST have an adult escort.</p>
+            {report.bmi != null && <p className="text-xs text-white/70">{t('pacWizard.bmiAuto', { bmi: report.bmi })}</p>}
+            <p className="text-xs text-white/60">{t('pacWizard.noDriving')}</p>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">Are you on any meds?</h3>
-            <p className="text-xs text-white/60">Daily, weekly, even sometimes — include injections like Ozempic/Mounjaro.</p>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{t('pacWizard.s2Title')}</h3>
+            <p className="text-xs text-white/60">{t('pacWizard.s2Sub')}</p>
             <div>
-              <div className="text-xs font-semibold text-white/80 mb-2">Do you take ANY medicine regularly?</div>
+              <div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.anyMedsQ')}</div>
               {yesNo(takesAnyMeds, setTakesAnyMeds, 'takes-any-meds')}
             </div>
             {takesAnyMeds && (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {MED_CHIPS.map((c) => chip(medCategories.includes(c.id), c.label, () => toggle(medCategories, c.id, setMedCategories), c.hint))}
+                  {MED_CHIP_IDS.map((id) => chip(medCategories.includes(id), t(`pacWizard.meds.${id}`), () => toggle(medCategories, id, setMedCategories), t(`pacWizard.medsHint.${id}`)))}
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Names + doses (as on strip)</label>
-                  <input value={medsFreeText} onChange={(e) => setMedsFreeText(e.target.value)} placeholder="e.g. Metformin 500mg morning, Thyroxine 50mcg"
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.medNames')}</label>
+                  <input value={medsFreeText} onChange={(e) => setMedsFreeText(e.target.value)} placeholder={t('pacWizard.medNamesPh')}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
                 </div>
                 {(medCategories.includes('GLP1_WEIGHTLOSS')) && (
                   <div>
-                    <label className="block text-xs font-semibold text-white/70 mb-1">When was your last weight-loss injection?</label>
-                    <input value={glp1LastDoseText} onChange={(e) => setGlp1LastDoseText(e.target.value)} placeholder="e.g. 3 days ago, Monday"
+                    <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.glp1Q')}</label>
+                    <input value={glp1LastDoseText} onChange={(e) => setGlp1LastDoseText(e.target.value)} placeholder={t('pacWizard.glp1Ph')}
                       className="w-full rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:outline-none min-h-[44px]" />
                   </div>
                 )}
               </>
             )}
             <div>
-              <div className="text-xs font-semibold text-white/80 mb-2">Vitamins, herbals, ayurvedic, fish oil, iron, OTC painkillers?</div>
+              <div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.herbalsQ')}</div>
               {yesNo(takesHerbalsOTC, setTakesHerbalsOTC, 'herbals')}
             </div>
             {takesHerbalsOTC && (
-              <input value={herbalsFreeText} onChange={(e) => setHerbalsFreeText(e.target.value)} placeholder="e.g. fish oil, ginkgo, ashwagandha"
+              <input value={herbalsFreeText} onChange={(e) => setHerbalsFreeText(e.target.value)} placeholder={t('pacWizard.herbalsPh')}
                 className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
             )}
             <div>
-              <label className="block text-xs font-semibold text-white/70 mb-1">What did you take in the last 24 hours?</label>
-              <input value={medsLast24h} onChange={(e) => setMedsLast24h(e.target.value)} placeholder="e.g. BP pill morning, nothing else"
+              <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.last24h')}</label>
+              <input value={medsLast24h} onChange={(e) => setMedsLast24h(e.target.value)} placeholder={t('pacWizard.last24hPh')}
                 className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
             </div>
             {report.morningMeds.length > 0 && (
               <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-3 text-xs space-y-1">
-                <div className="font-bold text-emerald-300">Morning-of-surgery rules for you:</div>
+                <div className="font-bold text-emerald-300">{t('pacWizard.morningRules')}</div>
                 {report.morningMeds.map((m, i) => <p key={i} className="text-white/85">• {m}</p>)}
               </div>
             )}
@@ -478,42 +493,42 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
 
         {step === 3 && (
           <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">Quick body check</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{t('pacWizard.s3Title')}</h3>
             <div className="space-y-3">
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Fever, cold, cough, breathing infection in last 2 weeks?</div>{yesNo(recentFeverColdCough, setRecentFeverColdCough, 'fever')}</div>
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Chest pain? Breathless climbing 2 floors?</div>{yesNo(chestPainOrBreathless, setChestPainOrBreathless, 'chest')}</div>
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Loud snoring? Sleepy in daytime?</div>{yesNo(loudSnoring, setLoudSnoring, 'snore')}</div>
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Bleeding problem? Transfusion before? Heavy bruises / nose / gum bleeds?</div>{yesNo(bleedingOrTransfusionHx, setBleedingOrTransfusionHx, 'bleed')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.feverQ')}</div>{yesNo(recentFeverColdCough, setRecentFeverColdCough, 'fever')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.chestQ')}</div>{yesNo(chestPainOrBreathless, setChestPainOrBreathless, 'chest')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.snoreQ')}</div>{yesNo(loudSnoring, setLoudSnoring, 'snore')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.bleedQ')}</div>{yesNo(bleedingOrTransfusionHx, setBleedingOrTransfusionHx, 'bleed')}</div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-white/80 mb-2">Any long-term illness? (tap all)</div>
+              <div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.chronicQ')}</div>
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                {CHRONIC_CHIPS.map((c) => chip(chronicFlags.includes(c), c, () => toggle(chronicFlags, c, setChronicFlags)))}
+                {CHRONIC_CHIPS.map((c) => chip(chronicFlags.includes(c), t(`pacWizard.chronic.${c}`), () => toggle(chronicFlags, c, setChronicFlags)))}
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Pregnancy (skip if not applicable)</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.pregnancy')}</label>
                 <select value={pregnancyStatus} onChange={(e) => setPregnancyStatus(e.target.value as PACInterview['pregnancyStatus'])}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]">
-                  <option value="NOT_APPLICABLE" className="bg-black">Not applicable</option>
-                  <option value="NOT_PREGNANT" className="bg-black">Not pregnant</option>
-                  <option value="POSSIBLY_PREGNANT" className="bg-black">Could be pregnant</option>
-                  <option value="PREGNANT" className="bg-black">Pregnant</option>
-                  <option value="BREASTFEEDING" className="bg-black">Breastfeeding</option>
+                  <option value="NOT_APPLICABLE" className="bg-black">{t('pacWizard.pregNA')}</option>
+                  <option value="NOT_PREGNANT" className="bg-black">{t('pacWizard.pregNot')}</option>
+                  <option value="POSSIBLY_PREGNANT" className="bg-black">{t('pacWizard.pregMaybe')}</option>
+                  <option value="PREGNANT" className="bg-black">{t('pacWizard.pregYes')}</option>
+                  <option value="BREASTFEEDING" className="bg-black">{t('pacWizard.pregFeed')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Last period / weeks (if relevant)</label>
-                <input value={lmpOrWeeks} onChange={(e) => setLmpOrWeeks(e.target.value)} placeholder="e.g. 10 days ago / 12 weeks"
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lmp')}</label>
+                <input value={lmpOrWeeks} onChange={(e) => setLmpOrWeeks(e.target.value)} placeholder={t('pacWizard.lmpPh')}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
             </div>
             <div>
-              <div className="text-xs font-semibold text-white/80 mb-2">Any allergy — medicine, food, latex, dye? (rash, swelling, breathing trouble?)</div>
+              <div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.allergyQ')}</div>
               {yesNo(hasAllergyAlert, setHasAllergyAlert, 'allergy')}
               {hasAllergyAlert && (
-                <input value={allergySummary} onChange={(e) => setAllergySummary(e.target.value)} placeholder="e.g. penicillin — rash; peanuts — breathing trouble"
+                <input value={allergySummary} onChange={(e) => setAllergySummary(e.target.value)} placeholder={t('pacWizard.allergyPh')}
                   className="mt-2 w-full rounded-xl border border-rose-500/40 bg-rose-500/10 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:outline-none min-h-[44px]" />
               )}
             </div>
@@ -522,48 +537,48 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
 
         {step === 4 && (
           <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">Mouth, teeth + fasting</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{t('pacWizard.s4Title')}</h3>
             <div>
-              <div className="text-xs font-semibold text-white/80 mb-2">Teeth? (tap all that apply)</div>
+              <div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.teethQ')}</div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {DENTAL_CHIPS.map((d) => chip(dentalFlags.includes(d), d.replace(/_/g, ' ').toLowerCase(), () => toggle(dentalFlags, d, setDentalFlags)))}
+                {DENTAL_CHIPS.map((d) => chip(dentalFlags.includes(d), t(`pacWizard.dental.${d}`), () => toggle(dentalFlags, d, setDentalFlags)))}
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Mouth opens wide (3 fingers fit)?</div>{yesNo(mouthOpensWide, setMouthOpensWide, 'mouth')}</div>
-              <div><div className="text-xs font-semibold text-white/80 mb-2">Neck moves fully (look up/down/side)?</div>{yesNo(neckMovesFully, setNeckMovesFully, 'neck')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.mouthQ')}</div>{yesNo(mouthOpensWide, setMouthOpensWide, 'mouth')}</div>
+              <div><div className="text-xs font-semibold text-white/80 mb-2">{t('pacWizard.neckQ')}</div>{yesNo(neckMovesFully, setNeckMovesFully, 'neck')}</div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Last food / milk / heavy meal (exact time)</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lastFood')}</label>
                 <input type="datetime-local" value={lastFoodIso} onChange={(e) => setLastFoodIso(e.target.value)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Last water / clear juice (exact time)</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lastFluid')}</label>
                 <input type="datetime-local" value={lastFluidIso} onChange={(e) => setLastFluidIso(e.target.value)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
             </div>
             <div className="rounded-xl border border-white/15 bg-white/5 p-3 text-xs space-y-1">
-              <div className="font-bold text-white/90">Rule: 8h solids / 2h minimum clears (3h preferred).</div>
-              {report.fastingHoursSinceFood != null && <p className="text-white/70">Since food: {report.fastingHoursSinceFood}h • Since water: {report.fastingHoursSinceFluid ?? '—'}h</p>}
-              {currentPatient?.scheduledTimeIso && <p className="text-white/60">Surgery: {new Date(currentPatient.scheduledTimeIso).toLocaleString()}</p>}
+              <div className="font-bold text-white/90">{t('pacWizard.ruleLine')}</div>
+              {report.fastingHoursSinceFood != null && <p className="text-white/70">{t('pacWizard.sinceLine', { food: report.fastingHoursSinceFood, fluid: report.fastingHoursSinceFluid ?? '—' })}</p>}
+              {currentPatient?.scheduledTimeIso && <p className="text-white/60">{t('pacWizard.surgeryAt', { when: new Date(currentPatient.scheduledTimeIso).toLocaleString() })}</p>}
             </div>
           </div>
         )}
 
         {step === 5 && (
           <div className="space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{mode === 'CLINIC' ? 'Clinic verify + plan' : 'Do’s for surgery day'}</h3>
+            <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{mode === 'CLINIC' ? t('pacWizard.step5VerifyPlan') : t('pacWizard.step5Dos')}</h3>
             {mode === 'SELF' ? (
               <div className="space-y-2">
                 {[
-                  { v: ackFasting, s: setAckFasting, t: 'I will fast: 8h solids / 2h minimum clears (3h preferred).' },
-                  { v: ackDiabetesHold, s: setAckDiabetesHold, t: 'I will NOT take diabetes tablets/insulin on surgery morning.' },
-                  { v: ackThyroidTake, s: setAckThyroidTake, t: 'I WILL take thyroid tablet on surgery morning with a sip of water.' },
-                  { v: ackBringList, s: setAckBringList, t: 'I will bring: reports, ECG, inhaler/CPAP, pills strip. No makeup, nail polish, jewellery.' },
-                  { v: ackEscort, s: setAckEscort, t: 'An adult will stay + take me home. No driving 24h.' },
+                  { v: ackFasting, s: setAckFasting, t: t('pacWizard.ackFasting') },
+                  { v: ackDiabetesHold, s: setAckDiabetesHold, t: t('pacWizard.ackDiabetes') },
+                  { v: ackThyroidTake, s: setAckThyroidTake, t: t('pacWizard.ackThyroid') },
+                  { v: ackBringList, s: setAckBringList, t: t('pacWizard.ackBring') },
+                  { v: ackEscort, s: setAckEscort, t: t('pacWizard.ackEscort') },
                 ].map((a, i) => (
                   <button key={i} type="button" onClick={() => a.s(!a.v)} aria-pressed={a.v}
                     className={`w-full flex items-start gap-2.5 rounded-xl border p-3 text-left transition cursor-pointer ${a.v ? 'border-emerald-500 bg-emerald-950/40' : 'border-white/15 bg-white/5'}`}>
@@ -574,19 +589,19 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                   </button>
                 ))}
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Type your name = “I understood”</label>
-                  <input value={teachBackName} onChange={(e) => setTeachBackName(e.target.value)} placeholder="Full name"
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.teachBack')}</label>
+                  <input value={teachBackName} onChange={(e) => setTeachBackName(e.target.value)} placeholder={t('pacWizard.teachBackPh')}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
                 </div>
               </div>
             ) : (
               <div className="space-y-2">
                 {[
-                  { v: vNpo, s: setVNpo, t: 'NPO verified (8h solids / 2h minimum clears (3h preferred), GLP-1 hold checked)' },
-                  { v: vAirway, s: setVAirway, t: 'Airway seen (mouth, neck, teeth, Mallampati if done)' },
-                  { v: vMeds, s: setVMeds, t: 'Meds reconciled (blood thinner + diabetes + thyroid plan told)' },
-                  { v: vAllergy, s: setVAllergy, t: 'Allergy banded + kit/latex plan ready' },
-                  { v: vConsent, s: setVConsent, t: 'Plan + risks explained, questions answered' },
+                  { v: vNpo, s: setVNpo, t: t('pacWizard.vNpo') },
+                  { v: vAirway, s: setVAirway, t: t('pacWizard.vAirway') },
+                  { v: vMeds, s: setVMeds, t: t('pacWizard.vMeds') },
+                  { v: vAllergy, s: setVAllergy, t: t('pacWizard.vAllergy') },
+                  { v: vConsent, s: setVConsent, t: t('pacWizard.vConsent') },
                 ].map((a, i) => (
                   <button key={i} type="button" onClick={() => a.s(!a.v)} aria-pressed={a.v}
                     className={`w-full flex items-start gap-2.5 rounded-xl border p-3 text-left transition cursor-pointer ${a.v ? 'border-emerald-500 bg-emerald-950/40' : 'border-amber-500/40 bg-amber-950/30'}`}>
@@ -598,7 +613,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 ))}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                   <div>
-                    <label className="block text-xs font-semibold text-white/70 mb-1">Anesthesia plan</label>
+                    <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.planLabel')}</label>
                     <select value={vPlan} onChange={(e) => setVPlan(e.target.value as typeof vPlan)}
                       className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]">
                       {(['UNDECIDED', 'GA', 'SPINAL', 'REGIONAL', 'MAC', 'COMBINED'] as const).map((p) => (
@@ -607,19 +622,19 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                     </select>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-white/70 mb-1">Verifier name</label>
-                    <input value={vName} onChange={(e) => setVName(e.target.value)} placeholder="Dr. / Nurse name"
+                    <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.verifierName')}</label>
+                    <input value={vName} onChange={(e) => setVName(e.target.value)} placeholder={t('pacWizard.verifierPh')}
                       className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
                   </div>
                 </div>
-                <input value={vNotes} onChange={(e) => setVNotes(e.target.value)} placeholder="Verify notes (optional)"
+                <input value={vNotes} onChange={(e) => setVNotes(e.target.value)} placeholder={t('pacWizard.verifyNotesPh')}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
               </div>
             )}
 
             {/* Summary */}
             <div className="rounded-xl border border-white/15 bg-white/5 p-4 space-y-2">
-              <div className="text-xs font-bold uppercase tracking-wider">Summary for anesthesiologist</div>
+              <div className="text-xs font-bold uppercase tracking-wider">{t('pacWizard.summaryTitle')}</div>
               {report.hardStopFlags.length > 0 && (
                 <div className="space-y-1">
                   {report.hardStopFlags.map((f, i) => (
@@ -642,18 +657,18 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
       <div className="flex flex-wrap items-center justify-between border-t border-white/15 bg-white/5 px-4 sm:px-6 py-3.5 gap-2 min-w-0">
         <button type="button" disabled={step === 1} onClick={() => setStep((s) => Math.max(1, s - 1))}
           className="flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold disabled:opacity-40 transition cursor-pointer min-h-[44px]">
-          <ChevronLeft className="h-4 w-4" /><span>Back</span>
+          <ChevronLeft className="h-4 w-4" /><span>{t('pacWizard.back')}</span>
         </button>
         <div className="text-xs font-mono text-white/60">{step} / {totalSteps}</div>
         {step < totalSteps ? (
           <button type="button" onClick={() => setStep((s) => Math.min(totalSteps, s + 1))}
             className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
-            <span>Next</span><ChevronRight className="h-4 w-4" />
+            <span>{t('pacWizard.next')}</span><ChevronRight className="h-4 w-4" />
           </button>
         ) : (
           <button type="button" onClick={handleSave}
             className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
-            <ShieldCheck className="h-4 w-4" /><span>{savedOk ? 'Saved!' : mode === 'CLINIC' ? 'Verify + save' : 'Finish + save'}</span>
+            <ShieldCheck className="h-4 w-4" /><span>{savedOk ? t('pacWizard.savedBtn') : mode === 'CLINIC' ? t('pacWizard.verifySave') : t('pacWizard.finishSave')}</span>
           </button>
         )}
       </div>

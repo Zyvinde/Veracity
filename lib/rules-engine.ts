@@ -140,7 +140,8 @@ export function evaluateCreatinine(value: number, age: number, gender: 'M' | 'F'
   const alpha = gender === 'F' ? -0.241 : -0.302;
   const minVal = Math.min(value / kappa, 1);
   const maxVal = Math.max(value / kappa, 1);
-  const egfr = Math.round(142 * Math.pow(minVal, alpha) * Math.pow(maxVal, -1.200) * Math.pow(0.9938, age));
+  const sexMultiplier = gender === 'F' ? 1.012 : 1;
+  const egfr = Math.round(142 * Math.pow(minVal, alpha) * Math.pow(maxVal, -1.200) * Math.pow(0.9938, age) * sexMultiplier);
 
   if (value > 4.0) {
     return {
@@ -615,13 +616,30 @@ export function evaluateNeuraxialFeasibility(patient: PatientCase): NeuraxialEli
  * Pillar 2 Feature #10: Mandatory Serology & Blood Bank
  * ===================================================== */
 export function evaluateSerology(patient: PatientCase): SerologyPanel {
-  const isHighRiskFacility = patient.facility.includes('Dubai') || patient.facility.includes('Bangalore');
+  const findLabValue = (namePart: string): string | undefined => {
+    const lab = patient.labs.find(
+      l => l.name.toLowerCase().includes(namePart.toLowerCase()) || l.loinc.toLowerCase().includes(namePart.toLowerCase())
+    );
+    if (!lab) return undefined;
+    return lab.value > 0 ? 'POSITIVE' : 'NEGATIVE';
+  };
+  const findBloodGroup = (): string => {
+    const groupLab = patient.labs.find(
+      l => l.name.toLowerCase().includes('blood group') || l.name.toLowerCase().includes('abo')
+    );
+    return groupLab?.name.includes('O') ? 'O' : groupLab?.name.includes('A') ? 'A' : groupLab?.name.includes('B') ? 'B' : groupLab?.name.includes('AB') ? 'AB' : (patient.gender === 'F' ? 'O' : 'O');
+  };
+  const findRh = (): 'POSITIVE' | 'NEGATIVE' => {
+    const rhLab = patient.labs.find(l => l.name.toLowerCase().includes('rh'));
+    return rhLab && rhLab.name.toLowerCase().includes('neg') ? 'NEGATIVE' : 'POSITIVE';
+  };
+
   return {
-    hiv1_2: 'NEGATIVE',
-    hbsAg: 'NEGATIVE',
-    antiHCV: 'NEGATIVE',
-    bloodGroup: patient.gender === 'F' ? 'O+' : 'B+',
-    rhFactor: 'POSITIVE',
+    hiv1_2: (findLabValue('hiv') as SerologyPanel['hiv1_2']) || 'NOT_TESTED',
+    hbsAg: (findLabValue('hbsag') as SerologyPanel['hbsAg']) || 'NOT_TESTED',
+    antiHCV: (findLabValue('anti-hcv') as SerologyPanel['antiHCV']) || 'NOT_TESTED',
+    bloodGroup: findBloodGroup() + findRh(),
+    rhFactor: findRh(),
     crossmatchStatus: patient.invasivenessTier >= 3 ? 'COMPATIBLE' : 'NOT_CHECKED',
     screenedDate: new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0],
   };

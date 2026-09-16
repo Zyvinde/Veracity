@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { PatientCase, AttestationRecord } from '@/lib/types';
 import { useI18n } from '@/lib/i18n/context';
+import { usePatientStore, CLINICIANS } from '@/lib/store';
 import {
   ShieldCheck,
   X,
@@ -31,11 +32,13 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
   onAuthorize,
 }) => {
   const { t } = useI18n();
+  const activeClinicianId = usePatientStore((s) => s.activeClinicianId);
+  const activeClinician = CLINICIANS.find((c) => c.id === activeClinicianId) || null;
   const [clause1, setClause1] = useState(true);
   const [clause2, setClause2] = useState(true);
   const [clause3, setClause3] = useState(true);
-  const [physicianName, setPhysicianName] = useState(patient.anesthesiologist || 'Dr. Consultant Anesthesiologist');
-  const [licenseNumber, setLicenseNumber] = useState(patient.mrn.includes('DHA') ? 'DHA-MED-2026-99014' : 'NMC-IN-2026-44019');
+  const [physicianName, setPhysicianName] = useState(activeClinician?.name || patient.anesthesiologist || 'Dr. Consultant Anesthesiologist');
+  const [licenseNumber, setLicenseNumber] = useState(activeClinician?.license.split(' ')[0] || (patient.mrn.includes('DHA') ? 'DHA-MED-2026-99014' : 'NMC-IN-2026-44019'));
   const [isSigning, setIsSigning] = useState(false);
 
   if (!isOpen) return null;
@@ -93,8 +96,8 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-full sm:max-w-2xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-2xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
@@ -114,7 +117,7 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 cursor-pointer"
+            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 active:scale-90 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>

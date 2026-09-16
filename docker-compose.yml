@@ -7,11 +7,13 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_APP_NAME=Anterior Health
+      - NEXT_PUBLIC_APP_NAME=House Health
       - AZURE_REGION=uae-north
+    volumes:
+      - ./data:/app/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:3000"]
+      test: ["CMD", "wget", "--no-verbose", "--spider", "http://localhost:3000/api/healthz"]
       interval: 30s
       timeout: 10s
       retries: 3

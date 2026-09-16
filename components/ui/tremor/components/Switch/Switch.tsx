@@ -35,7 +35,7 @@ const switchVariants = tv({
     ],
     thumb: [
       // base
-      "pointer-events-none relative inline-block transform appearance-none rounded-full border-none shadow-lg outline-hidden transition-all duration-150 ease-in-out focus:border-none focus:outline-hidden focus:outline-transparent",
+      "pointer-events-none relative inline-block transform appearance-none rounded-full border-none shadow-lg outline-hidden transition-all duration-150 ease-out focus:border-none focus:outline-hidden focus:outline-transparent",
       // background color
       "bg-white dark:bg-gray-50",
       // disabled

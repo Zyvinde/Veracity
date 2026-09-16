@@ -4,10 +4,16 @@ import React, { createContext, useContext, useState, useCallback, useEffect, Rea
 import en from './translations/en.json';
 import ar from './translations/ar.json';
 import hi from './translations/hi.json';
+import ur from './translations/ur.json';
+import ml from './translations/ml.json';
 
-export type Locale = 'en' | 'ar' | 'hi';
+export type Locale = 'en' | 'ar' | 'hi' | 'ur' | 'ml';
 
-const translations: Record<Locale, typeof en> = { en, ar, hi };
+export function isRtlLocale(locale: Locale): boolean {
+  return locale === 'ar' || locale === 'ur';
+}
+
+const translations: Record<Locale, typeof en> = { en, ar, hi, ur, ml };
 
 interface I18nContextType {
   locale: Locale;
@@ -42,12 +48,12 @@ export function I18nProvider({ children, defaultLocale = 'en' }: { children: Rea
     setLocaleState(newLocale);
     localStorage.setItem('anterior-health-locale', newLocale);
     document.documentElement.lang = newLocale;
-    document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = isRtlLocale(newLocale) ? 'rtl' : 'ltr';
   }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.dir = isRtlLocale(locale) ? 'rtl' : 'ltr';
   }, [locale]);
 
   const t = useCallback((key: string, params?: Record<string, string | number>): string => {
@@ -61,7 +67,7 @@ export function I18nProvider({ children, defaultLocale = 'en' }: { children: Rea
     );
   }, [locale]);
 
-  const dir = locale === 'ar' ? 'rtl' : 'ltr';
+  const dir = isRtlLocale(locale) ? 'rtl' : 'ltr';
 
   return (
     <I18nContext.Provider value={{ locale, setLocale, t, dir }}>

@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Noto_Sans_Malayalam, Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n/context";
-import { ToastProvider } from "@/components/Toast";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -49,6 +48,12 @@ const notoDevanagari = Noto_Sans_Devanagari({
   display: "swap",
 });
 
+const notoMalayalam = Noto_Sans_Malayalam({
+  subsets: ["malayalam"],
+  variable: "--font-malayalam",
+  display: "swap",
+});
+
 export const viewport: Viewport = {
   themeColor: "#0a0a0a",
   width: "device-width",
@@ -76,7 +81,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en" dir="ltr" suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${manrope.variable} ${playfairDisplay.variable} ${ibmPlexMono.variable} ${notoArabic.variable} ${notoDevanagari.variable} ${jakarta.variable}`}>
+      <html lang="en" dir="ltr" suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${manrope.variable} ${playfairDisplay.variable} ${ibmPlexMono.variable} ${notoArabic.variable} ${notoDevanagari.variable} ${notoMalayalam.variable} ${jakarta.variable}`}>
       <head>
         {/* Theme init: default is cream+green light; .dark only if user opted in */}
         <script
@@ -92,12 +97,10 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen w-full max-w-full overflow-x-clip bg-[#0a0a0a] text-white font-sans antialiased selection:bg-white/20 dark:bg-[#0A0B0E] dark:text-slate-200 dark:selection:bg-[#10B981] dark:selection:text-[#06281C]">
         <I18nProvider>
-          <ToastProvider>
-            <div id="app-root" className="w-full max-w-full min-w-0 overflow-x-clip">
-              {children}
-            </div>
-            <Toaster richColors theme="dark" position="bottom-right" closeButton />
-          </ToastProvider>
+          <div id="app-root" className="w-full max-w-full min-w-0 overflow-x-clip">
+            {children}
+          </div>
+          <Toaster richColors theme="dark" position="bottom-right" closeButton />
         </I18nProvider>
       </body>
     </html>

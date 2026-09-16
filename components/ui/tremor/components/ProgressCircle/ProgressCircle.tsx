@@ -116,7 +116,7 @@ const ProgressCircle = React.forwardRef<SVGSVGElement, ProgressCircleProps>(
                 "transition-colors ease-linear",
                 circle(),
                 showAnimation &&
-                  "transform-gpu transition-all duration-300 ease-in-out",
+                  "transform-gpu transition-all duration-300 ease-out",
               )}
             />
           ) : null}

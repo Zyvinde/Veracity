@@ -29,6 +29,7 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
     INGESTION_STARTED: { label: t('auditTrail.ingestionStarted'), color: 'text-amber-200 font-bold' },
     INGESTION_COMPLETE: { label: t('auditTrail.ingestionComplete'), color: 'text-emerald-200 font-bold' },
     AIRWAY_MODIFIED: { label: t('auditTrail.airwayModified'), color: 'text-amber-200 font-bold' },
+    CLINICIAN_SWITCHED: { label: 'Duty Clinician Switched', color: 'text-emerald-200 font-bold' },
     OVERRIDE_APPLIED: { label: t('auditTrail.overrideApplied'), color: 'text-rose-200 font-bold' },
   };
 

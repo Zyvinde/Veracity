@@ -65,8 +65,9 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
       aria-modal="true"
       aria-labelledby="print-slip-title"
       className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-900/60 p-0 sm:p-4 backdrop-blur-xs overflow-y-auto animate-fade-in"
+      onClick={onClose}
     >
-      <div className="relative w-full max-w-full sm:max-w-3xl rounded-none sm:rounded-2xl border border-slate-200 bg-white shadow-2xl my-0 sm:my-8 min-h-screen sm:min-h-0 animate-scale-in text-slate-900 overflow-hidden">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-3xl rounded-none sm:rounded-2xl border border-slate-200 bg-white shadow-2xl my-0 sm:my-8 min-h-screen sm:min-h-0 animate-scale-in text-slate-900 overflow-hidden">
         <div className="no-print flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/80 px-4 sm:px-6 py-4 rounded-t-none sm:rounded-t-2xl">
           <div className="flex items-center gap-2.5">
             <Printer className="h-4 w-4 text-sky-600" />

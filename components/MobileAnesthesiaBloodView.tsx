@@ -230,37 +230,40 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           type="button"
           onClick={() => setActiveTab('STAT_LABS')}
           className={
-            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'STAT_LABS'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
-          🩸 STAT Labs
+          <Droplets className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          STAT Labs
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('CLINICAL_HISTORY')}
           className={
-            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'CLINICAL_HISTORY'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
-          📋 Med History
+          <History className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          Med History
         </button>
         <button
           type="button"
           onClick={() => setActiveTab('NPO_MEDS')}
           className={
-            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center cursor-pointer text-[11px] sm:text-xs break-words ' +
+            'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'NPO_MEDS'
               ? 'border-emerald-400 text-emerald-300 bg-white/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
-          ⏱️ NPO / Holds
+          <Clock className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          NPO / Holds
         </button>
       </div>
 

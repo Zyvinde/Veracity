@@ -106,7 +106,7 @@ export interface PatientCase {
   hasActiveInfection?: boolean;
   infectionType?: string;
   phoneNumber?: string;
-  preferredLanguage?: 'en' | 'ar' | 'hi' | 'kn';
+  preferredLanguage?: 'en' | 'ar' | 'hi' | 'ur' | 'ml';
   overallStatus: ClearanceStatus;
   primaryActionDirective: string;
   questionnaire?: PatientPreOpQuestionnaire;
@@ -147,7 +147,7 @@ export interface AttestationRecord {
 export interface AuditLogEntry {
   id: string;
   timestamp: string;
-  action: 'PATIENT_VIEWED' | 'LAB_INSPECTED' | 'ATTESTATION_SIGNED' | 'PAC_PRINTED' | 'PAC_WHATSAPP_SENT' | 'INGESTION_STARTED' | 'INGESTION_COMPLETE' | 'AIRWAY_MODIFIED' | 'OVERRIDE_APPLIED' | 'PAC_INTERVIEW_COMPLETED' | 'PAC_INTERVIEW_VERIFIED';
+  action: 'PATIENT_VIEWED' | 'LAB_INSPECTED' | 'ATTESTATION_SIGNED' | 'PAC_PRINTED' | 'PAC_WHATSAPP_SENT' | 'INGESTION_STARTED' | 'INGESTION_COMPLETE' | 'AIRWAY_MODIFIED' | 'OVERRIDE_APPLIED' | 'PAC_INTERVIEW_COMPLETED' | 'PAC_INTERVIEW_VERIFIED' | 'CLINICIAN_SWITCHED';
   patientId: string;
   userId: string;
   details: string;

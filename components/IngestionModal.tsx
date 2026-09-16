@@ -283,8 +283,8 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
@@ -309,7 +309,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 cursor-pointer"
+            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 active:scale-90 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -462,7 +462,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-white flex items-center gap-1.5">
-                    <span>🇦🇪 Medsol (Cleared)</span>
+                    <Building2 className="h-4 w-4 shrink-0 text-emerald-300" aria-hidden="true" /><span>Medsol (Cleared)</span>
                   </div>
                   <div className="text-[11px] text-white/70 mt-0.5">
                     Aisha Al-Nuaimi · Arthroscopy · All Clean
@@ -499,7 +499,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-white flex items-center gap-1.5">
-                    <span>🇦🇪 Al Borg (Conditional)</span>
+                    <Building2 className="h-4 w-4 shrink-0 text-amber-300" aria-hidden="true" /><span>Al Borg (Conditional)</span>
                   </div>
                   <div className="text-[11px] text-white/70 mt-0.5">
                     Fatima Al-Mansoor · Cholecystectomy · Amber K+
@@ -536,7 +536,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 </div>
                 <div>
                   <div className="font-bold text-white flex items-center gap-1.5">
-                    <span>🇮🇳 Lal PathLabs (Hard Stop)</span>
+                    <Building2 className="h-4 w-4 shrink-0 text-rose-300" aria-hidden="true" /><span>Lal PathLabs (Hard Stop)</span>
                   </div>
                   <div className="text-[11px] text-white/70 mt-0.5">
                     Rajesh Sharma · Right TKA · DOAC Hold Red

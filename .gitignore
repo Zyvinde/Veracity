@@ -13,3 +13,6 @@ prod-server.log
 scratch/.chrome-*
 out
 .vercel
+data/anterior.db
+data/anterior.db-shm
+data/anterior.db-wal

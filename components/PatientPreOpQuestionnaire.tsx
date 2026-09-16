@@ -64,7 +64,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
   onSaved,
   isStandalonePage = false,
 }) => {
-  const { locale, setLocale } = useI18n();
+  const { t, locale, setLocale } = useI18n();
   const { patients, currentPatientId, saveQuestionnaire, generateIntakeLink, requestFitness, setFitnessStatus } = usePatientStore();
   const activeId = patientId || currentPatientId;
   const currentPatient = patients.find((p) => p.id === activeId) || patients[0];
@@ -429,14 +429,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
               <h2 className="font-serif text-sm sm:text-base font-bold text-white tracking-tight break-words">
-                Pre-Operative Medical Intake & Risk Assessment
+                {t('intake.headerTitle')}
               </h2>
               <span className="rounded bg-white/10 px-2 py-0.5 text-[10px] sm:text-[11px] font-semibold text-emerald-300 border border-white/20 shrink-0">
-                Self-Assessment
+                {t('intake.selfBadge')}
               </span>
             </div>
             <p className="text-[11px] sm:text-xs text-white/60 truncate">
-              Captures contraceptive VTE risks, medications, smoking, cardiac & NPO status
+              {t('intake.headerSub')}
             </p>
           </div>
         </div>
@@ -448,8 +448,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             {(
               [
                 { code: 'en', label: 'EN' },
-                { code: 'ar', label: 'العربية' },
+                { code: 'ar', label: 'عربي' },
                 { code: 'hi', label: 'हिन्दी' },
+                { code: 'ur', label: 'اردو' },
+                { code: 'ml', label: 'മല' },
               ] as const
             ).map((lang) => (
               <button
@@ -477,20 +479,18 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             ) : (
               <Copy className="h-3.5 w-3.5" />
             )}
-            <span>{copiedLink ? 'Link Copied!' : 'Copy Link'}</span>
+            <span>{copiedLink ? t('intake.linkCopied') : t('intake.copyLink')}</span>
           </button>
 
           <a
             href={
               'https://wa.me/?text=' +
               encodeURIComponent(
-                'Hello ' +
-                  patientName +
-                  ', please complete your Veracity Pre-Operative Clearance Questionnaire for ' +
-                  procedureName +
-                  ': ' +
-                  (typeof window !== 'undefined' ? window.location.origin : '') +
-                  '?view=intake'
+                t('intake.waShare', {
+                  name: patientName,
+                  procedure: procedureName,
+                  origin: typeof window !== 'undefined' ? window.location.origin : '',
+                })
               )
             }
             target="_blank"
@@ -498,7 +498,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-2 text-xs font-semibold transition cursor-pointer shadow-md min-h-[44px]"
           >
             <Share2 className="h-3.5 w-3.5" />
-            <span>Send WhatsApp</span>
+            <span>{t('intake.sendWhatsapp')}</span>
           </a>
 
           {onClose && (
@@ -534,7 +534,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           )}
           <div>
             <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider">
-              <span className="text-white">PAC Live Decision:</span>
+              <span className="text-white">{t('intake.pacLive')}</span>
               <span
                 className={
                   'px-2 py-0.5 rounded text-[10px] font-bold text-white ' +
@@ -562,21 +562,21 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           ) : (
             <Sparkles className="h-3.5 w-3.5" />
           )}
-          <span>{isSavedSuccess ? 'Synced to Active Case!' : 'Apply to Active Case'}</span>
+          <span>{isSavedSuccess ? t('intake.synced') : t('intake.applyCase')}</span>
         </button>
       </div>
 
       {/* Step Navigation Tabs */}
       <div className="flex overflow-x-auto border-b border-white/15 bg-white/5 px-3 sm:px-6 py-2.5 gap-2 text-xs backdrop-blur-md scrollbar-none">
         {[
-          { step: 1, label: 'Demographics', icon: User },
-          { step: 2, label: 'Medical Issues', icon: ClipboardList },
-          { step: 3, label: 'Surgery & Anesthesia', icon: History },
-          { step: 4, label: 'Smoking & Vaping', icon: Cigarette },
-          { step: 5, label: 'Contraceptives & HRT', icon: Pill },
-          { step: 6, label: 'Psych & Neuro', icon: Activity },
-          { step: 7, label: 'Cardiac & Stents', icon: Heart },
-          { step: 8, label: 'NPO & Summary', icon: Clock },
+          { step: 1, label: t('intake.step1'), icon: User },
+          { step: 2, label: t('intake.step2'), icon: ClipboardList },
+          { step: 3, label: t('intake.step3'), icon: History },
+          { step: 4, label: t('intake.step4'), icon: Cigarette },
+          { step: 5, label: t('intake.step5'), icon: Pill },
+          { step: 6, label: t('intake.step6'), icon: Activity },
+          { step: 7, label: t('intake.step7'), icon: Heart },
+          { step: 8, label: t('intake.step8'), icon: Clock },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeStep === tab.step;
@@ -621,13 +621,13 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif">
               <User className="h-4 w-4 text-emerald-400" />
-              <span>Patient Identification & Scheduled Procedure</span>
+              <span>{t('intake.s1Title')}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Full Legal Name
+                  {t('intake.fullName')}
                 </label>
                 <input
                   type="text"
@@ -639,7 +639,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Emirates ID / MRN
+                  {t('intake.emiratesId')}
                 </label>
                 <input
                   type="text"
@@ -651,7 +651,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Age & Biological Gender
+                  {t('intake.ageGender')}
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -659,7 +659,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     value={age}
                     onChange={(e) => setAge(Number(e.target.value))}
                     className="w-24 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Age"
+                    placeholder={t('intake.agePh')}
                   />
                   <select
                     value={gender}
@@ -674,10 +674,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     className="flex-1 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                   >
                     <option value="F" className="bg-black text-white">
-                      Female
+                      {t('intake.female')}
                     </option>
                     <option value="M" className="bg-black text-white">
-                      Male
+                      {t('intake.male')}
                     </option>
                   </select>
                 </div>
@@ -685,7 +685,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Scheduled Surgical Procedure
+                  {t('intake.procedure')}
                 </label>
                 <input
                   type="text"
@@ -703,16 +703,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-5">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif">
               <ClipboardList className="h-4 w-4 text-emerald-400" />
-              <span>Any medical issues?</span>
+              <span>{t('intake.s2Title')}</span>
             </h3>
             <p className="text-xs text-white/60">
-              Tick all conditions the patient has now or had recently — cold, cough, fever, asthma,
-              breathing infection, diabetes, blood pressure, heart, liver, kidney.
+              {t('intake.s2Sub')}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(Object.keys(MEDICAL_ISSUES_META) as MedicalIssueKey[]).map((key) => {
-                const meta = MEDICAL_ISSUES_META[key];
                 const selected = medicalIssues.includes(key);
                 return (
                   <button
@@ -727,10 +725,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     }
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-bold text-xs text-white">{meta.label}</span>
+                      <span className="font-bold text-xs text-white">{t(`intake.medical.${key}`)}</span>
                       {selected && <Check className="h-3.5 w-3.5 text-emerald-400" />}
                     </div>
-                    <span className="text-[11px] text-white/60 mt-1">{meta.hint}</span>
+                    <span className="text-[11px] text-white/60 mt-1">{t(`intake.medicalHint.${key}`)}</span>
                   </button>
                 );
               })}
@@ -738,20 +736,20 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
             <div>
               <label className="block text-xs font-semibold text-white/70 mb-1">
-                Notes on medical issues (optional)
+                {t('intake.medNotes')}
               </label>
               <input
                 type="text"
                 value={medicalIssueNotes}
                 onChange={(e) => setMedicalIssueNotes(e.target.value)}
                 className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                placeholder="e.g. Fever 2 days ago, BP tablets daily"
+                placeholder={t('intake.medNotesPh')}
               />
             </div>
 
             {report.medicalResult.directives.length > 0 && (
               <div className="rounded-xl border border-amber-500/40 bg-amber-950/30 p-3 text-xs space-y-1.5 backdrop-blur-md">
-                <div className="font-bold text-amber-300">What this means for surgery:</div>
+                <div className="font-bold text-amber-300">{t('intake.meansTitle')}</div>
                 {report.medicalResult.directives.map((dir, idx) => (
                   <p key={idx} className="text-white/80">
                     • {dir}
@@ -762,11 +760,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 pt-2 font-serif">
               <Pill className="h-4 w-4 text-emerald-400" />
-              <span>Current daily medications</span>
+              <span>{t('intake.medsTitle')}</span>
             </h3>
             <p className="text-xs text-white/60">
-              BP, diabetes, thyroid, anxiety, contraceptive pills, weight-reduction (Mounjaro,
-              Wegovy) — tick all the patient takes every day.
+              {t('intake.medsSub')}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -800,7 +797,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                       <span className="font-bold text-xs text-white">{preset.name}</span>
                       {selected && <Check className="h-3.5 w-3.5 text-emerald-400" />}
                     </div>
-                    <span className="text-[11px] text-white/60 mt-1">{preset.hint}</span>
+                    <span className="text-[11px] text-white/60 mt-1">{t(`intake.medPresetHint.${preset.name}`)}</span>
                   </button>
                 );
               })}
@@ -812,7 +809,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 value={newMedName}
                 onChange={(e) => setNewMedName(e.target.value)}
                 className="md:col-span-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                placeholder="Other medicine name (e.g. Thyroxine 50mcg)"
+                placeholder={t('intake.otherMedPh')}
               />
               <div className="flex gap-2">
                 <select
@@ -823,24 +820,24 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="flex-1 rounded-xl border border-white/15 bg-white/5 px-2 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                 >
                   <option value="BP" className="bg-black text-white">
-                    BP
+                    {t('intake.catBP')}
                   </option>
                   <option value="DIABETES" className="bg-black text-white">
-                    Diabetes
+                    {t('intake.catDiabetes')}
                   </option>
                   <option value="THYROID" className="bg-black text-white">
-                    Thyroid
+                    {t('intake.catThyroid')}
                   </option>
                   <option value="ANXIETY" className="bg-black text-white">
-                    Anxiety
+                    {t('intake.catAnxiety')}
                   </option>
                   <option value="CONTRACEPTIVE" className="bg-black text-white">
-                    Contraceptive
+                    {t('intake.catContraceptive')}
                   </option>
                   <option value="WEIGHT_LOSS" className="bg-black text-white">
-                    Weight-loss
+                    {t('intake.catWeightLoss')}
                   </option>
-                  <option value="OTHER">Other</option>
+                  <option value="OTHER">{t('intake.catOther')}</option>
                 </select>
                 <button
                   type="button"
@@ -851,7 +848,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="flex items-center gap-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 text-xs font-bold transition cursor-pointer shadow-md min-h-[44px]"
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  <span>Add</span>
+                  <span>{t('intake.add')}</span>
                 </button>
               </div>
             </div>
@@ -873,7 +870,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                         setCurrentMedications(currentMedications.filter((m) => m.name !== med.name))
                       }
                       className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
-                      aria-label={`Remove ${med.name}`}
+                      aria-label={t('intake.removeMed', { name: med.name })}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -884,21 +881,21 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
             <div>
               <label className="block text-xs font-semibold text-white/70 mb-1">
-                Medication notes (optional)
+                {t('intake.medNotes2')}
               </label>
               <input
                 type="text"
                 value={currentMedNotes}
                 onChange={(e) => setCurrentMedNotes(e.target.value)}
                 className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                placeholder="e.g. Takes insulin morning + night"
+                placeholder={t('intake.medNotes2Ph')}
               />
             </div>
 
             {report.currentMedsResult.directives.length > 0 && (
               <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-3 text-xs space-y-1.5 backdrop-blur-md">
                 <div className="font-bold text-emerald-300">
-                  Day-of-surgery plan for these medicines:
+                  {t('intake.dayPlan')}
                 </div>
                 {report.currentMedsResult.directives.map((dir, idx) => (
                   <p key={idx} className="text-white/80">
@@ -915,7 +912,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-5">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif">
               <History className="h-4 w-4 text-emerald-400" />
-              <span>Previous surgery, anesthesia, teeth & airway history</span>
+              <span>{t('intake.s3Title')}</span>
             </h3>
 
             <div className="flex items-center gap-3">
@@ -927,7 +924,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 className="h-4 w-4 rounded border-white/20 bg-white/10 text-emerald-500 focus:ring-0"
               />
               <label htmlFor="hadPreviousSurgery" className="text-xs font-bold text-white">
-                Patient had surgery before
+                {t('intake.hadSurgery')}
               </label>
             </div>
 
@@ -945,7 +942,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                       </div>
                       {s.complications && (
                         <div className="text-[11px] text-amber-300">
-                          Complications: {s.complications}
+                          {t('intake.complications', { c: s.complications })}
                         </div>
                       )}
                     </div>
@@ -955,7 +952,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                         setPreviousSurgeries(previousSurgeries.filter((_, i) => i !== idx))
                       }
                       className="p-1.5 text-white/50 hover:text-rose-400 transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
-                      aria-label="Remove surgery"
+                      aria-label={t('intake.removeSurgery')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -967,21 +964,21 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     value={newSurgeryProcedure}
                     onChange={(e) => setNewSurgeryProcedure(e.target.value)}
                     className="md:col-span-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Surgery (e.g. Appendix removal)"
+                    placeholder={t('intake.surgeryPh')}
                   />
                   <input
                     type="number"
                     value={newSurgeryYear}
                     onChange={(e) => setNewSurgeryYear(e.target.value)}
                     className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Year"
+                    placeholder={t('intake.yearPh')}
                   />
                   <input
                     type="text"
                     value={newSurgeryComplications}
                     onChange={(e) => setNewSurgeryComplications(e.target.value)}
                     className="rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Any problem? (optional)"
+                    placeholder={t('intake.problemPh')}
                   />
                 </div>
                 <button
@@ -990,15 +987,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 text-xs font-bold transition cursor-pointer shadow-md min-h-[44px]"
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  <span>Add surgery</span>
+                  <span>{t('intake.addSurgery')}</span>
                 </button>
               </div>
             )}
 
-            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">Anesthesia problems in family</h4>
+            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">{t('intake.familyTitle')}</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(Object.keys(FAMILY_ANESTHESIA_META) as FamilyAnesthesiaIssueKey[]).map((key) => {
-                const meta = FAMILY_ANESTHESIA_META[key];
                 const selected = familyAnesthesiaIssues.includes(key);
                 return (
                   <button
@@ -1012,10 +1008,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     )}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-bold text-xs text-white">{meta.label}</span>
+                      <span className="font-bold text-xs text-white">{t(`intake.family.${key}`)}</span>
                       {selected && <Check className="h-3.5 w-3.5 text-purple-400" />}
                     </div>
-                    <span className="text-[11px] text-white/60 mt-1">{meta.hint}</span>
+                    <span className="text-[11px] text-white/60 mt-1">{t(`intake.familyHint.${key}`)}</span>
                   </button>
                 );
               })}
@@ -1025,7 +1021,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               value={familyAnesthesiaNotes}
               onChange={(e) => setFamilyAnesthesiaNotes(e.target.value)}
               className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-              placeholder="Family anesthesia notes (optional)"
+              placeholder={t('intake.familyNotesPh')}
             />
 
             <div className="rounded-xl border border-white/15 bg-white/5 p-3.5 space-y-3 backdrop-blur-md">
@@ -1038,7 +1034,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="h-4 w-4 rounded border-white/20 bg-white/5 text-emerald-500 focus:ring-0"
                 />
                 <label htmlFor="hasG6pd" className="text-xs font-bold text-white/90">
-                  Patient has G6PD deficiency (favism)
+                  {t('intake.g6pd')}
                 </label>
               </div>
               {hasG6pd && (
@@ -1047,15 +1043,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   value={g6pdDetails}
                   onChange={(e) => setG6pdDetails(e.target.value)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                  placeholder="Details (e.g. diagnosed age 6, prior hemolysis)"
+                  placeholder={t('intake.g6pdPh')}
                 />
               )}
             </div>
 
-            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">Teeth — dentures, veneers, braces, loose tooth</h4>
+            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">{t('intake.teethTitle')}</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(Object.keys(DENTAL_META) as DentalIssueKey[]).map((key) => {
-                const meta = DENTAL_META[key];
                 const selected = dentalIssues.includes(key);
                 return (
                   <button
@@ -1069,10 +1064,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     )}
                   >
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-bold text-xs text-white">{meta.label}</span>
+                      <span className="font-bold text-xs text-white">{t(`intake.dental.${key}`)}</span>
                       {selected && <Check className="h-3.5 w-3.5 text-amber-400" />}
                     </div>
-                    <span className="text-[11px] text-white/60 mt-1">{meta.hint}</span>
+                    <span className="text-[11px] text-white/60 mt-1">{t(`intake.dentalHint.${key}`)}</span>
                   </button>
                 );
               })}
@@ -1082,34 +1077,34 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               value={dentalNotes}
               onChange={(e) => setDentalNotes(e.target.value)}
               className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-              placeholder="Teeth notes — which tooth is loose? (optional)"
+              placeholder={t('intake.dentalNotesPh')}
             />
 
-            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">Neck movement & mouth opening</h4>
+            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">{t('intake.neckTitle')}</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Neck movement</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.neckLabel')}</label>
                 <select
                   value={neckMovement}
                   onChange={(e) => setNeckMovement(e.target.value as typeof neckMovement)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                 >
-                  <option value="NORMAL" className="bg-[#0a0a0a] text-white">Normal — full movement</option>
-                  <option value="STIFF" className="bg-[#0a0a0a] text-white">Stiff — hard to bend/turn</option>
-                  <option value="VERY_LIMITED" className="bg-[#0a0a0a] text-white">Very limited movement</option>
-                  <option value="FUSION" className="bg-[#0a0a0a] text-white">Fused / fixed neck (rod or disease)</option>
+                  <option value="NORMAL" className="bg-[#0a0a0a] text-white">{t('intake.neckNormal')}</option>
+                  <option value="STIFF" className="bg-[#0a0a0a] text-white">{t('intake.neckStiff')}</option>
+                  <option value="VERY_LIMITED" className="bg-[#0a0a0a] text-white">{t('intake.neckVeryLimited')}</option>
+                  <option value="FUSION" className="bg-[#0a0a0a] text-white">{t('intake.neckFusion')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Mouth opening</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.mouthLabel')}</label>
                 <select
                   value={mouthOpening}
                   onChange={(e) => setMouthOpening(e.target.value as typeof mouthOpening)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                 >
-                  <option value="NORMAL_3FINGERS" className="bg-[#0a0a0a] text-white">Wide — 3 fingers fit</option>
-                  <option value="LIMITED_2FINGERS" className="bg-[#0a0a0a] text-white">Limited — only 2 fingers fit</option>
-                  <option value="VERY_LIMITED_1FINGER" className="bg-[#0a0a0a] text-white">Very small — only 1 finger fits</option>
+                  <option value="NORMAL_3FINGERS" className="bg-[#0a0a0a] text-white">{t('intake.mouthWide')}</option>
+                  <option value="LIMITED_2FINGERS" className="bg-[#0a0a0a] text-white">{t('intake.mouthLimited2')}</option>
+                  <option value="VERY_LIMITED_1FINGER" className="bg-[#0a0a0a] text-white">{t('intake.mouthVerySmall')}</option>
                 </select>
               </div>
             </div>
@@ -1118,10 +1113,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               value={airwayScreenNotes}
               onChange={(e) => setAirwayScreenNotes(e.target.value)}
               className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-              placeholder="Neck/mouth notes (optional)"
+              placeholder={t('intake.airwayNotesPh')}
             />
 
-            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">Allergy to any medication</h4>
+            <h4 className="text-xs font-bold text-white/90 uppercase tracking-wider">{t('intake.allergyTitle')}</h4>
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -1131,15 +1126,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 className="h-4 w-4 rounded border-white/20 bg-white/5 text-rose-200 focus:ring-0"
               />
               <label htmlFor="hasDrugAllergy" className="text-xs font-bold text-white/90">
-                Patient is allergic to a medicine
+                {t('intake.hasAllergyQ')}
               </label>
             </div>
             {hasDrugAllergy && (
               <div className="space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {(Object.keys(DRUG_ALLERGY_META) as DrugAllergyKey[]).map((key) => {
-                    const meta = DRUG_ALLERGY_META[key];
-                    const selected = drugAllergyKeys.includes(key);
+                {(Object.keys(DRUG_ALLERGY_META) as DrugAllergyKey[]).map((key) => {
+                  const selected = drugAllergyKeys.includes(key);
                     return (
                       <button
                         key={key}
@@ -1152,10 +1146,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                         )}
                       >
                         <div className="flex items-center justify-between w-full">
-                          <span className="font-bold text-xs text-white">{meta.label}</span>
+                          <span className="font-bold text-xs text-white">{t(`intake.drugAllergy.${key}`)}</span>
                           {selected && <Check className="h-3.5 w-3.5 text-rose-400" />}
                         </div>
-                        <span className="text-[11px] text-white/60 mt-1">{meta.hint}</span>
+                        <span className="text-[11px] text-white/60 mt-1">{t(`intake.drugAllergyHint.${key}`)}</span>
                       </button>
                     );
                   })}
@@ -1165,14 +1159,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   value={drugAllergyDetails}
                   onChange={(e) => setDrugAllergyDetails(e.target.value)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                  placeholder="What happens? e.g. rash, swelling, breathing trouble, anaphylaxis"
+                  placeholder={t('intake.allergyDetailsPh')}
                 />
               </div>
             )}
 
             {(report.familyG6pdResult.directives.length > 0 || report.dentalResult.directives.length > 0 || report.airwayScreenResult.directives.length > 0 || report.drugAllergyResult.directives.length > 0) && (
               <div className="rounded-xl border border-purple-500/30 bg-purple-500/10 p-3.5 text-xs space-y-1.5 backdrop-blur-md">
-                <div className="font-bold text-purple-300">History alerts for the anesthesiologist:</div>
+                <div className="font-bold text-purple-300">{t('intake.historyAlerts')}</div>
                 {report.familyG6pdResult.directives.map((dir, idx) => (
                   <p key={'fg' + idx} className="text-white/80">• {dir}</p>
                 ))}
@@ -1195,47 +1189,47 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif italic">
               <Cigarette className="h-4 w-4 text-amber-400" />
-              <span>Smoking, Vaping & Airway Hyperreactivity History</span>
+              <span>{t('intake.s4Title')}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Primary Smoking Status</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.smokeStatus')}</label>
                 <select
                   value={smokingStatus}
                   onChange={(e) => setSmokingStatus(e.target.value as SmokingStatus)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                 >
-                  <option value="NON_SMOKER" className="bg-[#0a0a0a] text-white">Never Smoked (Non-Smoker)</option>
-                  <option value="ACTIVE_SMOKER" className="bg-[#0a0a0a] text-white">Active Smoker (Daily / Intermittent)</option>
-                  <option value="EX_SMOKER" className="bg-[#0a0a0a] text-white">Former Smoker (Quit)</option>
-                  <option value="VAPING" className="bg-[#0a0a0a] text-white">Vaping / E-Cigarettes Only</option>
-                  <option value="SHISHA" className="bg-[#0a0a0a] text-white">Shisha / Hookah Smoker</option>
+                  <option value="NON_SMOKER" className="bg-[#0a0a0a] text-white">{t('intake.smokeNever')}</option>
+                  <option value="ACTIVE_SMOKER" className="bg-[#0a0a0a] text-white">{t('intake.smokeActive')}</option>
+                  <option value="EX_SMOKER" className="bg-[#0a0a0a] text-white">{t('intake.smokeEx')}</option>
+                  <option value="VAPING" className="bg-[#0a0a0a] text-white">{t('intake.smokeVape')}</option>
+                  <option value="SHISHA" className="bg-[#0a0a0a] text-white">{t('intake.smokeShisha')}</option>
                 </select>
               </div>
 
               {smokingStatus === 'ACTIVE_SMOKER' && (
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Pack-Years (Packs/Day × Years)</label>
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.packYears')}</label>
                   <input
                     type="number"
                     value={packYears}
                     onChange={(e) => setPackYears(Number(e.target.value))}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="e.g. 15"
+                    placeholder={t('intake.packYearsPh')}
                   />
                 </div>
               )}
 
               {smokingStatus === 'EX_SMOKER' && (
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Months Since Quitting</label>
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.quitMonths')}</label>
                   <input
                     type="number"
                     value={cessationMonths}
                     onChange={(e) => setCessationMonths(Number(e.target.value))}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Months"
+                    placeholder={t('intake.quitMonthsPh')}
                   />
                 </div>
               )}
@@ -1249,7 +1243,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="h-4 w-4 rounded border-white/20 bg-white/5 text-amber-200 focus:ring-0"
                 />
                 <label htmlFor="usesVapeOrShisha" className="text-xs text-white/80">
-                  Also uses E-Cigarettes / Vapes, Heated Tobacco (IQOS), or Medwakh / Shisha
+                  {t('intake.alsoVape')}
                 </label>
               </div>
             </div>
@@ -1258,7 +1252,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs space-y-1 backdrop-blur-md">
               <div className="font-semibold text-amber-300 flex items-center gap-1.5">
                 <Wind className="h-3.5 w-3.5" />
-                <span>Anesthesia Airway Defense Recommendation:</span>
+                <span>{t('intake.defenseTitle')}</span>
               </div>
               <p className="text-white/80">{report.smokingResult.inductionEmergencePlan}</p>
             </div>
@@ -1270,49 +1264,49 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif italic">
               <Pill className="h-4 w-4 text-pink-400" />
-              <span>Contraceptive Pills, Estrogen HRT & VTE Risk Shield</span>
+              <span>{t('intake.s5Title')}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1">Hormonal Contraceptive / HRT Type</label>
+                <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.contraType')}</label>
                 <select
                   value={contraceptiveType}
                   onChange={(e) => setContraceptiveType(e.target.value as ContraceptiveType)}
                   className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                 >
-                  <option value="NONE" className="bg-[#0a0a0a] text-white">None / Not taking hormonal therapy</option>
-                  <option value="COMBINED_ORAL_PILL" className="bg-[#0a0a0a] text-white">Combined Oral Contraceptive (Estrogen + Progestin)</option>
-                  <option value="PROGESTIN_ONLY" className="bg-[#0a0a0a] text-white">Progestin-Only Pill (Mini-Pill)</option>
-                  <option value="PATCH_RING" className="bg-[#0a0a0a] text-white">Contraceptive Patch / NuvaRing (Estrogen-containing)</option>
-                  <option value="INJECTION" className="bg-[#0a0a0a] text-white">Depo-Provera Injection</option>
-                  <option value="IUD" className="bg-[#0a0a0a] text-white">Intrauterine Device (Mirena / Kyleena / Copper)</option>
-                  <option value="HRT" className="bg-[#0a0a0a] text-white">Hormone Replacement Therapy (Post-Menopausal Estrogen)</option>
+                  <option value="NONE" className="bg-[#0a0a0a] text-white">{t('intake.contraNone')}</option>
+                  <option value="COMBINED_ORAL_PILL" className="bg-[#0a0a0a] text-white">{t('intake.contraCombined')}</option>
+                  <option value="PROGESTIN_ONLY" className="bg-[#0a0a0a] text-white">{t('intake.contraProgestin')}</option>
+                  <option value="PATCH_RING" className="bg-[#0a0a0a] text-white">{t('intake.contraPatch')}</option>
+                  <option value="INJECTION" className="bg-[#0a0a0a] text-white">{t('intake.contraInjection')}</option>
+                  <option value="IUD" className="bg-[#0a0a0a] text-white">{t('intake.contraIud')}</option>
+                  <option value="HRT" className="bg-[#0a0a0a] text-white">{t('intake.contraHrt')}</option>
                 </select>
               </div>
 
               {contraceptiveType !== 'NONE' && (
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Medication Name / Brand</label>
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.drugName')}</label>
                   <input
                     type="text"
                     value={contraceptiveDrugName}
                     onChange={(e) => setContraceptiveDrugName(e.target.value)}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="e.g. Yasmin, Marvelon, Diane-35"
+                    placeholder={t('intake.drugNamePh')}
                   />
                 </div>
               )}
 
               {contraceptiveType !== 'NONE' && (
                 <div>
-                  <label className="block text-xs font-semibold text-white/70 mb-1">Duration of Use (Months)</label>
+                  <label className="block text-xs font-semibold text-white/70 mb-1">{t('intake.durationMo')}</label>
                   <input
                     type="number"
                     value={contraceptiveDurationMonths}
                     onChange={(e) => setContraceptiveDurationMonths(Number(e.target.value))}
                     className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                    placeholder="Months"
+                    placeholder={t('intake.durationMoPh')}
                   />
                 </div>
               )}
@@ -1329,15 +1323,15 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               <div className="font-bold flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-white">
                   <ShieldCheck className="h-4 w-4 text-amber-400" />
-                  <span>ACOG / ASRA Perioperative Contraceptive Guideline:</span>
+                  <span>{t('intake.acogTitle')}</span>
                 </span>
                 <span className="rounded bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-300">
-                  Caprini VTE Points: +{report.contraceptiveResult.capriniPoints}
+                  {t('intake.capriniPts', { n: report.contraceptiveResult.capriniPoints })}
                 </span>
               </div>
               <p className="text-xs text-white/90">{report.contraceptiveResult.recommendation}</p>
               <p className="text-xs font-mono text-white/60">
-                Directives: {report.contraceptiveResult.surgicalDirective}
+                {t('intake.directivesLabel', { d: report.contraceptiveResult.surgicalDirective })}
               </p>
             </div>
           </div>
@@ -1348,7 +1342,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif italic">
               <Activity className="h-4 w-4 text-purple-400" />
-              <span>Psychiatric, Antipsychotic & Psychotropic Medication Screening</span>
+              <span>{t('intake.s6Title')}</span>
             </h3>
 
             <div className="flex items-center gap-3">
@@ -1360,7 +1354,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 className="h-4 w-4 rounded border-white/20 bg-white/5 text-purple-500 focus:ring-0"
               />
               <label htmlFor="takesPsychiatricMeds" className="text-xs font-bold text-white/90">
-                Patient takes prescription psychiatric or psychotropic medications
+                {t('intake.takesPsych')}
               </label>
             </div>
 
@@ -1371,37 +1365,37 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                     {
                       name: 'Quetiapine (Seroquel)',
                       category: 'ATYPICAL_ANTIPSYCHOTIC' as const,
-                      risk: 'QTc prolongation & Alpha-1 vasoplegia',
+                      riskKey: 'psychRisk0',
                     },
                     {
                       name: 'Olanzapine (Zyprexa)',
                       category: 'ATYPICAL_ANTIPSYCHOTIC' as const,
-                      risk: 'Sedation synergy & autonomic instability',
+                      riskKey: 'psychRisk1',
                     },
                     {
                       name: 'Haloperidol (Haldol)',
                       category: 'TYPICAL_ANTIPSYCHOTIC' as const,
-                      risk: 'High QTc prolongation & EPS risk',
+                      riskKey: 'psychRisk2',
                     },
                     {
                       name: 'Risperidone (Risperdal)',
                       category: 'ATYPICAL_ANTIPSYCHOTIC' as const,
-                      risk: 'Hypotension with volatile anesthetics',
+                      riskKey: 'psychRisk3',
                     },
                     {
                       name: 'Lithium (Priadel)',
                       category: 'LITHIUM' as const,
-                      risk: 'Prolongs neuromuscular blockades (Rocuronium)',
+                      riskKey: 'psychRisk4',
                     },
                     {
                       name: 'Phenelzine / MAO Inhibitor',
                       category: 'MAOI' as const,
-                      risk: 'FATAL CRISIS with Ephedrine or Meperidine',
+                      riskKey: 'psychRisk5',
                     },
                     {
                       name: 'SSRI / SNRI (Sertraline / Escitalopram)',
                       category: 'SSRI_SNRI' as const,
-                      risk: 'Serotonin syndrome with synthetic opioids',
+                      riskKey: 'psychRisk6',
                     },
                   ].map((drug) => {
                     const isSelected = selectedPsychMeds.some((m) => m.name.includes(drug.name.split(' ')[0]));
@@ -1421,7 +1415,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                                 qtcProlongationRisk: true,
                                 sedationInteraction: true,
                                 hypotensionRisk: true,
-                                recommendation: drug.risk,
+                                recommendation: t(`intake.${drug.riskKey}`),
                               },
                             ]);
                           }
@@ -1436,7 +1430,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                           <span className="font-bold text-xs text-white">{drug.name}</span>
                           {isSelected && <Check className="h-3.5 w-3.5 text-purple-400" />}
                         </div>
-                        <span className="text-[11px] text-white/60 mt-1">{drug.risk}</span>
+                        <span className="text-[11px] text-white/60 mt-1">{t(`intake.${drug.riskKey}`)}</span>
                       </button>
                     );
                   })}
@@ -1450,10 +1444,10 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 <div className="font-bold text-purple-300 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <AlertTriangle className="h-4 w-4 text-purple-400" />
-                    <span>Anesthesia Pressor & Drug Safety Warnings:</span>
+                    <span>{t('intake.pressorTitle')}</span>
                   </span>
                   <span className="rounded bg-rose-500/20 border border-rose-500/30 px-2 py-0.5 text-[10px] font-bold text-rose-300">
-                    Avoid: {report.antipsychoticResult.avoidDrugs.join(', ') || 'Droperidol'}
+                    {t('intake.avoidLabel', { drugs: report.antipsychoticResult.avoidDrugs.join(', ') || 'Droperidol' })}
                   </span>
                 </div>
                 {report.antipsychoticResult.clinicalDirectives.map((dir, idx) => (
@@ -1462,7 +1456,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   </p>
                 ))}
                 <div className="pt-1 text-emerald-300 font-mono text-[11px]">
-                  ✓ Preferred Induction Vasopressors: {report.antipsychoticResult.recommendedPressors.join(', ')}
+                  ✓ {t('intake.preferredPressors', { list: report.antipsychoticResult.recommendedPressors.join(', ') })}
                 </div>
               </div>
             )}
@@ -1474,7 +1468,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif italic">
               <Heart className="h-4 w-4 text-rose-200" />
-              <span>Cardiovascular Disease, Stents & Functional Capacity</span>
+              <span>{t('intake.s7Title')}</span>
             </h3>
 
             <div className="flex items-center gap-3">
@@ -1486,7 +1480,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 className="h-4 w-4 rounded border-white/20 bg-white/5 text-rose-200 focus:ring-0"
               />
               <label htmlFor="hasCardiacHistory" className="text-xs font-bold text-white/90">
-                Patient has documented history of cardiac or heart conditions
+                {t('intake.hasCardiac')}
               </label>
             </div>
 
@@ -1494,13 +1488,13 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               <div className="space-y-4 pt-2">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 min-w-0">
                   {[
-                    { id: 'MYOCARDIAL_INFARCTION' as CardiacCondition, label: 'Prior Heart Attack (MI)' },
-                    { id: 'CORONARY_STENT_DES' as CardiacCondition, label: 'Drug-Eluting Stent (DES)' },
-                    { id: 'CORONARY_STENT_BMS' as CardiacCondition, label: 'Bare-Metal Stent (BMS)' },
-                    { id: 'HEART_FAILURE' as CardiacCondition, label: 'Heart Failure / Low EF' },
-                    { id: 'ARRHYTHMIA_AFIB' as CardiacCondition, label: 'Atrial Fibrillation' },
-                    { id: 'PACEMAKER_ICD' as CardiacCondition, label: 'Pacemaker / Defibrillator' },
-                    { id: 'HYPERTENSION' as CardiacCondition, label: 'High Blood Pressure' },
+                    { id: 'MYOCARDIAL_INFARCTION' as CardiacCondition },
+                    { id: 'CORONARY_STENT_DES' as CardiacCondition },
+                    { id: 'CORONARY_STENT_BMS' as CardiacCondition },
+                    { id: 'HEART_FAILURE' as CardiacCondition },
+                    { id: 'ARRHYTHMIA_AFIB' as CardiacCondition },
+                    { id: 'PACEMAKER_ICD' as CardiacCondition },
+                    { id: 'HYPERTENSION' as CardiacCondition },
                   ].map((item) => {
                     const isChecked = cardiacConditions.includes(item.id);
                     return (
@@ -1514,7 +1508,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                             : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30 hover:bg-white/10'
                         )}
                       >
-                        {item.label}
+                        {t(`intake.cardiac.${item.id}`)}
                       </button>
                     );
                   })}
@@ -1523,7 +1517,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 {cardiacConditions.includes('CORONARY_STENT_DES') && (
                   <div className="rounded-xl border border-rose-500/40 bg-rose-500/10 p-3.5 text-xs space-y-2 backdrop-blur-md">
                     <label className="block font-bold text-rose-300">
-                      Months Since Drug-Eluting Stent (DES) Implantation:
+                      {t('intake.stentTitle')}
                     </label>
                     <div className="flex items-center gap-3">
                       <input
@@ -1531,14 +1525,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                         value={stentPlacementMonthsAgo}
                         onChange={(e) => setStentPlacementMonthsAgo(Number(e.target.value))}
                         className="w-24 rounded-xl border border-rose-500/30 bg-white/5 px-3 py-1.5 text-xs text-white focus:outline-none"
-                        placeholder="Months"
+                        placeholder={t('intake.monthsPh')}
                       />
                       <span className="text-white/80">
                         {stentPlacementMonthsAgo < 6
-                          ? '⚠️ HARD STOP: Stent < 6 months requires postponing elective surgery'
+                          ? t('intake.stentHard')
                           : stentPlacementMonthsAgo < 12
-                          ? '⚡ 6-12 Months: High risk, continue Aspirin'
-                          : '✓ >12 Months: Cleared for standard protocol'}
+                          ? t('intake.stentRisk')
+                          : t('intake.stentClear')}
                       </span>
                     </div>
                   </div>
@@ -1547,28 +1541,28 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                   <div>
                     <label className="block text-xs font-semibold text-white/70 mb-1">
-                      Functional Capacity (METs)
+                      {t('intake.mets')}
                     </label>
                     <select
                       value={metsTolerance}
                       onChange={(e) => setMetsTolerance(Number(e.target.value))}
                       className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white focus:border-emerald-400 focus:outline-none backdrop-blur-md"
                     >
-                      <option value={4} className="bg-[#0a0a0a] text-white">≥ 4 METs (Can climb 2 flights of stairs without stopping)</option>
-                      <option value={2} className="bg-[#0a0a0a] text-white">&lt; 4 METs (Short of breath with light household walking)</option>
+                      <option value={4} className="bg-[#0a0a0a] text-white">{t('intake.metsGood')}</option>
+                      <option value={2} className="bg-[#0a0a0a] text-white">{t('intake.metsBad')}</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-white/70 mb-1">
-                      Left Ventricular Ejection Fraction (LVEF %)
+                      {t('intake.lvef')}
                     </label>
                     <input
                       type="number"
                       value={ejectionFraction}
                       onChange={(e) => setEjectionFraction(Number(e.target.value))}
                       className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                      placeholder="e.g. 55"
+                      placeholder={t('intake.lvefPh')}
                     />
                   </div>
                 </div>
@@ -1582,13 +1576,13 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 font-serif italic">
               <Clock className="h-4 w-4 text-emerald-400" />
-              <span>8-Hour NPO Fasting, GLP-1 Holds & Clearance Attestation</span>
+              <span>{t('intake.s8Title')}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Hours Since Last Solid Food (Target ≥ 8h)
+                  {t('intake.solidHours')}
                 </label>
                 <input
                   type="number"
@@ -1604,7 +1598,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">
-                  Hours Since Last Clear Liquids (≥2h minimum, 3h preferred)
+                  {t('intake.fluidHours')}
                 </label>
                 <input
                   type="number"
@@ -1617,9 +1611,9 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
 
             {/* Day-of-surgery medicine rules */}
             <div className="rounded-xl border border-white/15 bg-white/5 p-3.5 space-y-1.5 text-xs backdrop-blur-md">
-              <div className="font-bold text-white/90">Day-of-surgery medicine rules:</div>
-              <p className="text-rose-400">✕ Do NOT take any diabetes medicine on the morning of surgery (tablets + insulin).</p>
-              <p className="text-emerald-400">✓ TAKE thyroid medicine on the morning of surgery with a sip of water.</p>
+              <div className="font-bold text-white/90">{t('intake.medRules')}</div>
+              <p className="text-rose-400">✕ {t('intake.noDiabetes')}</p>
+              <p className="text-emerald-400">✓ {t('intake.takeThyroid')}</p>
             </div>
 
             {/* GLP-1 Agonist Section */}
@@ -1633,14 +1627,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   className="h-4 w-4 rounded border-white/20 bg-white/5 text-amber-200 focus:ring-0"
                 />
                 <label htmlFor="takesGlp1" className="text-xs font-bold text-white/90">
-                  Patient takes GLP-1 Agonist (Ozempic, Wegovy, Mounjaro, Tirzepatide, Trulicity)
+                  {t('intake.glp1Q')}
                 </label>
               </div>
 
               {takesGlp1 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                   <div>
-                    <label className="block text-[11px] font-semibold text-white/70 mb-1">GLP-1 Drug</label>
+                    <label className="block text-[11px] font-semibold text-white/70 mb-1">{t('intake.glp1Drug')}</label>
                     <input
                       type="text"
                       value={glp1DrugName}
@@ -1650,7 +1644,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                   </div>
                   <div>
                     <label className="block text-[11px] font-semibold text-white/70 mb-1">
-                      Hours Since Last Dose (Weekly = 168h target)
+                      {t('intake.glp1Hours')}
                     </label>
                     <input
                       type="number"
@@ -1670,14 +1664,14 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             {/* Allergies and Complications */}
             <div>
               <label className="block text-xs font-semibold text-white/70 mb-1">
-                Documented Drug & Food Allergies
+                {t('intake.allergiesLabel')}
               </label>
               <input
                 type="text"
                 value={allergiesText}
                 onChange={(e) => setAllergiesText(e.target.value)}
                 className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-white placeholder-white/40 focus:border-emerald-400 focus:outline-none backdrop-blur-md"
-                placeholder="e.g. Penicillin, Latex, Contrast Dye"
+                placeholder={t('intake.allergiesPh')}
               />
             </div>
 
@@ -1686,19 +1680,19 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               <div className="flex items-center justify-between">
                 <span className="font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5">
                   <FileCheck2 className="h-4 w-4 text-amber-400" />
-                  <span>Doctor fitness for major illness</span>
+                  <span>{t('intake.fitnessTitle')}</span>
                 </span>
                 {report.fitnessResult.isBlocked ? (
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-sm">HOLD — fitness pending</span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-sm">{t('intake.fitnessHold')}</span>
                 ) : (
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow-sm">No pending fitness</span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow-sm">{t('intake.fitnessClear')}</span>
                 )}
               </div>
               <p className="text-[11px] text-white/60">
-                For major illness the patient must bring fitness from their own concerned doctor. Surgery stays on hold until each referral is marked Cleared.
+                {t('intake.fitnessSub')}
               </p>
               {report.fitnessResult.suggested.length === 0 && (
-                <p className="text-xs text-emerald-400">No major illness detected — no outside fitness needed.</p>
+                <p className="text-xs text-emerald-400">{t('intake.fitnessNone')}</p>
               )}
               {report.fitnessResult.suggested.map((s) => {
                 const existing = (currentPatient?.fitnessReferrals || []).find((r) => r.specialty === s.specialty);
@@ -1715,7 +1709,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                           onClick={() => currentPatient && requestFitness(currentPatient.id, s.specialty, s.reason)}
                           className="rounded-xl bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 text-xs font-bold transition cursor-pointer shrink-0 shadow-md min-h-[44px] sm:min-h-0"
                         >
-                          Request fitness
+                          {t('intake.requestFitness')}
                         </button>
                       ) : (
                         <span className={'px-2.5 py-0.5 rounded-full text-[10px] font-bold shrink-0 shadow-sm ' + (
@@ -1725,7 +1719,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                             ? 'bg-rose-600 text-white'
                             : 'bg-amber-600 text-white'
                         )}>
-                          {existing.status.replace('_', ' ')}
+                          {existing.status === 'CLEARED' ? t('intake.fitCleared') : existing.status === 'NOT_CLEARED' ? t('intake.fitNotCleared') : existing.status === 'RECEIVED' ? t('intake.fitReceived') : t('intake.fitRequested')}
                         </span>
                       )}
                     </div>
@@ -1742,7 +1736,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
                                 : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
                             )}
                           >
-                            {st.replace('_', ' ')}
+                            {st === 'CLEARED' ? t('intake.fitCleared') : st === 'NOT_CLEARED' ? t('intake.fitNotCleared') : st === 'RECEIVED' ? t('intake.fitReceived') : t('intake.fitRequested')}
                           </button>
                         ))}
                       </div>
@@ -1757,7 +1751,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <span className="font-bold text-xs text-white uppercase tracking-wider flex items-center gap-1.5">
                   <Stethoscope className="h-4 w-4 text-emerald-400" />
-                  <span>PAC Pre-Operative Risk Assessment Summary</span>
+                  <span>{t('intake.summaryTitle')}</span>
                 </span>
                 <span
                   className={'px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-md ' + (
@@ -1775,7 +1769,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               {/* Hard Stops */}
               {report.hardStopFlags.length > 0 && (
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-rose-400">Critical Surgical Contraindications:</span>
+                  <span className="text-[11px] font-bold text-rose-400">{t('intake.hardTitle')}</span>
                   {report.hardStopFlags.map((flag, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-xs text-rose-200 bg-rose-500/20 p-2.5 rounded-xl border border-rose-500/30 backdrop-blur-md">
                       <AlertOctagon className="h-4 w-4 text-rose-400 shrink-0 mt-0.5" />
@@ -1788,7 +1782,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               {/* Conditionals */}
               {report.conditionalFlags.length > 0 && (
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-amber-400">Pre-Anesthesia Directives & Optimization:</span>
+                  <span className="text-[11px] font-bold text-amber-400">{t('intake.condTitle')}</span>
                   {report.conditionalFlags.map((flag, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-xs text-amber-200 bg-amber-500/20 p-2.5 rounded-xl border border-amber-500/30 backdrop-blur-md">
                       <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
@@ -1801,7 +1795,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
               {/* Green Cleared */}
               {report.greenClearancePoints.length > 0 && (
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-emerald-400">Cleared Clinical Systems:</span>
+                  <span className="text-[11px] font-bold text-emerald-400">{t('intake.greenTitle')}</span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                     {report.greenClearancePoints.map((pt, idx) => (
                       <div key={idx} className="flex items-center gap-1.5 text-[11px] text-emerald-300 bg-emerald-500/10 px-2.5 py-1.5 rounded-lg border border-emerald-500/20 backdrop-blur-md">
@@ -1826,7 +1820,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
           className="flex items-center justify-center gap-1.5 rounded-xl border border-white/15 bg-white/10 px-3.5 sm:px-4 py-2.5 text-xs font-semibold text-white/80 hover:bg-white/20 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer backdrop-blur-md min-h-[44px]"
         >
           <ChevronLeft className="h-4 w-4" />
-          <span>Previous</span>
+          <span>{t('intake.previous')}</span>
         </button>
 
         <div className="text-[11px] sm:text-xs font-mono text-white/60 text-center px-1">
@@ -1839,7 +1833,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             onClick={() => setActiveStep((prev) => Math.min(totalSteps, prev + 1))}
             className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-5 py-2.5 text-xs font-bold transition shadow-md cursor-pointer min-h-[44px]"
           >
-            <span>Next</span>
+            <span>{t('intake.next')}</span>
             <ChevronRight className="h-4 w-4" />
           </button>
         ) : (
@@ -1849,7 +1843,7 @@ export const PatientPreOpQuestionnaire: React.FC<PatientPreOpQuestionnaireProps>
             className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white px-4 sm:px-6 py-2.5 text-xs font-bold transition shadow-lg cursor-pointer min-h-[44px]"
           >
             <ShieldCheck className="h-4 w-4" />
-            <span>Complete & Sync</span>
+            <span>{t('intake.completeSync')}</span>
           </button>
         )}
       </div>

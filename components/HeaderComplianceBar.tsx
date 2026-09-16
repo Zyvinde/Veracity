@@ -26,10 +26,12 @@ interface HeaderComplianceBarProps {
   isAttested: boolean;
 }
 
-const LOCALE_OPTIONS: { code: Locale; label: string; flag: string }[] = [
-  { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'ar', label: 'العربية', flag: '🇦🇪' },
-  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+const LOCALE_OPTIONS: { code: Locale; label: string; short: string }[] = [
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'ar', label: 'العربية', short: 'AR' },
+  { code: 'hi', label: 'हिन्दी', short: 'HI' },
+  { code: 'ur', label: 'اردو', short: 'UR' },
+  { code: 'ml', label: 'മലയാളം', short: 'ML' },
 ];
 
 export const HeaderComplianceBar: React.FC<HeaderComplianceBarProps> = ({
@@ -128,7 +130,7 @@ export const HeaderComplianceBar: React.FC<HeaderComplianceBarProps> = ({
                 className="flex items-center gap-1 sm:gap-1.5 rounded-[4px] border border-white/[0.10] bg-[#0F1117] px-2 py-1.5 text-xs font-medium text-[#E2E8F0] transition hover:border-white/30 hover:text-white focus:outline-none"
               >
                 <Globe2 className="h-3.5 w-3.5 text-white" aria-hidden="true" />
-                <span className="text-[11px] sm:text-xs">{currentLocale.flag} <span className="hidden sm:inline">{currentLocale.label}</span></span>
+                <span className="text-[11px] sm:text-xs flex items-center gap-1.5"><span className="rounded border border-white/20 bg-white/10 px-1 py-px font-mono text-[9px] font-bold text-white/80">{currentLocale.short}</span><span className="hidden sm:inline">{currentLocale.label}</span></span>
                 <ChevronDown className={`h-3 w-3 text-[#94A3B8] transition-transform ${langOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
               </button>
               {langOpen && (
@@ -145,7 +147,7 @@ export const HeaderComplianceBar: React.FC<HeaderComplianceBarProps> = ({
                           : 'hover:bg-white/[0.06] text-[#E2E8F0]'
                       }`}
                     >
-                      <span>{opt.flag}</span>
+                      <span className="rounded border border-white/20 bg-white/10 px-1 py-px font-mono text-[9px] font-bold text-white/80">{opt.short}</span>
                       <span>{opt.label}</span>
                     </button>
                   ))}

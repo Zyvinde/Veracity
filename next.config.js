@@ -5,7 +5,7 @@ const isGhActions = Boolean(process.env.GITHUB_ACTIONS);
 const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
-  ...(isStaticExport ? { output: 'export', trailingSlash: true } : {}),
+  ...(isStaticExport ? { output: 'export', trailingSlash: true } : { output: 'standalone' }),
   basePath: isGhActions ? '/Veracity' : '',
   assetPrefix: isGhActions ? '/Veracity/' : '',
   eslint: {

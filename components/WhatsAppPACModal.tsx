@@ -44,7 +44,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
   const [phoneNumber, setPhoneNumber] = useState<string>(
     patient.phoneNumber || (patient.mrn.includes('DHA') ? '+971 50 892 1440' : '+91 98450 44019')
   );
-  const [language, setLanguage] = useState<'en' | 'ar' | 'hi' | 'kn'>(
+  const [language, setLanguage] = useState<'en' | 'ar' | 'hi' | 'ur' | 'ml'>(
     patient.preferredLanguage || (patient.mrn.includes('DHA') ? 'ar' : 'en')
   );
   const [isSending, setIsSending] = useState(false);
@@ -70,6 +70,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
 
   const isCleared = patient.overallStatus === 'GREEN_CLEARED';
   const isAmber = patient.overallStatus === 'AMBER_CONDITIONAL';
+  const anesthesiologistLine = attestationRecord?.anesthesiologistName || patient.anesthesiologist;
 
   // Generate localized text
   const getMessageContent = () => {
@@ -89,7 +90,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
           `🏥 *المستشفى:* ${patient.facility.split(',')[0]}`,
           `🩺 *العملية:* ${patient.procedureName} (${patient.cptCode})`,
           `📅 *الموعد:* ${formattedDate} الساعة ${formattedTime}`,
-          `👨‍⚕️ *طبيب التخدير:* ${patient.anesthesiologist}`,
+          `👨‍⚕️ *طبيب التخدير:* ${anesthesiologistLine}`,
         ],
         fastingTitle: `🕒 *تعليمات الصيام قبل العملية (NPO):*`,
         fastingText: `• الامتناع عن الأطعمة الصلبة لمدة 8 ساعات قبل الجراحة.\n• يُسمح بالسوائل الشفافة (الماء أو العصير الشفاف حتى 200 مل) حتى 3 ساعات قبل الجراحة.\n• لا تأخذ دواء السكري يوم الجراحة.\n• خذ دواء الغدة الدرقية يوم الجراحة مع رشفة ماء.`,
@@ -117,7 +118,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
           `🏥 *अस्पताल:* ${patient.facility.split(',')[0]}`,
           `🩺 *प्रक्रिया:* ${patient.procedureName} (${patient.cptCode})`,
           `📅 *समय:* ${formattedDate} समय ${formattedTime}`,
-          `👨‍⚕️ *एनेस्थेसियोलॉजिस्ट:* ${patient.anesthesiologist}`,
+          `👨‍⚕️ *एनेस्थेसियोलॉजिस्ट:* ${anesthesiologistLine}`,
         ],
         fastingTitle: `🕒 *फास्टिंग (उपवास) निर्देश:*`,
         fastingText: `• सर्जरी से 8 घंटे पहले से कोई भी ठोस भोजन न लें।\n• सर्जरी से 3 घंटे पहले तक केवल 200ml साफ पानी या सेब का जूस ले सकते हैं।\n• सर्जरी वाले दिन शुगर (डायबिटीज) की दवा न लें।\n• थायरॉइड की दवा एक घूंट पानी के साथ जरूर लें।`,
@@ -132,31 +133,59 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
       };
     }
 
-    if (language === 'kn') {
+    if (language === 'ur') {
       return {
-        greeting: `ನಮಸ್ಕಾರ ${patient.name},`,
-        title: `*ಅರಿವಳಿಕೆ ಪೂರ್ವ ಮೌಲ್ಯಮಾಪನ ಕ್ಲಿಯರೆನ್ಸ್ (PAC) - House Health*`,
+        greeting: `السلام علیکم ${patient.name}،`,
+        title: `*پری آپریٹو اینستھیزیا کلیئرنس (PAC) - House Health*`,
         status: isCleared
-          ? '🟢 *ಸ್ಥಿತಿ: ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಗೆ ಅನುಮೋದಿಸಲಾಗಿದೆ (CLEARED)*'
+          ? '🟢 *حیثیت: سرجری کے لیے منظور شدہ (CLEARED)*'
           : isAmber
-          ? '🟡 *ಸ್ಥಿತಿ: ಷರತ್ತುಬದ್ಧ ಕ್ಲಿಯರೆನ್ಸ್ (CONDITIONAL)*'
-          : '🔴 *ಸ್ಥಿತಿ: ಪರಿಶೀಲನೆಗೆ ತಡೆಹಿಡಿಯಲಾಗಿದೆ (HARD STOP)*',
+          ? '🟡 *حیثیت: مشروط منظوری (CONDITIONAL)*'
+          : '🔴 *حیثیت: نظرثانی کے لیے ملتوی (HARD STOP)*',
         details: [
-          `🏥 *ಆಸ್ಪತ್ರೆ:* ${patient.facility.split(',')[0]}`,
-          `🩺 *ಶಸ್ತ್ರಚಿಕಿತ್ಸೆ:* ${patient.procedureName} (${patient.cptCode})`,
-          `📅 *ದಿನಾಂಕ:* ${formattedDate} ಸಮಯ ${formattedTime}`,
-          `👨‍⚕️ *ಅರಿವಳಿಕೆ ತಜ್ಞರು:* ${patient.anesthesiologist}`,
+          `🏥 *ہسپتال:* ${patient.facility.split(',')[0]}`,
+          `🩺 *آپریشن:* ${patient.procedureName} (${patient.cptCode})`,
+          `📅 *وقت:* ${formattedDate} وقت ${formattedTime}`,
+          `👨‍⚕️ *اینستھیزیولوجسٹ:* ${anesthesiologistLine}`,
         ],
-        fastingTitle: `🕒 *ಉಪವಾಸದ ನಿಯಮಗಳು (NPO):*`,
-        fastingText: `• ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಗೆ 8 ಗಂಟೆಗಳ ಮೊದಲು ಘನ ಆಹಾರ ಸೇವಿಸಬೇಡಿ.\n• ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಗೆ 3 ಗಂಟೆಗಳ ಮೊದಲು 200ml ವರೆಗೆ ತಿಳಿ ನೀರು ಸೇವಿಸಬಹುದು.\n• ಶಸ್ತ್ರಚಿಕಿತ್ಸೆಯ ದಿನ ಮಧುಮೇಹ ಔಷಧಿ ತೆಗೆದುಕೊಳ್ಳಬೇಡಿ.\n• ಥೈರಾಯ್ಡ್ ಔಷಧಿಯನ್ನು ಒಂದು ಗುಟುಕು ನೀರಿನೊಂದಿಗೆ ತೆಗೆದುಕೊಳ್ಳಿ.`,
-        medsTitle: `💊 *ಔಷಧಿಗಳ ಮಾರ್ಗದರ್ಶನ:*`,
+        fastingTitle: `🕒 *آپریشن سے پہلے روزے کی ہدایات (NPO):*`,
+        fastingText: `• سرجری سے 8 گھنٹے پہلے ٹھوس غذا نہ لیں۔\n• سرجری سے 3 گھنٹے پہلے تک 200ml صاف پانی لے سکتے ہیں۔\n• سرجری والے دن ذیابیطس کی دوا نہ لیں۔\n• تھائرائیڈ کی دوا ایک گھونٹ پانی کے ساتھ ضرور لیں۔`,
+        medsTitle: `💊 *ادویات کی ہدایات:*`,
         medsText: patient.medications
           .map((m) => `• ${m.drugName}: ${m.clinicalAction}`)
           .join('\n'),
-        directiveTitle: `⚠️ *ಪ್ರಮುಖ ನಿರ್ದೇಶನಗಳು:*`,
+        directiveTitle: `⚠️ *اہم ہدایات:*`,
         directiveText: patient.primaryActionDirective,
-        verifyLink: `🔗 ಡಿಜಿಟಲ್ ಪ್ರಮಾಣಪತ್ರ ಪರಿಶೀಲನೆ ಲಿಂಕ್: https://pac.house.health/v/${patient.mrn}`,
-        footer: `ಪ್ರಮಾಣಪತ್ರ ಸಂಖ್ಯೆ: ${certNumber}\n🔒 House Health ಸಾಫ್ಟ್ವೇರ್`,
+        verifyLink: `🔗 ڈیجیٹل سرٹیفکیٹ کی تصدیق: https://pac.house.health/v/${patient.mrn}`,
+        footer: `سرٹیفکیٹ نمبر: ${certNumber}\n🔒 House Health مصدقہ ڈیجیٹل میڈیکل ریکارڈ`,
+      };
+    }
+
+    if (language === 'ml') {
+      return {
+        greeting: `നമസ്കാരം ${patient.name},`,
+        title: `*പ്രീ-ഓപ്പറേറ്റീവ് അനസ്തേഷ്യ ക്ലിയറൻസ് (PAC) - House Health*`,
+        status: isCleared
+          ? '🟢 *സ്ഥിതി: ശസ്ത്രക്രിയയ്ക്ക് അംഗീകരിച്ചു (CLEARED)*'
+          : isAmber
+          ? '🟡 *സ്ഥിതി: നിബന്ധനകളോടെയുള്ള അനുമതി (CONDITIONAL)*'
+          : '🔴 *സ്ഥിതി: അവലോകനത്തിനായി മാറ്റിവച്ചു (HARD STOP)*',
+        details: [
+          `🏥 *ആശുപത്രി:* ${patient.facility.split(',')[0]}`,
+          `🩺 *ശസ്ത്രക്രിയ:* ${patient.procedureName} (${patient.cptCode})`,
+          `📅 *സമയം:* ${formattedDate} സമയം ${formattedTime}`,
+          `👨‍⚕️ *അനസ്തേഷ്യോളജിസ്റ്റ്:* ${anesthesiologistLine}`,
+        ],
+        fastingTitle: `🕒 *ഉപവാസ നിർദ്ദേശങ്ങൾ (NPO):*`,
+        fastingText: `• ശസ്ത്രക്രിയയ്ക്ക് 8 മണിക്കൂർ മുമ്പ് ഖരഭക്ഷണം കഴിക്കരുത്.\n• ശസ്ത്രക്രിയയ്ക്ക് 3 മണിക്കൂർ മുമ്പുവരെ 200ml തെളിനീർ കുടിക്കാം.\n• ശസ്ത്രക്രിയാ ദിവസം പ്രമേഹ മരുന്ന് കഴിക്കരുത്.\n• തൈറോയ്ഡ് മരുന്ന് ഒരു കവിൾ വെള്ളത്തോടെ കഴിക്കുക.`,
+        medsTitle: `💊 *മരുന്ന് നിർദ്ദേശങ്ങൾ:*`,
+        medsText: patient.medications
+          .map((m) => `• ${m.drugName}: ${m.clinicalAction}`)
+          .join('\n'),
+        directiveTitle: `⚠️ *പ്രധാന നിർദ്ദേശങ്ങൾ:*`,
+        directiveText: patient.primaryActionDirective,
+        verifyLink: `🔗 ഡിജിറ്റൽ സർട്ടിഫിക്കറ്റ് പരിശോധന: https://pac.house.health/v/${patient.mrn}`,
+        footer: `സർട്ടിഫിക്കറ്റ് നമ്പർ: ${certNumber}\n🔒 House Health സാക്ഷ്യപ്പെടുത്തിയ ഡിജിറ്റൽ മെഡിക്കൽ റെക്കോർഡ്`,
       };
     }
 
@@ -173,7 +202,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
         `🏥 *Facility:* ${patient.facility.split(',')[0]}`,
         `🩺 *Procedure:* ${patient.procedureName} (${patient.cptCode})`,
         `📅 *Scheduled:* ${formattedDate} at ${formattedTime}`,
-        `👨‍⚕️ *Anesthesiologist:* ${patient.anesthesiologist}`,
+        `👨‍⚕️ *Anesthesiologist:* ${anesthesiologistLine}`,
       ],
       fastingTitle: `🕒 *Preoperative Fasting (NPO) Rules:*`,
       fastingText: `• 8h solids / 2h minimum clears (3h preferred).\n• No solid food, milk, or heavy meals for 8 hours before surgery.\n• Clear liquids (water/apple juice up to 200ml): 2h minimum, 3h preferred.\n• Do NOT take diabetes medicine on day of surgery.\n• TAKE thyroid medicine on day of surgery with a sip of water.`,
@@ -299,11 +328,11 @@ ${msg.footer}`;
     }, 2100);
   };
 
-  const isRTL = language === 'ar';
+  const isRTL = language === 'ar' || language === 'ur';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+    <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/55 backdrop-blur-xs p-0 sm:p-4 animate-fade-in overflow-y-auto">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-strong rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
         {/* Modal Header */}
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
@@ -329,7 +358,7 @@ ${msg.footer}`;
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 cursor-pointer"
+            className="rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 transition-all duration-150 active:scale-90 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -386,51 +415,29 @@ ${msg.footer}`;
                 <Globe2 className="h-3.5 w-3.5 text-sky-200" />
                 {t('whatsapp.languageSelect')}
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs min-w-0">
-                <button
-                  type="button"
-                  onClick={() => setLanguage('en')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
-                    language === 'en'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <span>🇬🇧 English</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('ar')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
-                    language === 'ar'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <span>🇦🇪 العربية (AR)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('hi')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
-                    language === 'hi'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <span>🇮🇳 हिन्दी (HI)</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setLanguage('kn')}
-                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
-                    language === 'kn'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <span>🇮🇳 ಕನ್ನಡ (KN)</span>
-                </button>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs min-w-0">
+                {(
+                  [
+                    { code: 'en', label: 'EN · English' },
+                    { code: 'ar', label: 'AR · عربي' },
+                    { code: 'hi', label: 'HI · हिन्दी' },
+                    { code: 'ur', label: 'UR · اردو' },
+                    { code: 'ml', label: 'ML · മലയാളം' },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.code}
+                    type="button"
+                    onClick={() => setLanguage(opt.code)}
+                    className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
+                      language === opt.code
+                        ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
+                        : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 

@@ -7,6 +7,60 @@ import { logAuditEvent } from './audit-logger';
 
 export type UserRole = 'coordinator' | 'anesthesiologist';
 
+export interface Clinician {
+  id: string;
+  name: string;
+  title: string;
+  specialty: string;
+  license: string;
+  initials: string;
+}
+
+export const CLINICIANS: Clinician[] = [
+  {
+    id: 'dr-mansoor',
+    name: 'Dr. Tariq Mansoor',
+    title: 'DESA, Consultant Anaesthetist',
+    specialty: 'Anaesthesia / Airway',
+    license: 'DHA-3060-AE (Verified)',
+    initials: 'TM',
+  },
+  {
+    id: 'dr-ben-salem',
+    name: 'Dr. Mariam Ben-Salem',
+    title: 'DESA, Consultant Anaesthetist',
+    specialty: 'Obstetric Anaesthesia',
+    license: 'DHA-3077-AE (Verified)',
+    initials: 'MB',
+  },
+  {
+    id: 'dr-rao',
+    name: 'Dr. Sunita Rao',
+    title: 'Senior Anaesthetist',
+    specialty: 'Cardiac / Vascular',
+    license: 'DHA-2981-AE (Verified)',
+    initials: 'SR',
+  },
+  {
+    id: 'dr-gray',
+    name: 'Dr. Alistair Gray',
+    title: 'Consultant Anaesthetist',
+    specialty: 'Neuroanaesthesia',
+    license: 'MOH-1182-AE (Verified)',
+    initials: 'AG',
+  },
+];
+
+export const getClinicianInitials = (name: string) =>
+  name
+    .replace(/^Dr\.\s*/i, '')
+    .split(/\s+/)
+    .map((w) => w[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
 interface PatientStore {
   patients: PatientCase[];
   currentPatientId: string;
@@ -20,6 +74,7 @@ interface PatientStore {
 
   // Demo User Role State
   userRole: UserRole;
+  activeClinicianId: string;
 
   getCurrentPatient: () => PatientCase;
   getSelectedLab: () => ExtractedLabItem | null;
@@ -47,6 +102,7 @@ interface PatientStore {
   setProvenanceDrawerOpen: (open: boolean) => void;
   setUploadedPdf: (dataUrl: string | null, filename?: string | null) => void;
   setUserRole: (role: UserRole) => void;
+  setActiveClinician: (id: string) => void;
   fetchPatientsFromApi: () => Promise<void>;
   fetchAttestationsFromApi: () => Promise<void>;
 }
@@ -62,6 +118,7 @@ export const usePatientStore = create<PatientStore>()(
       uploadedPdfDataUrl: null,
       uploadedPdfFilename: null,
       userRole: 'coordinator',
+      activeClinicianId: 'dr-mansoor',
 
       getCurrentPatient: () => {
         const state = get();
@@ -398,6 +455,7 @@ export const usePatientStore = create<PatientStore>()(
         }),
 
       setUserRole: (role) => set({ userRole: role }),
+      setActiveClinician: (id) => set({ activeClinicianId: id }),
 
       fetchPatientsFromApi: async () => {
         try {
@@ -406,10 +464,16 @@ export const usePatientStore = create<PatientStore>()(
             const data = await res.json();
             if (data.success && Array.isArray(data.patients) && data.patients.length > 0) {
               set((state) => {
-                const currentStillExists = data.patients.some((p: PatientCase) => p.id === state.currentPatientId);
+                const merged = [...state.patients];
+                for (const remote of data.patients as PatientCase[]) {
+                  const idx = merged.findIndex(p => p.id === remote.id);
+                  if (idx === -1) merged.unshift(remote);
+                  else merged[idx] = remote;
+                }
+                const currentStillExists = merged.some(p => p.id === state.currentPatientId);
                 return {
-                  patients: data.patients,
-                  currentPatientId: currentStillExists ? state.currentPatientId : data.patients[0].id,
+                  patients: merged,
+                  currentPatientId: currentStillExists ? state.currentPatientId : merged[0].id,
                 };
               });
             }
@@ -445,6 +509,7 @@ export const usePatientStore = create<PatientStore>()(
         uploadedPdfDataUrl: state.uploadedPdfDataUrl,
         uploadedPdfFilename: state.uploadedPdfFilename,
         userRole: state.userRole,
+        activeClinicianId: state.activeClinicianId,
       }),
     }
   )

@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useCallback, lazy, Suspense } from 'react';
-import { usePatientStore } from '@/lib/store';
+import { usePatientStore, CLINICIANS } from '@/lib/store';
 import { useI18n } from '@/lib/i18n/context';
 import { checkDrugInteractions } from '@/lib/rules-engine';
 import { PatientCase } from '@/lib/types';
@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 
 const PostOpMonitor = lazy(() => import('@/components/PostOpMonitor'));
 const QualityAnalytics = lazy(() => import('@/components/QualityAnalytics'));
+const OTCommandAnalytics = lazy(() => import('@/components/OTCommandAnalytics'));
 
 import {
   Activity,
@@ -70,7 +71,9 @@ import {
   Utensils,
   AlertTriangle,
   Sparkles,
+  Check,
 } from 'lucide-react';
+import { logAuditEvent } from '@/lib/audit-logger';
 
 export type DashboardNavTab =
   | 'dashboard'
@@ -110,7 +113,11 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
     updateAirway,
     toggleProvenanceDrawer,
     setFitnessStatus,
+    activeClinicianId,
+    setActiveClinician,
   } = usePatientStore();
+
+  const activeClinician = CLINICIANS.find((c) => c.id === activeClinicianId) || CLINICIANS[0];
 
   const [activeNav, setActiveNav] = useState<DashboardNavTab>('dashboard');
   const [patientFilter, setPatientFilter] = useState<'ALL' | 'RED' | 'AMBER' | 'GREEN'>('ALL');
@@ -463,7 +470,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
           {/* Tabler Main Body & Top Navigation Bar */}
           <div className="flex-1 flex flex-col transparent min-w-0 w-full max-w-full overflow-x-clip">
             {/* Top Command Bar */}
-            <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full overflow-hidden">
+            <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full overflow-x-clip overflow-y-visible">
               {/* Left: Return to Landing + Console Wordmark + Global Search */}
               <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
                 <a
@@ -647,10 +654,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     className="flex items-center gap-1.5 pl-1 pr-2 py-0.5 sm:py-1 rounded-full bg-white/10 border border-white/25 hover:border-white/50 transition cursor-pointer min-h-[44px] sm:min-h-[36px]"
                   >
                     <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 font-bold text-[10px] sm:text-xs flex items-center justify-center ring-1.5 sm:ring-2 ring-white/60 shrink-0 shadow-xs">
-                      TM
+                      {activeClinician.initials}
                     </div>
                     <span className="text-xs font-bold text-white/90 hidden md:inline-block">
-                      Dr. Tariq Mansoor
+                      {activeClinician.name}
                     </span>
                     <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white/60 shrink-0" />
                   </button>
@@ -660,14 +667,53 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     <div className="glass-strong menu-pop absolute right-0 mt-2 w-64 max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl p-3 z-50">
                       <div className="p-2 border-b border-white/15">
                         <div className="text-xs font-extrabold text-white">
-                          Dr. Tariq Mansoor, MD
+                          {activeClinician.name}
                         </div>
                         <div className="text-[10px] text-white/70 font-mono">
-                          DESA, Consultant Anaesthetist
+                          {activeClinician.title}
                         </div>
                         <div className="text-[9px] text-white font-mono font-bold mt-0.5">
-                          Lic: DHA-3060-AE (Verified)
+                          Lic: {activeClinician.license.replace('(Verified)', '').trim()} (Verified)
                         </div>
+                      </div>
+
+                      <div className="px-1 pt-2 pb-1">
+                        <div className="text-[9px] font-mono font-bold uppercase tracking-wider text-white/50 px-2 pb-1">
+                          Duty Anaesthetist
+                        </div>
+                        {CLINICIANS.map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => {
+                              setActiveClinician(c.id);
+                              logAuditEvent('CLINICIAN_SWITCHED', currentPatient?.id || 'unknown', `Duty anaesthetist changed to ${c.name}`);
+                              setIsProfileMenuOpen(false);
+                            }}
+                            className="btn-press w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left transition hover:bg-white/15"
+                          >
+                            <div
+                              className={`h-6 w-6 shrink-0 rounded-full flex items-center justify-center font-bold text-[9px] ${
+                                c.id === activeClinicianId
+                                  ? 'bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 ring-1.5 ring-white/60'
+                                  : 'bg-white/15 text-white/80 border border-white/25'
+                              }`}
+                            >
+                              {c.initials}
+                            </div>
+                            <span className="min-w-0 flex-1">
+                              <span className={`block text-xs font-bold ${c.id === activeClinicianId ? 'text-emerald-300' : 'text-white/85'}`}>
+                                {c.name}
+                              </span>
+                              <span className="block text-[10px] text-white/50 font-mono truncate">
+                                {c.specialty}
+                              </span>
+                            </span>
+                            {c.id === activeClinicianId && (
+                              <Check className="h-3.5 w-3.5 text-emerald-300 shrink-0" />
+                            )}
+                          </button>
+                        ))}
                       </div>
 
                       <div className="py-2 space-y-1 text-xs font-medium">
@@ -1229,6 +1275,11 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       </button>
                     </div>
                   </div>
+
+                  {/* OT Command Analytics — clearance mix, flags, throughput */}
+                  <Suspense fallback={<div className="text-xs font-mono text-white/60">Loading command analytics…</div>}>
+                    <OTCommandAnalytics />
+                  </Suspense>
 
                   {/* Multi-Pane Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

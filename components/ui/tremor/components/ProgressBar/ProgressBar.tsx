@@ -85,7 +85,7 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
               "h-full flex-col rounded-full",
               bar(),
               showAnimation &&
-                "transform-gpu transition-all duration-300 ease-in-out",
+                "transform-gpu transition-all duration-300 ease-out",
             )}
             style={{
               width: max ? `${(safeValue / max) * 100}%` : `${safeValue}%`,

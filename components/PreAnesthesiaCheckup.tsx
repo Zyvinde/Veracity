@@ -73,6 +73,10 @@ const CHECKUP_SECTIONS = [
           ? 'Arabic-speaking patient. Interpreter may be needed for informed consent process.'
           : p.preferredLanguage === 'hi'
           ? 'Hindi-speaking patient. Confirm verbal comprehension of consent.'
+          : p.preferredLanguage === 'ur'
+          ? 'Urdu-speaking patient. Confirm verbal comprehension of consent; written materials in Urdu script.'
+          : p.preferredLanguage === 'ml'
+          ? 'Malayalam-speaking patient. Confirm verbal comprehension of consent.'
           : 'English-speaking patient. Standard consent process.',
         category: 'identity',
         critical: false,

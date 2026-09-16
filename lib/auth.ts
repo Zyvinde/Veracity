@@ -30,16 +30,6 @@ export const authOptions: NextAuthOptions = {
           } as any;
         }
 
-        // Demo fallback for any valid username
-        if (credentials.username && credentials.password) {
-          return {
-            id: `user-${credentials.username}`,
-            name: credentials.username.charAt(0).toUpperCase() + credentials.username.slice(1),
-            email: `${credentials.username}@anterior.ae`,
-            role: credentials.username.toLowerCase().includes('anes') ? 'anesthesiologist' : 'coordinator',
-          } as any;
-        }
-
         return null;
       },
     }),

@@ -2,8 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { extractTextFromPdfBuffer } from '@/lib/pdf-parser';
 import { parseLabReport } from '@/lib/lab-parser';
 import { saveUploadedFileDb } from '@/lib/db';
+import { requireAuth, assertUploadCategory } from '@/lib/api-utils';
+
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+const ALLOWED_TYPES = new Set([
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/tiff',
+  'image/heic',
+  'image/heif',
+]);
 
 export async function POST(req: NextRequest) {
+  const authError = await requireAuth();
+  if (authError) return authError;
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
@@ -15,31 +29,37 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'No file uploaded' }, { status: 400 });
     }
 
-    const filename = file.name;
+    if (file.size > MAX_UPLOAD_BYTES) {
+      return NextResponse.json(
+        { success: false, error: `File too large: ${(file.size / 1024 / 1024).toFixed(1)}MB (max 10MB)` },
+        { status: 413 }
+      );
+    }
+
     const mimeType = file.type || 'application/pdf';
-    const rawCategory = (formData.get('category') as string) || 'OTHER';
-    const category = (['LAB', 'ECG', 'ECHO', 'CONSENT', 'OTHER'] as const).includes(rawCategory as any)
-      ? (rawCategory as 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER')
-      : 'OTHER';
+    if (!ALLOWED_TYPES.has(mimeType)) {
+      return NextResponse.json(
+        { success: false, error: `Unsupported file type: ${mimeType}. Allowed: PDF, PNG, JPEG, WebP, TIFF, HEIC/HEIF` },
+        { status: 415 }
+      );
+    }
+
+    const filename = file.name;
+    const category = assertUploadCategory(formData.get('category') as string);
     const arrayBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
-
-    // Save uploaded file into SQLite for persistence
-    const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     const base64Data = Buffer.from(uint8Array).toString('base64');
+
+    const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     try {
       saveUploadedFileDb(fileId, filename, mimeType, base64Data, category);
     } catch (dbErr) {
       console.warn('File DB save skipped or failed:', dbErr);
     }
 
-    // Extract text and bounding boxes from PDF
     const extractionResult = await extractTextFromPdfBuffer(uint8Array, filename);
-
-    // Flatten lines for lab parsing
     const allLines = extractionResult.pages.flatMap((p) => p.lines);
 
-    // Parse structured lab items from extracted text
     const parsedLabs = parseLabReport(
       extractionResult.fullText,
       labSource as any,
