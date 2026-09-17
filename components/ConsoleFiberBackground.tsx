@@ -15,11 +15,11 @@ export default function ConsoleFiberBackground({
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none -z-10 bg-[#071322] ${
+      className={`console-ambient pointer-events-none z-0 ${
         fixed ? 'fixed inset-0' : 'absolute inset-0'
       }`}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1e36]/60 via-[#07172c]/80 to-[#040d18]" />
+      <div className="console-ambient-light" />
     </div>
   );
 }

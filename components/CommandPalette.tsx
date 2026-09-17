@@ -60,9 +60,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!open) return null;
 
   return (
-    <div className="cmdk-overlay" onClick={() => onOpenChange(false)}>
-      <div className="cmdk-root" onClick={(e) => e.stopPropagation()}>
-        <Command label="Clinical Command Palette">
+    <Command.Dialog open={open} onOpenChange={onOpenChange} label="Clinical Command Palette" overlayClassName="cmdk-overlay" contentClassName="cmdk-root">
           <div className="cmdk-input-wrapper">
             <Search className="h-4 w-4 text-sky-300 shrink-0" />
             <Command.Input
@@ -256,9 +254,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               <span>House Health Spotlight Engine</span>
             </div>
           </div>
-        </Command>
-      </div>
-    </div>
+    </Command.Dialog>
   );
 };
 

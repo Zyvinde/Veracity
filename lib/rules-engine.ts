@@ -41,6 +41,7 @@ export interface PotassiumEvaluation {
 }
 
 export function evaluatePotassium(value: number): PotassiumEvaluation {
+  if (!Number.isFinite(value)) throw new RangeError('Potassium must be a finite number');
   if (value < 3.0) {
     return {
       status: 'CRITICAL_LOW',
@@ -55,7 +56,7 @@ export function evaluatePotassium(value: number): PotassiumEvaluation {
       directive: 'CRITICAL HYPERKALEMIA (>5.5 mEq/L): Urgent ECG, hold all K+ retaining drugs, stat nephrology/endocrine consult.',
     };
   }
-  if (value >= 3.1 && value <= 3.4) {
+  if (value >= 3.0 && value < 3.5) {
     return {
       status: 'BORDERLINE_LOW',
       severity: 'AMBER',
@@ -380,7 +381,17 @@ export interface GLP1Evaluation {
   guidelineBasis: string;
 }
 
+export const LEGACY_GLP1_POLICY = 'Legacy ASA 2023 GLP-1 consensus-inspired local policy; historical, not current guidance';
+
 export function evaluateGLP1Hold(hoursElapsed: number, isWeekly: boolean): GLP1Evaluation {
+  if (!Number.isFinite(hoursElapsed) || hoursElapsed < 0 || typeof isWeekly !== 'boolean') {
+    return {
+      status: 'HARD_STOP',
+      hoursRemaining: 0,
+      clinicalAction: 'Unknown GLP-1 exposure: stop automated clearance, verify dose timing and aspiration risk with the anesthesia team; consider gastric POCUS.',
+      guidelineBasis: LEGACY_GLP1_POLICY,
+    };
+  }
   const targetHoldHours = isWeekly ? 168 : 24;
   const hoursRemaining = Math.max(0, targetHoldHours - hoursElapsed);
 
@@ -389,15 +400,15 @@ export function evaluateGLP1Hold(hoursElapsed: number, isWeekly: boolean): GLP1E
       return {
         status: 'HOLD_REQUIRED',
         hoursRemaining,
-        clinicalAction: `ASA 2023 Consensus: Requires ${targetHoldHours}h (7 days) hold. Point-of-Care Gastric Ultrasound (POCUS) mandatory to confirm empty stomach before general anesthesia. Rapid Sequence Induction (RSI) advised if food residue detected.`,
-        guidelineBasis: 'ASA Practice Guidelines for Preoperative Fasting and GLP-1 Receptor Agonists (2023)',
+        clinicalAction: `Legacy ASA 2023 local policy: ${targetHoldHours}h (7 days) hold unmet; aspiration risk requires anesthesia review. Consider gastric POCUS by a qualified clinician; if unavailable or inconclusive, use full-stomach precautions or delay.`,
+        guidelineBasis: LEGACY_GLP1_POLICY,
       };
     }
     return {
       status: 'CLEARED',
       hoursRemaining: 0,
       clinicalAction: '7-day GLP-1 hold period satisfied. Standard NPO guidelines apply.',
-      guidelineBasis: 'ASA Consensus Statement on Preoperative GLP-1 Management (2023)',
+      guidelineBasis: LEGACY_GLP1_POLICY,
     };
   } else {
     if (hoursElapsed < 24) {
@@ -405,14 +416,14 @@ export function evaluateGLP1Hold(hoursElapsed: number, isWeekly: boolean): GLP1E
         status: 'HOLD_REQUIRED',
         hoursRemaining,
         clinicalAction: 'Omit morning dose on day of surgery. Assess for gastrointestinal symptoms.',
-        guidelineBasis: 'ASA Daily GLP-1 Protocol (2023)',
+        guidelineBasis: LEGACY_GLP1_POLICY,
       };
     }
     return {
       status: 'CLEARED',
       hoursRemaining: 0,
       clinicalAction: 'Daily GLP-1 hold satisfied. Standard fasting protocol.',
-      guidelineBasis: 'ASA Daily GLP-1 Protocol (2023)',
+      guidelineBasis: LEGACY_GLP1_POLICY,
     };
   }
 }
@@ -430,6 +441,9 @@ export function evaluateNeuraxialEligibility(
 ): NeuraxialEvaluation {
   const reasons: string[] = [];
 
+  if (!Number.isFinite(platelets) || platelets < 0 || !Number.isFinite(inr) || inr <= 0 || !Number.isFinite(activeDoacHours) || activeDoacHours < 0) {
+    reasons.push('Missing or invalid coagulation/DOAC inputs: stop automated clearance and verify values');
+  }
   if (platelets < 70000) {
     reasons.push(`Thrombocytopenia (Platelets ${platelets.toLocaleString()} /µL < 70,000 /µL)`);
   }
@@ -2252,3 +2266,4 @@ export function evaluatePACInterview(
     bmi,
   };
 }
+

@@ -104,6 +104,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   const { t } = useI18n();
   const {
     patients,
+    attestations,
     selectedLabId,
     getCurrentPatient,
     getSelectedLab,
@@ -177,23 +178,14 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   }, [currentPatient?.name, onOpenAttestation]);
 
   const handleOpenWhatsApp = useCallback(() => {
-    toast.success('Pre-Op Directive Dispatched', {
-      description: `Bilingual SMS & WhatsApp verification sent for ${currentPatient?.name || 'case'}`,
-    });
     onOpenWhatsApp();
   }, [currentPatient?.name, onOpenWhatsApp]);
 
   const handleOpenPrintSlip = useCallback(() => {
-    toast('Generating PAC Clearance Slip', {
-      description: `Exporting FHIR JSON & PDF clearance for ${currentPatient?.name || 'case'}`,
-    });
     onOpenPrintSlip();
   }, [currentPatient?.name, onOpenPrintSlip]);
 
   const handleOpenAuditDrawer = useCallback(() => {
-    toast('Clinical Audit Log Synchronized', {
-      description: 'Immutable 256-bit SHA audit trail verified',
-    });
     onOpenAuditDrawer();
   }, [onOpenAuditDrawer]);
 
@@ -237,6 +229,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   const redCount = patients.filter((p) => p.overallStatus === 'RED_HARD_STOP').length;
   const amberCount = patients.filter((p) => p.overallStatus === 'AMBER_CONDITIONAL').length;
   const greenCount = patients.filter((p) => p.overallStatus === 'GREEN_CLEARED').length;
+  const attestedCount = patients.filter((p) => Boolean(attestations[p.id])).length;
 
   // Active notifications count and items
   const notifications = useMemo(() => {
@@ -346,13 +339,14 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
   }
 
   return (
-    <div className="console-canvas w-full max-w-full min-w-0 overflow-x-clip min-h-screen p-0 m-0 text-white/90 font-sans selection:bg-sky-500 selection:text-white">
+    <div id="ot-console" className="console-canvas w-full min-w-0 min-h-screen text-white/90 font-sans selection:bg-sky-500 selection:text-white">
+      <a href="#console-content" className="skip-link">Skip to clinical workspace</a>
       {/* Outer Shell: edge-to-edge full width translucent console workspace */}
       <div className="console-shell w-full max-w-full min-w-0 min-h-screen rounded-none border-0 overflow-hidden">
         <div className="flex flex-col md:flex-row min-h-screen w-full max-w-full min-w-0 overflow-x-clip">
           {/* Tabler Slim Icon Rail (76px) */}
           <aside
-            className="glass-strong hidden md:flex w-[76px] shrink-0 flex-col items-center justify-between border-r border-white/20 z-30 py-4"
+            className="console-sidebar glass-strong hidden md:flex w-[88px] shrink-0 flex-col items-center justify-between z-30 py-5"
             aria-label="Clinical sections"
           >
             <div className="flex flex-col items-center gap-5 w-full px-2">
@@ -470,7 +464,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
           {/* Tabler Main Body & Top Navigation Bar */}
           <div className="flex-1 flex flex-col transparent min-w-0 w-full max-w-full overflow-x-clip">
             {/* Top Command Bar */}
-            <header className="glass-strong sticky top-0 z-20 border-b border-white/20 px-2 sm:px-6 py-2 sm:py-3 flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full overflow-x-clip overflow-y-visible">
+            <header className="console-toolbar glass-strong sticky top-0 z-40 px-3 sm:px-5 py-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
               {/* Left: Return to Landing + Console Wordmark + Global Search */}
               <div className="flex items-center gap-1.5 sm:gap-4 flex-1 min-w-0">
                 <a
@@ -789,14 +783,26 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             </header>
 
             {/* Main Content Area */}
-            <main className="px-3 sm:px-8 py-3.5 sm:py-6 pb-28 md:pb-8 space-y-4 sm:space-y-6 overflow-y-auto overflow-x-clip w-full max-w-full min-w-0">
+            <main id="console-content" tabIndex={-1} className="console-content px-4 sm:px-7 py-6 sm:py-8 pb-28 md:pb-8 space-y-6 w-full min-w-0">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                  <p className="text-xs font-medium tracking-widest uppercase text-sky-200/80 mb-2">House Health / Clinical workspace</p>
+                  <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+                    {{ dashboard: 'Your surgical overview', 'blood-labs': 'Blood & laboratory', questionnaire: 'Pre-operative assessment', regional: 'Regional & blood bank', 'ot-defense': 'Surgical readiness', notes: 'Clinical documentation', patients: 'Patient directory' }[activeNav]}
+                  </h1>
+                  <p className="mt-2 text-sm text-slate-300">{activeNav === 'dashboard' ? 'A clear view of your cases, priorities, and next steps.' : 'Review the selected case without losing your place.'}</p>
+                </div>
+                <button type="button" onClick={handleOpenIngestion} className="console-primary inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold">
+                  <Plus className="h-4 w-4" /> Add case
+                </button>
+              </div>
               {/* Hero Stat Strip (4 tiles) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+              <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
                 {/* Tile 1: Cases Today */}
                 <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
-                      Cases Today
+                      Total cases
                     </span>
                     <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-sky-500/20 text-sky-200 border border-sky-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
                       <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
@@ -834,17 +840,17 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                 <div className="console-stat glass-specular rounded-2xl border border-white/25 p-4 sm:p-5 transition-[transform,background-color,border-color,box-shadow] duration-200 group overflow-hidden min-w-0 max-w-full break-words">
                   <div className="flex items-center justify-between">
                     <span className="text-[10.5px] sm:text-[11px] font-bold uppercase tracking-wider text-white/70 font-mono">
-                      NPO Fasting
+                      Cleared cases
                     </span>
                     <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-emerald-500/20 text-emerald-200 border border-emerald-300/30 flex items-center justify-center group-hover:scale-105 transition-transform">
                       <Utensils className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
                   </div>
                   <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
-                    12h <span className="text-xs sm:text-sm font-normal text-white/60 font-sans">00m</span>
+                    {greenCount} <span className="text-xs sm:text-sm font-normal text-white/60 font-sans">/ {patients.length}</span>
                   </div>
                   <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium truncate">
-                    Solids 12h · Liquids 3.5h
+                    Based on recorded case status
                   </div>
                 </div>
 
@@ -859,10 +865,10 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                     </div>
                   </div>
                   <div className="mt-2 font-mono text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-none tracking-tight">
-                    100<span className="text-lg sm:text-xl font-bold text-sky-200">%</span>
+                    {attestedCount}<span className="text-sm font-normal text-white/60"> / {patients.length}</span>
                   </div>
                   <div className="mt-2 text-[11px] sm:text-xs text-white/70 font-medium truncate">
-                    DHA § 3060(a) Audited
+                    Recorded attestations
                   </div>
                 </div>
               </div>
@@ -1916,7 +1922,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
             {/* Mobile Fixed Bottom Navigation Bar (Phone Viewports 375px-430px) */}
             <nav
               aria-label="Mobile Bottom Navigation"
-              className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-white/20 bg-[#071322] px-1 pt-1.5 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,0.8)] w-full max-w-full overflow-hidden"
+              className="console-mobile-nav glass-strong fixed bottom-3 inset-x-3 z-40 md:hidden rounded-3xl px-1.5 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]"
             >
               <div className="grid grid-cols-7 gap-0.5 items-center w-full max-w-md mx-auto">
                 {[
@@ -1936,7 +1942,7 @@ export const TablerClinicalDashboard: React.FC<TablerClinicalDashboardProps> = (
                       type="button"
                       onClick={() => {
                         setActiveNav(tab.id);
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: 'instant' });
                       }}
                       className={`relative flex flex-col items-center justify-center py-1.5 px-0.5 rounded-xl transition min-h-[48px] active:scale-95 cursor-pointer ${
                         isActive

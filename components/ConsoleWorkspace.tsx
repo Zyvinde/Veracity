@@ -82,6 +82,7 @@ function ConsoleWorkspaceContent() {
   const handleAuthorizeAttestation = useCallback(
     (record: AttestationRecord) => {
       addAttestation(record);
+      setIsAttestationOpen(false);
       setIsPrintSlipOpen(true);
     },
     [addAttestation]
