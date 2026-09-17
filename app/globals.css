@@ -1060,21 +1060,6 @@ body.menu-open {
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Retired: TERRANOVA card system (LiquidGlassCard deleted). The canonical dark
-   glass system lives in styles/veracity-tokens.css. */
-
-.card__frost,
-/* Retired: terranova card element styles (consumers deleted). */
-
-/* ==========================================================================
-   GLASS_KIT COMPREHENSIVE GLASSMORPHISM DESIGN SYSTEM
-   ========================================================================== */
-
-/* Retired: legacy light-mode GLASS_KIT (glass-light/glass-card/glass-panel collision,
-   glass-dark, glass-header/sidebar, glass-button-*, glass-pill, glass-modal-*).
-   The canonical dark glass system lives in styles/veracity-tokens.css (.glass-panel,
-   .glass-card-subtle, .veracity-well). Press physics: .veracity-press. */
-
 .specular-hairline {
   position: relative;
 }
