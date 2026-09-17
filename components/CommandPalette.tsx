@@ -250,7 +250,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               <span>ESC Close</span>
             </div>
             <div className="flex items-center gap-1.5 text-sky-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
               <span>House Health Spotlight Engine</span>
             </div>
           </div>

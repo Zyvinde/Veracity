@@ -100,8 +100,8 @@ function ConsoleWorkspaceContent() {
   if (!currentPatient || patients.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-          H
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+          V
         </div>
         <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
         <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
@@ -172,8 +172,8 @@ export default function ConsoleWorkspace() {
     <Suspense
       fallback={
       <div className="min-h-screen w-full max-w-full min-w-0 overflow-x-clip flex flex-col items-center justify-center gap-4 px-4 py-8 sm:p-8 text-center text-white">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-            H
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+            V
           </div>
           <p className="text-sm font-semibold text-white">Loading House Health console…</p>
         </div>

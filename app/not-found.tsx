@@ -8,20 +8,20 @@ export default function NotFound() {
   const { t } = useI18n();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-950 text-slate-100 p-6">
-      <div className="text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-blue-500/40 bg-gradient-to-br from-blue-500/20 to-blue-900/40 shadow-glow mb-6">
-          <Activity className="h-8 w-8 text-blue-400" />
+    <div className="veracity-canvas flex min-h-screen flex-col items-center justify-center text-slate-100 p-6">
+      <div className="glass-panel w-full max-w-md rounded-2xl p-8 text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-sky-300/30 bg-sky-400/10 shadow-[0_0_24px_-6px_rgba(56,189,248,0.5)] mb-6">
+          <Activity className="h-8 w-8 text-sky-300" />
         </div>
-        <h1 className="font-serif text-4xl font-bold tracking-tight text-white">
+        <h1 className="veracity-serif-accent text-4xl text-white">
           {t('notFound.title')}
         </h1>
-        <p className="mt-3 max-w-md text-sm text-slate-400 font-sans">
+        <p className="veracity-ui-label mt-3 max-w-md text-sm text-slate-400">
           {t('notFound.description')}
         </p>
         <a
           href="/"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg border border-blue-500/40 bg-gradient-to-r from-blue-600/20 to-blue-600/20 px-5 py-2.5 text-sm font-semibold text-blue-300 transition hover:border-blue-400 hover:bg-blue-500/30 hover:text-white"
+          className="veracity-focus veracity-press mt-6 inline-flex items-center gap-2 rounded-xl bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-white"
         >
           {t('notFound.returnDashboard')}
         </a>

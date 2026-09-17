@@ -41,9 +41,9 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end animate-fade-in">
-      <div className="absolute inset-0 bg-slate-950/55 backdrop-blur-xs" onClick={onClose} />
-      <div className="relative h-full w-full max-w-full sm:max-w-md border-l border-white/20 bg-[#091b30]/85 backdrop-blur-xl shadow-2xl overflow-y-auto overflow-x-clip animate-slide-down text-white/90 min-w-0">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/15 bg-white/10 backdrop-blur-md px-5 py-4">
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
+      <div className="relative h-full w-full max-w-full sm:max-w-md border-l border-white/20 glass-panel rounded-none border-y-0 border-r-0 shadow-2xl overflow-y-auto overflow-x-clip veracity-drawer-in text-white/90 min-w-0">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/15 bg-black/40 px-5 py-4">
           <div className="flex items-center gap-2.5">
             <History className="h-4 w-4 text-sky-200" />
             <h3 className="font-serif italic text-lg tracking-wide text-white font-bold">{t('auditTrail.title')}</h3>
@@ -84,7 +84,7 @@ export const AuditTrailDrawer: React.FC<AuditTrailDrawerProps> = ({ isOpen, onCl
               const action = ACTION_LABELS[log.action] || { label: log.action, color: 'text-white/90' };
               const time = new Date(log.timestamp);
               return (
-                <div key={log.id} className="rounded-xl border border-white/25 bg-white/10 p-3.5 hover:border-white/50 hover:bg-white/15 transition">
+                <div key={log.id} className="rounded-xl border border-white/25 bg-white/10 p-3.5 hover:border-white/50 hover:bg-white/15 transition-[border-color,background-color] duration-150">
                   <div className="flex items-center justify-between">
                     <span className={`text-[11px] font-mono font-medium ${action.color}`}>
                       {action.label}

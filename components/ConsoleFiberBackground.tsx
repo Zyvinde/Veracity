@@ -2,10 +2,6 @@
 
 import React from 'react';
 
-/**
- * High-performance, lightweight background for the OT console
- * Pure CSS gradient without expensive filters, SVG noise, or full-screen blurs.
- */
 export default function ConsoleFiberBackground({
   fixed = false,
 }: {
@@ -15,12 +11,15 @@ export default function ConsoleFiberBackground({
   return (
     <div
       aria-hidden="true"
-      className={`console-ambient pointer-events-none z-0 ${
-        fixed ? 'fixed inset-0' : 'absolute inset-0'
-      }`}
+      className={`pointer-events-none z-0 ${fixed ? 'fixed inset-0' : 'absolute inset-0'}`}
     >
-      <div className="console-ambient-light" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(10, 30, 54, 0.35), rgba(7, 23, 44, 0.5) 50%, rgba(4, 13, 24, 0.9))',
+        }}
+      />
     </div>
   );
 }
-

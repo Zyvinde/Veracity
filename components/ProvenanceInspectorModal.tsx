@@ -139,14 +139,14 @@ export const ProvenanceInspectorModal: React.FC<ProvenanceInspectorModalProps> =
   };
 
   return (
-    <div role="dialog" aria-modal="true" aria-label={`Provenance inspection for ${biomarkerLabel}`} className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-6">
-      <div className="glass-panel flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl">
+    <div role="dialog" aria-modal="true" aria-label={`Provenance inspection for ${biomarkerLabel}`} className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-3 sm:p-6">
+      <div className="glass-panel animate-scale-in flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl">
         <div className="flex items-start justify-between gap-3 border-b border-white/10 p-4">
           <div className="min-w-0">
             <p className="veracity-num text-[10.5px] uppercase tracking-[0.14em] text-sky-300">Provenance split-view</p>
             <h2 className="veracity-ui-label mt-1 truncate text-[16px] font-semibold text-white">{title}</h2>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close provenance inspector" className="veracity-focus rounded-lg border border-white/10 bg-white/5 p-2 text-slate-200 hover:bg-white/10">
+          <button type="button" onClick={onClose} aria-label="Close provenance inspector"             className="veracity-focus veracity-press rounded-lg border border-white/10 bg-white/5 p-2 text-slate-200 hover:bg-white/10">
             <X size={16} aria-hidden="true" />
           </button>
         </div>

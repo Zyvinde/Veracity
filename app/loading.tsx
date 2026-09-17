@@ -5,9 +5,8 @@ import { Skeleton } from '@/components/ui-utils';
 
 export default function Loading() {
   return (
-    <div className="min-h-screen bg-slate-950 p-6">
-      {/* Header skeleton */}
-      <div className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
+    <div className="veracity-canvas min-h-screen p-6">
+      <div className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#06090E]/80 backdrop-blur-xl">
         <div className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-xl" />
@@ -24,10 +23,8 @@ export default function Loading() {
         </div>
       </div>
 
-      {/* Main content skeleton */}
       <main className="mx-auto max-w-[1750px] space-y-6 px-4 py-6 sm:px-6 lg:px-8">
-        {/* Patient banner skeleton */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+        <div className="glass-panel rounded-2xl p-5">
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
             <div className="lg:col-span-5 space-y-3">
               <Skeleton className="h-3 w-48" />
@@ -51,8 +48,7 @@ export default function Loading() {
           </div>
         </div>
 
-        {/* Traffic light skeleton */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+        <div className="glass-panel rounded-2xl p-5">
           <div className="flex items-start gap-4">
             <Skeleton className="h-14 w-14 rounded-xl" />
             <div className="flex-1 space-y-2">
@@ -67,8 +63,7 @@ export default function Loading() {
           </div>
         </div>
 
-        {/* Lab table skeleton */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/90 p-5">
+        <div className="glass-panel rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="space-y-2">
               <Skeleton className="h-5 w-72" />

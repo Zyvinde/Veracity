@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Noto_Sans_Malayalam, Manrope, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Playfair_Display, Instrument_Serif, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Noto_Sans_Malayalam, Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import "../styles/veracity-tokens.css";
 import { I18nProvider } from "@/lib/i18n/context";
@@ -27,6 +27,14 @@ const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-serif",
   display: "swap",
+  style: ["normal", "italic"],
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-veracity-serif",
+  display: "swap",
+  weight: ["400"],
   style: ["normal", "italic"],
 });
 
@@ -82,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en" dir="ltr" suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${manrope.variable} ${playfairDisplay.variable} ${ibmPlexMono.variable} ${notoArabic.variable} ${notoDevanagari.variable} ${notoMalayalam.variable} ${jakarta.variable}`}>
+      <html lang="en" dir="ltr" suppressHydrationWarning className={`scroll-smooth ${inter.variable} ${manrope.variable} ${playfairDisplay.variable} ${instrumentSerif.variable} ${ibmPlexMono.variable} ${notoArabic.variable} ${notoDevanagari.variable} ${notoMalayalam.variable} ${jakarta.variable}`}>
       <head>
         {/* Theme init: default is cream+green light; .dark only if user opted in */}
         <script

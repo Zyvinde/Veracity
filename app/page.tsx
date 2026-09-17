@@ -83,9 +83,9 @@ function PageContent() {
   // Guard: for patient-specific sub-views, wait for patient store hydration
   if ((directView === 'intake' || directView === 'questionnaire' || directView === 'blood' || directView === 'mobile') && (!currentPatient || patients.length === 0)) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse backdrop-blur-md">
-          H
+      <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+          V
         </div>
         <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
         <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
@@ -96,7 +96,7 @@ function PageContent() {
   // Patient self-assessment portal (?view=intake)
   if (directView === 'intake' || directView === 'questionnaire') {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] px-3 py-4 sm:p-8 text-white w-full overflow-x-hidden">
+      <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-8 text-white w-full overflow-x-hidden">
         <div className="max-w-5xl mx-auto space-y-3 sm:space-y-4 w-full">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -104,7 +104,7 @@ function PageContent() {
               onClick={() => {
                 router.push('/');
               }}
-              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition shrink-0"
+              className="text-xs font-mono text-sky-300 hover:text-sky-200 transition shrink-0"
             >
               ← Back to Main Platform
             </button>
@@ -122,7 +122,7 @@ function PageContent() {
   // In-OT mobile viewport (?view=blood)
   if (directView === 'blood' || directView === 'mobile') {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] px-3 py-4 sm:p-6 flex flex-col items-center justify-center text-white w-full overflow-x-hidden">
+      <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-center text-white w-full overflow-x-hidden">
         <div className="w-full max-w-md space-y-3">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -130,7 +130,7 @@ function PageContent() {
               onClick={() => {
                 router.push('/');
               }}
-              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition shrink-0"
+              className="text-xs font-mono text-sky-300 hover:text-sky-200 transition shrink-0"
             >
               ← Back to Main Platform
             </button>
@@ -181,9 +181,9 @@ export default function Home() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#223140] text-white font-bold text-xl shadow-lg animate-pulse">
-            H
+        <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center">
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-lg">
+            V
           </div>
           <p className="text-sm font-semibold text-white">Loading House Health Platform…</p>
         </div>

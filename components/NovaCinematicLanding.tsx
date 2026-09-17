@@ -56,7 +56,7 @@ function Reveal({
     <div
       ref={ref}
       style={{ transitionDelay: `${Math.min(delay, 300)}ms` }}
-      className={`transition-all duration-500 ease-out will-change-transform ${
+      className={`transition-[transform,opacity] duration-500 ease-out will-change-transform ${
         visible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       } ${className}`}
     >
@@ -305,7 +305,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
 
       <div className="relative z-10 w-full overflow-x-hidden">
         {/* ── Navbar ── */}
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/15 backdrop-blur-md bg-black/60">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/15 backdrop-blur-md bg-black/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
           <div className="flex items-center justify-between px-3 sm:px-8 md:px-12 max-w-7xl mx-auto w-full">
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a href="/" className="flex items-center gap-2">
@@ -329,12 +329,12 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                     key={link.label}
                     href={link.href}
                     aria-current={isActive ? 'true' : undefined}
-                    className={`flex items-center gap-1.5 text-sm transition-colors duration-300 ${
+                    className={`flex items-center gap-1.5 text-sm transition-[background-color,border-color,color] duration-200 ease-out ${
                       isActive ? 'font-medium text-white' : 'text-white/60 hover:text-white'
                     }`}
                   >
                     <span
-                      className={`h-1 w-1 rounded-full transition-all duration-300 ${
+                      className={`h-1 w-1 rounded-full transition-[background-color] duration-300 ${
                         isActive ? 'bg-white' : 'bg-transparent'
                       }`}
                     />
@@ -351,7 +351,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <button
                 type="button"
                 onClick={goConsole}
-                className="rounded-full bg-white px-3 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-black transition-all duration-300 hover:bg-white/85 active:scale-95 sm:text-sm shadow-md min-h-[44px] flex items-center justify-center shrink-0"
+                className="veracity-press rounded-full bg-white px-3 sm:px-5 py-2 sm:py-2.5 text-xs font-semibold text-black hover:bg-white/85 sm:text-sm shadow-md min-h-[44px] flex items-center justify-center shrink-0"
               >
                 <span className="sm:hidden">Console</span>
                 <span className="hidden sm:inline">Open OT Console</span>
@@ -360,7 +360,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <button
                 type="button"
                 onClick={() => setModal('QUESTIONNAIRE')}
-                className="hidden lg:block rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:px-5 sm:text-sm shrink-0 min-h-[44px]"
+                className="hidden lg:block rounded-full border border-white/20 bg-white/10 px-4 py-2.5 text-xs text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/20 sm:px-5 sm:text-sm shrink-0 min-h-[44px]"
               >
                 Sample Intake
               </button>
@@ -369,7 +369,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
                 aria-label="Toggle menu"
-                className="rounded-xl border border-white/20 bg-white/15 p-2 text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/25 md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shrink-0"
+                className="rounded-xl border border-white/20 bg-white/15 p-2 text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/25 md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shrink-0"
               >
                 {menuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
@@ -487,7 +487,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={goConsole}
-                    className="btn-press flex items-center justify-center gap-1.5 rounded-full bg-white px-6 py-3.5 text-xs sm:text-sm font-semibold text-black transition-all duration-300 hover:bg-white/85 shadow-lg min-h-[44px] cursor-pointer"
+                    className="btn-press veracity-press flex items-center justify-center gap-1.5 rounded-full bg-white px-6 py-3.5 text-xs sm:text-sm font-semibold text-black hover:bg-white/85 shadow-lg min-h-[44px] cursor-pointer"
                   >
                     <span>Open OT Console</span>
                     <ChevronRight size={14} />
@@ -495,7 +495,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={() => setModal('QUESTIONNAIRE')}
-                    className="btn-press flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-5 py-3.5 text-xs sm:text-sm text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 font-medium min-h-[44px] cursor-pointer"
+                    className="btn-press flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-5 py-3.5 text-xs sm:text-sm text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/20 font-medium min-h-[44px] cursor-pointer"
                   >
                     Sample Pre-Op Intake
                   </button>
@@ -554,7 +554,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                       <button
                         type="button"
                         onClick={step.onClick}
-                        className="mt-5 flex items-center gap-1 self-start text-xs font-medium text-white transition-colors duration-300 hover:text-sky-200 min-h-[44px]"
+                        className="mt-5 flex items-center gap-1 self-start text-xs font-medium text-white transition-[background-color,border-color,color] duration-200 ease-out hover:text-sky-200 min-h-[44px]"
                       >
                         {step.action}
                         <ChevronRight size={14} />
@@ -609,7 +609,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                     <button
                       type="button"
                       onClick={goConsole}
-                      className="flex items-center gap-1 rounded-full bg-white px-5 py-2.5 text-xs font-medium text-black transition-colors duration-300 hover:bg-white/85 sm:text-sm min-h-[44px]"
+                      className="flex items-center gap-1 rounded-full bg-white px-5 py-2.5 text-xs font-medium text-black transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/85 sm:text-sm min-h-[44px]"
                     >
                       Explore Console
                       <ChevronRight size={14} />
@@ -617,7 +617,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                     <button
                       type="button"
                       onClick={() => setModal('BLOOD')}
-                      className="rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:text-sm min-h-[44px]"
+                      className="rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-xs text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/20 sm:text-sm min-h-[44px]"
                     >
                       View Blood Triage
                     </button>
@@ -667,7 +667,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                             {row.title}
                             <ChevronRight
                               size={16}
-                              className="text-white/40 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-white"
+                              className="text-white/40 transition-[transform,color] duration-300 group-hover:translate-x-0.5 group-hover:text-white"
                             />
                           </button>
                           <p className="mt-1 text-xs sm:text-sm leading-relaxed text-white/70">{row.body}</p>
@@ -733,7 +733,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   },
                 ].map((card, i) => (
                   <Reveal key={card.headline} delay={220 + i * 100}>
-                    <div className="glass-specular flex h-full flex-col justify-between rounded-2xl border border-white/15 bg-white/10 p-5 sm:p-6 backdrop-blur-md hover:border-sky-400/40 transition">
+                    <div className="glass-specular veracity-lift flex h-full flex-col justify-between rounded-2xl border border-white/15 bg-white/10 p-5 sm:p-6 hover:border-sky-400/40">
                       <div>
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-serif text-2xl sm:text-4xl font-normal text-white">
@@ -761,7 +761,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
 
               {/* Comparative Matrix: Traditional Pre-Op vs House Health Defense */}
               <Reveal delay={320} className="mt-8 sm:mt-12">
-                <div className="glass-specular rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 backdrop-blur-md min-w-0 max-w-full overflow-hidden break-words">
+                <div className="glass-specular rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 min-w-0 max-w-full overflow-hidden break-words">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-white/15">
                     <div>
                       <span className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-sky-300 font-bold">
@@ -866,7 +866,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   },
                 ].map((card, i) => (
                   <Reveal key={card.title} delay={260 + i * 100}>
-                    <div className="glass-specular flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-md">
+                    <div className="glass-specular flex h-full flex-col rounded-2xl border border-white/15 bg-white/10 p-6">
                       <span className="font-mono text-[11px] tracking-[0.15em] text-sky-300 font-bold">
                         {card.index}
                       </span>
@@ -880,7 +880,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 <button
                   type="button"
                   onClick={goConsole}
-                  className="btn-press mt-8 flex items-center gap-1 rounded-full border border-sky-400/30 bg-sky-500/20 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-sky-500/30 sm:text-sm font-semibold cursor-pointer"
+                  className="btn-press mt-8 flex items-center gap-1 rounded-full border border-sky-400/30 bg-sky-500/20 px-6 py-3 text-xs text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-sky-500/30 sm:text-sm font-semibold cursor-pointer"
                 >
                   Open the OT Console
                   <ChevronRight size={14} />
@@ -903,7 +903,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={goConsole}
-                    className="btn-press flex items-center gap-1 rounded-full bg-white px-6 py-3 text-xs font-semibold text-black transition-colors duration-300 hover:bg-white/85 sm:text-sm shadow-md cursor-pointer"
+                    className="btn-press flex items-center gap-1 rounded-full bg-white px-6 py-3 text-xs font-semibold text-black transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/85 sm:text-sm shadow-md cursor-pointer"
                   >
                     Open OT Console
                     <ChevronRight size={14} />
@@ -911,7 +911,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <button
                     type="button"
                     onClick={() => setModal('QUESTIONNAIRE')}
-                    className="btn-press rounded-full border border-white/25 bg-white/10 px-6 py-3 text-xs text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:text-sm font-medium cursor-pointer"
+                    className="btn-press rounded-full border border-white/25 bg-white/10 px-6 py-3 text-xs text-white backdrop-blur-md transition-[background-color,border-color,color] duration-200 ease-out hover:bg-white/20 sm:text-sm font-medium cursor-pointer"
                   >
                     Sample Pre-Op Intake
                   </button>
@@ -943,7 +943,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <a
                     key={link.label}
                     href={link.href}
-                    className="text-xs text-white/70 transition-colors duration-300 hover:text-white"
+                    className="text-xs text-white/70 transition-[background-color,border-color,color] duration-200 ease-out hover:text-white"
                   >
                     {link.label}
                   </a>

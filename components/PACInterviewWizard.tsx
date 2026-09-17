@@ -314,17 +314,17 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
   ];
 
   return (
-    <div className="w-full max-w-full sm:max-w-3xl mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden overflow-x-clip min-w-0 break-words">
+    <div className="w-full max-w-full sm:max-w-3xl mx-auto glass-panel text-white rounded-2xl border-white/[0.08] shadow-2xl overflow-hidden overflow-x-clip min-w-0 break-words">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 bg-black/30 px-4 sm:px-6 py-3.5">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shrink-0">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/[0.06] text-sky-200 shadow-md shrink-0">
             <Stethoscope className="h-5 w-5" />
           </div>
           <div className="min-w-0">
             <h2 className="font-serif text-sm sm:text-base font-bold tracking-tight">
               {t('pacWizard.title')} — {mode === 'CLINIC' ? t('pacWizard.clinicVerify') : t('pacWizard.askQuestions')}
-              {currentPatient?.pacCompleted && <span className="ml-2 rounded bg-emerald-600 px-2 py-0.5 text-[10px] font-bold">{t('pacWizard.doneBadge')}</span>}
+              {currentPatient?.pacCompleted && <span className="ml-2 rounded bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-950">{t('pacWizard.doneBadge')}</span>}
             </h2>
             <p className="text-[11px] sm:text-xs text-white/60 truncate">
               {currentPatient ? `${currentPatient.name} • ${currentPatient.mrn} • ${currentPatient.procedureName}` : t('pacWizard.noCase')}
@@ -340,7 +340,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 type="button"
                 onClick={() => setLocale(l)}
                 aria-pressed={locale === l}
-                className={`px-2 py-1.5 text-[10px] font-mono font-bold rounded-lg transition min-h-[44px] cursor-pointer ${locale === l ? 'bg-emerald-600 text-white shadow' : 'text-white/70 hover:text-white'}`}
+                className={`px-2 py-1.5 text-[10px] font-mono font-bold rounded-lg transition min-h-[44px] cursor-pointer ${locale === l ? 'bg-slate-100 text-slate-950 shadow' : 'text-white/70 hover:text-white'}`}
               >
                 {l.toUpperCase()}
               </button>
@@ -353,7 +353,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 type="button"
                 onClick={() => setMode(m)}
                 aria-pressed={mode === m}
-                className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition min-h-[44px] cursor-pointer ${mode === m ? 'bg-emerald-600 text-white shadow' : 'text-white/70 hover:text-white'}`}
+                className={`px-3 py-1.5 text-[11px] font-bold rounded-lg transition min-h-[44px] cursor-pointer ${mode === m ? 'bg-slate-100 text-slate-950 shadow' : 'text-white/70 hover:text-white'}`}
               >
                 {m === 'SELF' ? t('pacWizard.modePatient') : t('pacWizard.modeClinic')}
               </button>
@@ -377,9 +377,9 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
 
       {/* Live banner */}
       <div className={`px-4 sm:px-6 py-3 border-b flex flex-wrap items-center justify-between gap-3 ${
-        report.overallClearance === 'RED_HARD_STOP' ? 'bg-rose-950/40 border-rose-500/40 text-rose-200'
-        : report.overallClearance === 'AMBER_CONDITIONAL' ? 'bg-amber-950/40 border-amber-500/40 text-amber-200'
-        : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'}`}>
+        report.overallClearance === 'RED_HARD_STOP' ? 'veracity-status-stop border-b'
+        : report.overallClearance === 'AMBER_CONDITIONAL' ? 'veracity-status-conditional border-b'
+        : 'veracity-status-cleared border-b'}`}>
         <div className="flex items-center gap-2.5">
           {report.overallClearance === 'RED_HARD_STOP' ? <AlertOctagon className="h-5 w-5 text-rose-400 shrink-0" />
           : report.overallClearance === 'AMBER_CONDITIONAL' ? <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0" />
@@ -389,7 +389,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
             <p className="text-xs mt-0.5 text-white/90 max-w-xl">{report.primaryActionDirective}</p>
           </div>
         </div>
-        <button type="button" onClick={handleSave} className="rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
+        <button type="button" onClick={handleSave} className="veracity-press rounded-xl bg-slate-100 hover:bg-white px-4 py-2 text-xs font-bold text-slate-950 shadow cursor-pointer min-h-[44px]">
           {savedOk ? t('pacWizard.savedBtn') : mode === 'CLINIC' ? t('pacWizard.verifySave') : t('pacWizard.saveDone')}
         </button>
       </div>
@@ -402,7 +402,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
           const done = s.n < step;
           return (
             <button key={s.n} type="button" onClick={() => setStep(s.n)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-full border text-xs font-semibold whitespace-nowrap transition cursor-pointer min-h-[44px] ${active ? 'bg-emerald-600 border-emerald-500 text-white' : done ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-white/5 border-white/10 text-white/70'}`}>
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-full border text-xs font-semibold whitespace-nowrap transition cursor-pointer min-h-[44px] ${active ? 'bg-slate-100 border-slate-100 text-slate-950' : done ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-white/5 border-white/10 text-white/70'}`}>
               <span className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold ${active ? 'bg-white/20' : done ? 'bg-emerald-500 text-white' : 'bg-white/10'}`}>{done ? <Check className="h-3 w-3" /> : s.n}</span>
               <Icon className="h-3.5 w-3.5" />
               <span>{s.label}</span>
@@ -411,7 +411,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
         })}
       </div>
 
-      <div className="p-4 sm:p-6 space-y-5">
+      <div key={step} className="veracity-fade-up p-4 sm:p-6 space-y-5">
         {step === 1 && (
           <div className="space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider font-serif">{t('pacWizard.s1Title')}</h3>
@@ -419,22 +419,22 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.escortName')}</label>
                 <input value={escortName} onChange={(e) => setEscortName(e.target.value)} placeholder={t('pacWizard.escortNamePh')}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.escortPhone')}</label>
                 <input value={escortPhone} onChange={(e) => setEscortPhone(e.target.value)} placeholder={t('pacWizard.escortPhonePh')} inputMode="tel"
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.weight')}</label>
                 <input type="number" value={weightKg} onChange={(e) => setWeightKg(e.target.value === '' ? '' : Number(e.target.value))} placeholder={t('pacWizard.weightPh')} inputMode="decimal"
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.height')}</label>
                 <input type="number" value={heightCm} onChange={(e) => setHeightCm(e.target.value === '' ? '' : Number(e.target.value))} placeholder={t('pacWizard.heightPh')} inputMode="decimal"
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
             </div>
             {report.bmi != null && <p className="text-xs text-white/70">{t('pacWizard.bmiAuto', { bmi: report.bmi })}</p>}
@@ -458,7 +458,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 <div>
                   <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.medNames')}</label>
                   <input value={medsFreeText} onChange={(e) => setMedsFreeText(e.target.value)} placeholder={t('pacWizard.medNamesPh')}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                    className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
                 </div>
                 {(medCategories.includes('GLP1_WEIGHTLOSS')) && (
                   <div>
@@ -475,12 +475,12 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
             </div>
             {takesHerbalsOTC && (
               <input value={herbalsFreeText} onChange={(e) => setHerbalsFreeText(e.target.value)} placeholder={t('pacWizard.herbalsPh')}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
             )}
             <div>
               <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.last24h')}</label>
               <input value={medsLast24h} onChange={(e) => setMedsLast24h(e.target.value)} placeholder={t('pacWizard.last24hPh')}
-                className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
             </div>
             {report.morningMeds.length > 0 && (
               <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-3 text-xs space-y-1">
@@ -510,7 +510,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.pregnancy')}</label>
                 <select value={pregnancyStatus} onChange={(e) => setPregnancyStatus(e.target.value as PACInterview['pregnancyStatus'])}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]">
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-sky-300 focus:outline-none min-h-[44px]">
                   <option value="NOT_APPLICABLE" className="bg-black">{t('pacWizard.pregNA')}</option>
                   <option value="NOT_PREGNANT" className="bg-black">{t('pacWizard.pregNot')}</option>
                   <option value="POSSIBLY_PREGNANT" className="bg-black">{t('pacWizard.pregMaybe')}</option>
@@ -521,7 +521,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lmp')}</label>
                 <input value={lmpOrWeeks} onChange={(e) => setLmpOrWeeks(e.target.value)} placeholder={t('pacWizard.lmpPh')}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
             </div>
             <div>
@@ -552,12 +552,12 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lastFood')}</label>
                 <input type="datetime-local" value={lastFoodIso} onChange={(e) => setLastFoodIso(e.target.value)}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.lastFluid')}</label>
                 <input type="datetime-local" value={lastFluidIso} onChange={(e) => setLastFluidIso(e.target.value)}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
             </div>
             <div className="rounded-xl border border-white/15 bg-white/5 p-3 text-xs space-y-1">
@@ -591,7 +591,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                 <div>
                   <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.teachBack')}</label>
                   <input value={teachBackName} onChange={(e) => setTeachBackName(e.target.value)} placeholder={t('pacWizard.teachBackPh')}
-                    className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                    className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
                 </div>
               </div>
             ) : (
@@ -615,7 +615,7 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                   <div>
                     <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.planLabel')}</label>
                     <select value={vPlan} onChange={(e) => setVPlan(e.target.value as typeof vPlan)}
-                      className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-emerald-400 focus:outline-none min-h-[44px]">
+                      className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white focus:border-sky-300 focus:outline-none min-h-[44px]">
                       {(['UNDECIDED', 'GA', 'SPINAL', 'REGIONAL', 'MAC', 'COMBINED'] as const).map((p) => (
                         <option key={p} value={p} className="bg-black">{p}</option>
                       ))}
@@ -624,11 +624,11 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
                   <div>
                     <label className="block text-xs font-semibold text-white/70 mb-1">{t('pacWizard.verifierName')}</label>
                     <input value={vName} onChange={(e) => setVName(e.target.value)} placeholder={t('pacWizard.verifierPh')}
-                      className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                      className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
                   </div>
                 </div>
                 <input value={vNotes} onChange={(e) => setVNotes(e.target.value)} placeholder={t('pacWizard.verifyNotesPh')}
-                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-emerald-400 focus:outline-none min-h-[44px]" />
+                  className="w-full rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/35 focus:border-sky-300 focus:outline-none min-h-[44px]" />
               </div>
             )}
 
@@ -662,12 +662,12 @@ export const PACInterviewWizard: React.FC<PACInterviewWizardProps> = ({ patientI
         <div className="text-xs font-mono text-white/60">{step} / {totalSteps}</div>
         {step < totalSteps ? (
           <button type="button" onClick={() => setStep((s) => Math.min(totalSteps, s + 1))}
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
+            className="veracity-press flex items-center gap-1.5 rounded-xl bg-slate-100 hover:bg-white px-5 py-2.5 text-xs font-bold text-slate-950 shadow cursor-pointer min-h-[44px]">
             <span>{t('pacWizard.next')}</span><ChevronRight className="h-4 w-4" />
           </button>
         ) : (
           <button type="button" onClick={handleSave}
-            className="flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-5 py-2.5 text-xs font-bold transition shadow cursor-pointer min-h-[44px]">
+            className="veracity-press flex items-center gap-1.5 rounded-xl bg-slate-100 hover:bg-white px-5 py-2.5 text-xs font-bold text-slate-950 shadow cursor-pointer min-h-[44px]">
             <ShieldCheck className="h-4 w-4" /><span>{savedOk ? t('pacWizard.savedBtn') : mode === 'CLINIC' ? t('pacWizard.verifySave') : t('pacWizard.finishSave')}</span>
           </button>
         )}

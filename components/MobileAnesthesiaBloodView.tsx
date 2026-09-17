@@ -55,7 +55,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
 
   if (!currentPatient) {
     return (
-      <div className="p-4 text-center text-slate-500 dark:text-slate-400">
+      <div className="p-4 text-center text-slate-500">
         No patient record selected.
       </div>
     );
@@ -149,12 +149,12 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
   };
 
   return (
-    <div className="w-full max-w-full sm:max-w-md mx-auto bg-[#0a1e36]/80 text-white rounded-2xl border border-white/20 backdrop-blur-xl shadow-2xl overflow-hidden overflow-x-clip font-sans min-w-0 break-words">
+    <div className="w-full max-w-full sm:max-w-md mx-auto glass-panel text-white rounded-2xl border-white/[0.08] shadow-2xl overflow-hidden overflow-x-clip font-sans min-w-0 break-words">
       {/* Top Phone In-OT Header */}
-      <div className="bg-white/10 backdrop-blur-md border-b border-white/15 p-3.5 sm:p-4 min-w-0 max-w-full overflow-hidden">
+      <div className="bg-black/30 border-b border-white/15 p-3.5 sm:p-4 min-w-0 max-w-full overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white font-bold shadow-md shrink-0">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/15 bg-white/[0.06] text-sky-200 font-bold shadow-md shrink-0">
               <Droplets className="h-4 w-4" />
             </div>
             <div className="min-w-0">
@@ -162,7 +162,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                 <span className="text-xs font-bold text-white tracking-tight uppercase truncate">
                   In-OT Blood View
                 </span>
-                <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
               </div>
               <span className="text-[10px] text-white/60 font-mono block truncate">
                 DHA § 3060(a) Bedside STAT Triage
@@ -173,7 +173,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           <select
             value={currentPatient.id}
             onChange={(e) => selectPatient(e.target.value)}
-            className="rounded border border-white/20 bg-white/10 px-2 py-1 text-[11px] font-bold text-emerald-300 focus:outline-none backdrop-blur-md shrink-0 max-w-[140px]"
+            className="rounded border border-white/20 bg-white/10 px-2 py-1 text-[11px] font-bold text-sky-200 focus:outline-none shrink-0 max-w-[140px]"
           >
             {patients.map((p) => (
               <option key={p.id} value={p.id} className="bg-black text-white">
@@ -184,7 +184,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
         </div>
 
         {/* Patient Pill Card */}
-        <div className="rounded-xl border border-white/15 bg-white/5 p-3 backdrop-blur-md">
+        <div className="veracity-well rounded-xl p-3">
           <div className="flex items-center justify-between gap-2">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
@@ -205,10 +205,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
               className={
                 'flex flex-col items-end px-2.5 py-1 rounded-lg text-center shrink-0 ' +
                 (currentPatient.overallStatus === 'RED_HARD_STOP'
-                  ? 'bg-rose-600 text-white'
+                  ? 'veracity-status-stop'
                   : currentPatient.overallStatus === 'AMBER_CONDITIONAL'
-                  ? 'bg-amber-600 text-white'
-                  : 'bg-emerald-600 text-white')
+                  ? 'veracity-status-conditional'
+                  : 'veracity-status-cleared')
               }
             >
               <span className="text-[9px] font-bold uppercase tracking-wider">PAC Status</span>
@@ -225,14 +225,14 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       </div>
 
       {/* View Tabs */}
-      <div className="grid grid-cols-3 border-b border-white/15 bg-white/5 text-center backdrop-blur-md min-w-0 max-w-full overflow-hidden">
+      <div className="grid grid-cols-3 border-b border-white/15 bg-black/30 text-center min-w-0 max-w-full overflow-hidden">
         <button
           type="button"
           onClick={() => setActiveTab('STAT_LABS')}
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'STAT_LABS'
-              ? 'border-emerald-400 text-emerald-300 bg-white/10'
+              ? 'border-sky-300 text-sky-200 bg-sky-400/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
@@ -245,7 +245,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'CLINICAL_HISTORY'
-              ? 'border-emerald-400 text-emerald-300 bg-white/10'
+              ? 'border-sky-300 text-sky-200 bg-sky-400/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
@@ -258,7 +258,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
             (activeTab === 'NPO_MEDS'
-              ? 'border-emerald-400 text-emerald-300 bg-white/10'
+              ? 'border-sky-300 text-sky-200 bg-sky-400/10'
               : 'border-transparent text-white/60 hover:text-white')
           }
         >
@@ -271,17 +271,17 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       {activeTab === 'STAT_LABS' && (
         <div className="p-3.5 space-y-2.5">
           {/* Potassium (K+) */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 transition backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
                   className={
                     'flex h-8 w-8 items-center justify-center rounded-lg font-bold text-xs ' +
                     (kEval.severity === 'RED'
-                      ? 'bg-rose-600 text-white'
+                      ? 'veracity-status-stop'
                       : kEval.severity === 'AMBER'
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-emerald-600 text-white')
+                      ? 'veracity-status-conditional'
+                      : 'veracity-status-cleared')
                   }
                 >
                   K⁺
@@ -301,10 +301,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                   className={
                     'px-2 py-0.5 rounded text-[9px] font-bold ' +
                     (kEval.severity === 'RED'
-                      ? 'bg-rose-600 text-white'
+                      ? 'veracity-status-stop'
                       : kEval.severity === 'AMBER'
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-emerald-600 text-white')
+                      ? 'veracity-status-conditional'
+                      : 'veracity-status-cleared')
                   }
                 >
                   {kEval.status.replace('_', ' ')}
@@ -317,17 +317,17 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Hemoglobin (Hb) */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 transition backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div
                   className={
                     'flex h-8 w-8 items-center justify-center rounded-lg font-bold text-xs ' +
                     (hbEval.severity === 'RED'
-                      ? 'bg-rose-600 text-white'
+                      ? 'veracity-status-stop'
                       : hbEval.severity === 'AMBER'
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-emerald-600 text-white')
+                      ? 'veracity-status-conditional'
+                      : 'veracity-status-cleared')
                   }
                 >
                   Hb
@@ -349,10 +349,10 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                   className={
                     'px-2 py-0.5 rounded text-[9px] font-bold ' +
                     (hbEval.severity === 'RED'
-                      ? 'bg-rose-600 text-white'
+                      ? 'veracity-status-stop'
                       : hbEval.severity === 'AMBER'
-                      ? 'bg-amber-600 text-white'
-                      : 'bg-emerald-600 text-white')
+                      ? 'veracity-status-conditional'
+                      : 'veracity-status-cleared')
                   }
                 >
                   {hbEval.status.replace('_', ' ')}
@@ -367,7 +367,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           {/* Platelets & Coagulation Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
             {/* Platelets */}
-            <div className="rounded-xl border border-white/10 bg-white/5 p-2.5 backdrop-blur-md">
+            <div className="veracity-well rounded-xl p-2.5">
               <div className="text-[11px] font-bold text-white/70">Platelets (PLT)</div>
               <div className="text-sm font-black text-white mt-0.5">
                 {plateletsLab.value}{' '}
@@ -379,7 +379,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             </div>
 
             {/* PT / INR */}
-            <div className="rounded-xl border border-white/10 bg-white/5 p-2.5 backdrop-blur-md">
+            <div className="veracity-well rounded-xl p-2.5">
               <div className="text-[11px] font-bold text-white/70">Coagulation (INR)</div>
               <div className="text-sm font-black text-white mt-0.5">
                 {inrLab.value}{' '}
@@ -394,7 +394,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           {/* Renal & Troponin Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
             {/* Creatinine */}
-            <div className="rounded-xl border border-white/10 bg-white/5 p-2.5 backdrop-blur-md">
+            <div className="veracity-well rounded-xl p-2.5">
               <div className="text-[11px] font-bold text-white/70">Creatinine / eGFR</div>
               <div className="text-sm font-black text-white mt-0.5">
                 {creatinineLab.value}{' '}
@@ -419,7 +419,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             {/* Troponin */}
             <div
               className={
-                'rounded-xl border p-2.5 backdrop-blur-md ' +
+                'rounded-xl border p-2.5 ' +
                 (tropEval.severity === 'RED'
                   ? 'border-rose-500/40 bg-rose-950/20'
                   : tropEval.severity === 'AMBER'
@@ -453,9 +453,9 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Blood Bank Strip */}
-          <div className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words">
+          <div className="rounded-xl border border-white/15 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 min-w-0 break-words">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-emerald-600 text-white font-black text-xs">
+              <div className="flex h-6 w-6 items-center justify-center rounded border border-white/15 bg-white/[0.06] text-sky-200 font-black text-xs">
                 {bloodBankData.bloodGroup}
               </div>
               <div>
@@ -481,7 +481,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             const blocked = refs.filter((r) => r.status === 'NOT_CLEARED');
             if (pending.length === 0 && blocked.length === 0) return null;
             return (
-              <div className="rounded-xl border border-rose-500/40 bg-rose-950/40 p-3 space-y-1 backdrop-blur-md">
+              <div className="rounded-xl border border-rose-500/40 bg-rose-950/40 p-3 space-y-1">
                 <div className="font-bold text-rose-300 flex items-center gap-1.5">
                   <AlertOctagon className="h-4 w-4" />
                   <span>DO NOT CLEAR — doctor fitness pending</span>
@@ -500,7 +500,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             );
           })()}
           {/* Contraceptive / Estrogen Pill Alert */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-emerald-300">
               <span className="flex items-center gap-1.5">
                 <Pill className="h-4 w-4" />
@@ -543,7 +543,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Antipsychotic & Psychotropic Alert */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-emerald-300">
               <span className="flex items-center gap-1.5">
                 <Activity className="h-4 w-4" />
@@ -561,7 +561,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Smoking & Inhalation Airway Alert */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-emerald-300">
               <span className="flex items-center gap-1.5">
                 <Cigarette className="h-4 w-4" />
@@ -579,7 +579,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Cardiac Disease & Stents */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-emerald-300">
               <span className="flex items-center gap-1.5">
                 <Heart className="h-4 w-4" />
@@ -597,7 +597,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Medical Issues Checklist */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-white">
               <span className="flex items-center gap-1.5">
                 <Stethoscope className="h-4 w-4 text-emerald-400" />
@@ -618,7 +618,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Previous Surgery + Family Anesthesia + G6PD */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-white">
               <span className="flex items-center gap-1.5">
                 <History className="h-4 w-4 text-emerald-400" />
@@ -650,7 +650,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           </div>
 
           {/* Dental + Airway Screen + Drug Allergy */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-1 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-1">
             <div className="flex items-center justify-between font-bold text-amber-300">
               <span className="flex items-center gap-1.5">
                 <AlertTriangle className="h-4 w-4" />
@@ -688,7 +688,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             <button
               type="button"
               onClick={onOpenQuestionnaire}
-              className="w-full py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs transition cursor-pointer backdrop-blur-md"
+              className="veracity-press w-full py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-white font-bold text-xs cursor-pointer"
             >
               Open Full Patient Pre-Op Questionnaire
             </button>
@@ -700,7 +700,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       {activeTab === 'NPO_MEDS' && (
         <div className="p-3.5 space-y-2.5 text-xs">
           {/* NPO Clock */}
-          <div className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-2 backdrop-blur-md">
+          <div className="veracity-well rounded-xl p-3 space-y-2">
             <div className="flex items-center justify-between font-bold text-emerald-300">
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
@@ -756,7 +756,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             {currentPatient.medications.map((med) => (
               <div
                 key={med.id}
-                className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words"
+                className="veracity-well rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 min-w-0 break-words"
               >
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-white text-xs break-words">{med.drugName}</div>
@@ -768,7 +768,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                   className={
                     'px-2 py-0.5 rounded text-[9px] font-bold ' +
                     (med.status === 'CLEARED'
-                      ? 'bg-emerald-600 text-white'
+                      ? 'veracity-status-cleared'
                       : 'bg-amber-600 text-white')
                   }
                 >
@@ -784,7 +784,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                 {q.currentMedications.map((med) => (
                   <div
                     key={med.name}
-                    className="rounded-lg border border-white/10 bg-white/5 p-2.5 flex flex-wrap items-center justify-between gap-2 backdrop-blur-md min-w-0 break-words"
+                    className="veracity-well rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2 min-w-0 break-words"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="font-bold text-white text-xs break-words">{med.name}</div>
@@ -797,9 +797,9 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                       className={
                         'px-2 py-0.5 rounded text-[9px] font-bold ' +
                         (med.category === 'THYROID'
-                          ? 'bg-emerald-600 text-white'
+                          ? 'veracity-status-cleared'
                           : med.category === 'DIABETES'
-                          ? 'bg-rose-600 text-white'
+                          ? 'veracity-status-stop'
                           : 'bg-white/15 text-white')
                       }
                     >
@@ -818,7 +818,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       )}
 
       {/* Bottom Action Footer for In-OT Anesthesiologist */}
-      <div className="p-4 bg-white/10 backdrop-blur-md border-t border-white/15 space-y-2">
+      <div className="p-4 bg-black/30 border-t border-white/15 space-y-2">
         {clearedNotice && (
           <div className="p-2 rounded-lg bg-emerald-600 text-white text-xs font-bold text-center animate-fade-in">
             ✓ In-OT Anesthetic Clearance Logged & Certified!
@@ -829,7 +829,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           <button
             type="button"
             onClick={handle1TapClearance}
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white py-3 px-3 text-xs font-bold shadow-md transition cursor-pointer min-h-[46px]"
+            className="veracity-press flex items-center justify-center gap-1.5 rounded-xl bg-slate-100 hover:bg-white text-slate-950 py-3 px-3 text-xs font-bold shadow-md cursor-pointer min-h-[46px]"
           >
             <CheckCircle2 className="h-4 w-4" />
             <span>1-Tap OT Clearance</span>
@@ -838,7 +838,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
           <button
             type="button"
             onClick={onOpenWhatsApp}
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 border border-white/20 text-white py-3 px-3 text-xs font-bold transition cursor-pointer backdrop-blur-md min-h-[46px]"
+            className="veracity-press flex items-center justify-center gap-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white py-3 px-3 text-xs font-bold cursor-pointer min-h-[46px]"
           >
             <Share2 className="h-4 w-4 text-emerald-400" />
             <span>Send PAC WhatsApp</span>

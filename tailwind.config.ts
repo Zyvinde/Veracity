@@ -15,7 +15,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-jakarta)", "var(--font-sans)", "Plus Jakarta Sans", "Inter", "system-ui", "sans-serif"],
-        serif: ["var(--font-serif)", "Playfair Display", "Georgia", "serif"],
+        serif: ["var(--font-veracity-serif)", "Instrument Serif", "var(--font-serif)", "Playfair Display", "Georgia", "serif"],
         mono: ["var(--font-mono)", "IBM Plex Mono", "JetBrains Mono", "monospace"],
         manrope: ["var(--font-manrope)", "Manrope", "sans-serif"],
       },
@@ -110,16 +110,8 @@ const config: Config = {
         "glow-orange": "0 0 20px -5px rgba(249, 115, 22, 0.4)",
         "glow-yellow": "0 0 20px -5px rgba(234, 179, 8, 0.4)",
       },
-      animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "shimmer": "shimmer 2s linear infinite",
-      },
-      keyframes: {
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
-        },
-      },
+      animation: {},
+      keyframes: {},
     },
   },
   plugins: [animate],

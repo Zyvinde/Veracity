@@ -40,8 +40,8 @@ function BloodPageContent() {
 
   if (!currentPatient || patients.length === 0) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white font-serif italic text-2xl shadow-xl animate-pulse">
+      <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
           V
         </div>
         <p className="text-sm font-semibold text-white">Loading In-OT Blood View…</p>
@@ -51,12 +51,12 @@ function BloodPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] px-3 py-4 sm:p-6 flex flex-col items-center justify-start sm:justify-center text-white w-full overflow-x-hidden selection:bg-rose-500/30">
+    <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-start sm:justify-center text-white w-full overflow-x-hidden selection:bg-sky-500/30">
       <div className="w-full max-w-md space-y-3">
         <div className="flex items-center justify-between gap-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 hover:text-emerald-300 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-sky-300 hover:text-sky-200 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] shrink-0"
           >
             <ChevronLeft className="h-4 w-4" />
             <span>Home</span>
@@ -107,8 +107,8 @@ export default function BloodPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#223140] text-white font-bold text-xl shadow-lg animate-pulse">
+        <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-lg">
             V
           </div>
           <p className="text-sm font-semibold text-white">Loading In-OT Blood View…</p>
