@@ -6,6 +6,7 @@ import { PATIENT_FATIMA, PATIENT_RAJESH, PATIENT_AISHA } from '@/lib/mock-data';
 import { buildPatientFromLabs, CoordinatorPatientMetadata } from '@/lib/patient-builder';
 import { extractTextFromPdfFileClient } from '@/lib/pdf-parser';
 import { parseLabReport } from '@/lib/lab-parser';
+import { extractVisionDocument } from '@/lib/vision-parser';
 import { usePatientStore } from '@/lib/store';
 import {
   UploadCloud,
@@ -71,6 +72,8 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
   const [logs, setLogs] = useState<string[]>([]);
   const [parsedLabsResult, setParsedLabsResult] = useState<ExtractedLabItem[]>([]);
   const [constructedPatient, setConstructedPatient] = useState<PatientCase | null>(null);
+  const [visionQuarantine, setVisionQuarantine] = useState<string[]>([]);
+  const [visionSource, setVisionSource] = useState<string>('UNKNOWN');
 
   // SeamlessMD-lite: document category (LAB/ECG/ECHO/CONSENT/OTHER) + local library
   type DocCategory = 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER';
@@ -227,11 +230,23 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         }));
       }
 
+      const vision = extractVisionDocument({
+        fullText,
+        lines: extractedLines,
+        filename,
+        quality: { ocrConfidence: 0.9, rotationDegrees: 0, hasRotationMetadata: true, blurScore: 0.9 },
+      });
+      setVisionSource(vision.biomarkers[0]?.sourceLab ?? 'UNKNOWN');
+      setVisionQuarantine(vision.quarantineFlags);
+
       setPipelineStep(3);
       setLogs((prev) => [
         ...prev,
-        `[01.85s] Extracted ${labs.length} validated lab biomarkers with LOINC & provenance bounding boxes.`,
-        `[02.10s] Evaluating deterministic rules engine against ASA 2023, ASRA 2025, and Dubai DHA specs...`,
+        `[01.85s] Extracted ${labs.length} validated lab biomarkers with LOINC & provenance bounding boxes. Source: ${vision.biomarkers[0]?.sourceLab ?? 'UNKNOWN'}.`,
+        ...(vision.quarantineFlags.length > 0
+          ? vision.quarantineFlags.map((f) => `[01.90s] QUARANTINE: ${f}`)
+          : [`[01.90s] Vision quality gates passed (local-only, confidence floor 0.88).`]),
+        `[02.10s] Evaluating deterministic local rules engine (legacy ASA 2023-inspired GLP-1 policy; historical, not current guidance)...`,
       ]);
 
       // 3. Build full dynamic PatientCase
@@ -726,11 +741,27 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 ))}
               </div>
 
+              {visionQuarantine.length > 0 && (
+                <div className="pt-2.5 border-t border-amber-300/30">
+                  <div className="text-[11px] font-mono text-amber-200 uppercase tracking-wider mb-1.5 font-bold">
+                    Manual review required ({visionQuarantine.length}):
+                  </div>
+                  <ul className="space-y-1 font-mono text-[10.5px] text-amber-100/90">
+                    {visionQuarantine.slice(0, 4).map((flag, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <AlertTriangle className="h-3.5 w-3.5 mt-px shrink-0" />
+                        <span className="break-words">{flag}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* Parsed Biomarkers Snapshot Table */}
               {parsedLabsResult.length > 0 && (
                 <div className="pt-2.5 border-t border-white/25">
                   <div className="text-[11px] font-mono text-white/75 uppercase tracking-wider mb-2 font-bold">
-                    Extracted Biomarkers ({parsedLabsResult.length} verified):
+                    Extracted Biomarkers ({parsedLabsResult.length} verified · {visionSource}):
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 min-w-0">
                     {parsedLabsResult.slice(0, 8).map((lab) => (

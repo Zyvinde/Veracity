@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { usePatientStore } from '@/lib/store';
-import TablerClinicalDashboard from '@/components/TablerClinicalDashboard';
+import VeracityFlightDeck from '@/components/VeracityFlightDeck';
 import AttestationModal from '@/components/AttestationModal';
 import PrintablePACSlip from '@/components/PrintablePACSlip';
 import IngestionModal from '@/components/IngestionModal';
@@ -111,7 +111,7 @@ function ConsoleWorkspaceContent() {
 
   return (
     <div className="relative z-10 w-full max-w-full min-w-0 overflow-x-clip min-h-screen">
-      <TablerClinicalDashboard
+      <VeracityFlightDeck
         onOpenIngestion={() => setIsIngestionOpen(true)}
         onOpenAttestation={() => setIsAttestationOpen(true)}
         onOpenPrintSlip={() => setIsPrintSlipOpen(true)}

@@ -1,0 +1,113 @@
+:root {
+  --veracity-canvas-from: #06090e;
+  --veracity-canvas-to: #0b111a;
+  --veracity-ink-1: #f1f5f9;
+  --veracity-ink-2: #cbd5e1;
+  --veracity-ink-3: #94a3b8;
+  --veracity-ink-4: #64748b;
+  --veracity-cleared: #34c759;
+  --veracity-cleared-border: rgba(52, 199, 89, 0.3);
+  --veracity-cleared-bg: rgba(52, 199, 89, 0.08);
+  --veracity-conditional: #ff9500;
+  --veracity-conditional-border: rgba(255, 149, 0, 0.3);
+  --veracity-conditional-bg: rgba(255, 149, 0, 0.08);
+  --veracity-stop: #ff3b30;
+  --veracity-stop-border: rgba(255, 59, 48, 0.35);
+  --veracity-stop-bg: rgba(255, 59, 48, 0.1);
+  --veracity-titanium: #e2e8f0;
+  --veracity-accent: #38bdf8;
+  --veracity-serif: 'Instrument Serif', 'Playfair Display', Georgia, serif;
+  --veracity-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --veracity-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, monospace;
+}
+
+.veracity-canvas {
+  background: linear-gradient(180deg, var(--veracity-canvas-from) 0%, var(--veracity-canvas-to) 100%);
+}
+
+.glass-panel {
+  background: linear-gradient(168deg, rgba(15, 23, 38, 0.72) 0%, rgba(8, 14, 24, 0.84) 100%);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 16px 36px -6px rgba(0, 0, 0, 0.55);
+}
+
+.glass-card-subtle {
+  background: rgba(22, 30, 44, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.veracity-serif-accent {
+  font-family: var(--veracity-serif);
+  font-style: italic;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+.veracity-ui-label {
+  font-family: var(--veracity-sans);
+  letter-spacing: -0.015em;
+}
+
+.veracity-num {
+  font-family: var(--veracity-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.veracity-status-cleared {
+  color: var(--veracity-cleared);
+  border: 1px solid var(--veracity-cleared-border);
+  background: var(--veracity-cleared-bg);
+}
+
+.veracity-status-conditional {
+  color: var(--veracity-conditional);
+  border: 1px solid var(--veracity-conditional-border);
+  background: var(--veracity-conditional-bg);
+}
+
+.veracity-status-stop {
+  color: var(--veracity-stop);
+  border: 1px solid var(--veracity-stop-border);
+  background: var(--veracity-stop-bg);
+}
+
+.veracity-hairline {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.veracity-focus:focus-visible {
+  outline: 2px solid var(--veracity-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-panel {
+    background: linear-gradient(168deg, rgba(15, 23, 38, 0.96) 0%, rgba(8, 14, 24, 0.98) 100%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-card-subtle {
+    background: rgba(22, 30, 44, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .veracity-animated {
+    animation: none !important;
+    transition: opacity 160ms ease !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass-panel,
+  .glass-card-subtle {
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+}

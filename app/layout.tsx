@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, IBM_Plex_Mono, Noto_Sans_Arabic, Noto_Sans_Devanagari, Noto_Sans_Malayalam, Manrope, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import "../styles/veracity-tokens.css";
 import { I18nProvider } from "@/lib/i18n/context";
 import { Toaster } from "sonner";
 

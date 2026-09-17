@@ -2267,3 +2267,121 @@ export function evaluatePACInterview(
   };
 }
 
+export type AdversarialModality = 'SPINAL' | 'EPIDURAL' | 'DEEP_PNB' | 'GENERAL' | 'MAC';
+export type AdversarialAnticoag =
+  | 'NONE'
+  | 'APIXABAN'
+  | 'RIVAROXABAN'
+  | 'DABIGATRAN'
+  | 'ENOXAPARIN_PROPHYLAXIS'
+  | 'ENOXAPARIN_THERAPEUTIC'
+  | 'CLOPIDOGREL'
+  | 'TICAGRELOR'
+  | 'ASPIRIN';
+export type AdversarialGlp1 =
+  | 'NONE'
+  | 'WEEKLY_SEMAGLUTIDE'
+  | 'WEEKLY_TIRZEPATIDE'
+  | 'WEEKLY_DULAGLUTIDE'
+  | 'DAILY_RYBELSUS';
+
+export interface AdversarialCase {
+  modality: AdversarialModality;
+  anticoag: AdversarialAnticoag;
+  anticoagHoldHours: number;
+  crClMlMin: number;
+  glp1: AdversarialGlp1;
+  glp1HoldHours: number;
+  potassiumMeqL: number;
+  plateletsPerMicroL: number;
+  inr: number;
+  hemoglobinGDl: number;
+}
+
+export interface AdversarialDecision {
+  cleared: boolean;
+  hardStops: string[];
+  conditionals: string[];
+}
+
+export const ADVERSARIAL_POLICY_LABEL =
+  'Local conservative perioperative policy for synthetic benchmarking; not an ASRA guideline implementation. Legacy ASA 2023-inspired GLP-1 wording is historical.';
+
+function adversarialRequiredHoldHours(anticoag: AdversarialAnticoag, crClMlMin: number): number {
+  switch (anticoag) {
+    case 'NONE':
+    case 'ASPIRIN':
+      return 0;
+    case 'APIXABAN':
+    case 'RIVAROXABAN':
+      return 72;
+    case 'DABIGATRAN':
+      if (!Number.isFinite(crClMlMin)) return 144;
+      if (crClMlMin < 30) return 144;
+      if (crClMlMin < 50) return 120;
+      if (crClMlMin < 80) return 96;
+      return 72;
+    case 'ENOXAPARIN_PROPHYLAXIS':
+      return 12;
+    case 'ENOXAPARIN_THERAPEUTIC':
+      return 24;
+    case 'CLOPIDOGREL':
+      return 168;
+    case 'TICAGRELOR':
+      return 120;
+  }
+}
+
+export function evaluateAdversarialCase(input: AdversarialCase): AdversarialDecision {
+  const hardStops: string[] = [];
+  const conditionals: string[] = [];
+  const nums = [input.anticoagHoldHours, input.crClMlMin, input.glp1HoldHours, input.potassiumMeqL, input.plateletsPerMicroL, input.inr, input.hemoglobinGDl];
+  if (nums.some((n) => typeof n !== 'number' || !Number.isFinite(n))) {
+    return { cleared: false, hardStops: ['Invalid or missing synthetic inputs: fail closed, verify manually.'], conditionals };
+  }
+  if (input.anticoagHoldHours < 0 || input.glp1HoldHours < 0 || input.plateletsPerMicroL < 0 || input.inr <= 0 || input.hemoglobinGDl <= 0) {
+    return { cleared: false, hardStops: ['Out-of-range synthetic inputs: fail closed, verify manually.'], conditionals };
+  }
+
+  const neuraxial = input.modality === 'SPINAL' || input.modality === 'EPIDURAL';
+  const deepBlock = input.modality === 'DEEP_PNB';
+
+  if (input.potassiumMeqL < 3.0) hardStops.push(`Hypokalemia K+ ${input.potassiumMeqL} mEq/L < 3.0: hard stop.`);
+  if (input.potassiumMeqL > 5.5) hardStops.push(`Hyperkalemia K+ ${input.potassiumMeqL} mEq/L > 5.5: hard stop.`);
+  if (input.hemoglobinGDl < 7.0) hardStops.push(`Critical anemia Hb ${input.hemoglobinGDl} g/dL < 7.0: hard stop.`);
+  if (input.inr > 1.5) hardStops.push(`Coagulopathy INR ${input.inr} > 1.5: hard stop.`);
+  if (input.plateletsPerMicroL < 50000) {
+    hardStops.push(`Critical thrombocytopenia ${input.plateletsPerMicroL}/µL < 50,000: hard stop all techniques.`);
+  } else if (neuraxial && input.plateletsPerMicroL < 70000) {
+    hardStops.push(`Platelets ${input.plateletsPerMicroL}/µL < 70,000: neuraxial contraindicated.`);
+  } else if (deepBlock && input.plateletsPerMicroL < 70000) {
+    conditionals.push(`Platelets ${input.plateletsPerMicroL}/µL < 70,000 with deep block: bleeding review required.`);
+  }
+  if (neuraxial && input.inr > 1.4 && input.inr <= 1.5) hardStops.push(`INR ${input.inr} > 1.4: neuraxial threshold exceeded.`);
+
+  if (neuraxial || deepBlock) {
+    const required = adversarialRequiredHoldHours(input.anticoag, input.crClMlMin);
+    if (input.anticoagHoldHours < required) {
+      hardStops.push(
+        `${input.anticoag} washout ${input.anticoagHoldHours}h < ${required}h local minimum for ${input.modality} (CrCl ${input.crClMlMin} mL/min).`
+      );
+    }
+  } else if (input.anticoag === 'ENOXAPARIN_THERAPEUTIC' || input.anticoag === 'DABIGATRAN' || input.anticoag === 'CLOPIDOGREL' || input.anticoag === 'TICAGRELOR') {
+    if (input.anticoagHoldHours < adversarialRequiredHoldHours(input.anticoag, input.crClMlMin)) {
+      conditionals.push(`${input.anticoag} recently dosed: confirm hemostasis plan with anesthesia for ${input.modality}.`);
+    }
+  }
+
+  const weekly = input.glp1 === 'WEEKLY_SEMAGLUTIDE' || input.glp1 === 'WEEKLY_TIRZEPATIDE' || input.glp1 === 'WEEKLY_DULAGLUTIDE';
+  if (weekly && input.glp1HoldHours < 168) {
+    conditionals.push(
+      `Weekly GLP-1 (${input.glp1}) held ${input.glp1HoldHours}h < 168h: aspiration precautions; anesthesia review with gastric POCUS consideration.`
+    );
+  }
+  if (input.glp1 === 'DAILY_RYBELSUS' && input.glp1HoldHours < 24) {
+    conditionals.push('Daily oral GLP-1 held < 24h: omit morning dose, assess gastrointestinal symptoms.');
+  }
+
+  return { cleared: hardStops.length === 0, hardStops, conditionals };
+}
+
