@@ -240,9 +240,10 @@ function ScrollCanvas({ posterSrc }: { posterSrc?: string }) {
       />
 
       {/* 3 — Cinematic mist blue atmospheric overlays */}
-      <div className="absolute inset-0 bg-black/40 mix-blend-screen pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_20%,rgba(56,189,248,0.22),transparent_70%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-[#7fb2e5]/10 mix-blend-screen pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(1100px_620px_at_50%_16%,rgba(147,197,253,0.17),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),transparent_28%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,rgba(0,0,0,0.88))] pointer-events-none" />
     </div>
   );
 }
@@ -303,7 +304,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
 
       <div className="relative z-10 w-full overflow-x-hidden">
         {/* ── Navbar ── */}
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/15 backdrop-blur-md bg-black/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+        <header className="sticky inset-x-0 top-0 z-50 border-b border-white/15 backdrop-blur-md bg-black/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
           <div className="flex items-center justify-between px-3 sm:px-8 md:px-12 max-w-7xl mx-auto w-full">
             <div className="flex items-center gap-2 sm:gap-3 shrink-0">
               <a href="/" className="flex items-center gap-2">

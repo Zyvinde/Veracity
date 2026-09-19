@@ -104,7 +104,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen w-full max-w-full overflow-x-clip bg-[#0a0a0a] text-white font-sans antialiased selection:bg-white/20 dark:bg-[#0A0B0E] dark:text-slate-200 dark:selection:bg-[#10B981] dark:selection:text-[#06281C]">
         <I18nProvider>
-          <div role="note" aria-label="MVP prototype notice" className="sticky top-0 z-[100] w-full bg-amber-400 px-3 py-2 text-center font-mono text-[11px] font-bold uppercase tracking-wider text-black">
+          <div role="note" aria-label="MVP prototype notice" className="relative z-40 w-full bg-amber-400 px-3 py-2 text-center font-mono text-[11px] font-bold uppercase tracking-wider text-black">
             MVP Prototype — Demo with mock data only · Not a medical device · Not for clinical use
           </div>
           <div id="app-root" className="w-full max-w-full min-w-0 overflow-x-clip">

@@ -128,10 +128,11 @@ export const FiberHero: React.FC = () => {
         {!ready && (
           <img src={getFramePath(1)} alt="" aria-hidden="true" draggable={false} className="absolute inset-0 h-full w-full object-cover" />
         )}
-        {/* Cinematic grade — mist blue + readable scrims */}
-        <div className="pointer-events-none absolute inset-0 bg-[#0c2444]/30 mix-blend-screen" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_20%,rgba(56,189,248,0.2),transparent_70%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#061424]/60 via-transparent to-black/90" />
+        {/* White + mist-blue cinematic grade — calibrated washes over black film */}
+        <div className="pointer-events-none absolute inset-0 bg-[#7fb2e5]/10 mix-blend-screen" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1100px_620px_at_50%_16%,rgba(147,197,253,0.17),transparent_70%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),transparent_28%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_52%,rgba(0,0,0,0.88))]" />
 
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-5 pb-16 sm:px-8 md:px-12">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-sky-200">
