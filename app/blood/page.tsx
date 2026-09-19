@@ -40,23 +40,23 @@ function BloodPageContent() {
 
   if (!currentPatient || patients.length === 0) {
     return (
-      <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+      <div className="harvey-dashboard min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-[#1a1a1a]">
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-[#1a1a1a] font-serif italic text-2xl shadow-xl">
           V
         </div>
-        <p className="text-sm font-semibold text-white">Loading In-OT Blood View…</p>
-        <p className="text-xs text-white/50 font-mono">Loading MVP demo with mock cases</p>
+        <p className="text-sm font-semibold text-[#1a1a1a]">Loading In-OT Blood View…</p>
+        <p className="text-xs text-[#6b706b] font-mono">Loading MVP demo with mock cases</p>
       </div>
     );
   }
 
   return (
-    <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-start sm:justify-center text-white w-full overflow-x-hidden selection:bg-sky-500/30">
+    <div className="harvey-dashboard min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-start sm:justify-center text-[#1a1a1a] w-full overflow-x-hidden selection:bg-sky-500/30">
       <div className="w-full max-w-md space-y-3">
         <div className="flex items-center justify-between gap-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-sky-300 hover:text-sky-200 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1a1a1a] hover:text-[#1a1a1a] transition py-2 px-3 rounded-lg bg-black/[0.03] border border-black/10 hover:bg-black/[0.04] min-h-[44px] shrink-0"
           >
             <ChevronLeft className="h-4 w-4" />
             <span>Home</span>
@@ -64,7 +64,7 @@ function BloodPageContent() {
           <div className="flex items-center gap-2">
             <Link
               href="/console"
-              className="text-xs font-mono text-sky-400 hover:text-sky-300 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] flex items-center shrink-0"
+              className="text-xs font-mono text-sky-400 hover:text-[#1a1a1a] transition py-2 px-3 rounded-lg bg-black/[0.03] border border-black/10 hover:bg-black/[0.04] min-h-[44px] flex items-center shrink-0"
             >
               OT Console →
             </Link>
@@ -107,11 +107,11 @@ export default function BloodPage() {
   return (
     <Suspense
       fallback={
-        <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-lg">
+        <div className="harvey-dashboard min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-[#1a1a1a]">
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-[#1a1a1a] font-serif italic text-2xl shadow-lg">
             V
           </div>
-          <p className="text-sm font-semibold text-white">Loading In-OT Blood View…</p>
+          <p className="text-sm font-semibold text-[#1a1a1a]">Loading In-OT Blood View…</p>
         </div>
       }
     >

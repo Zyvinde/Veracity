@@ -12,14 +12,14 @@ export const metadata: Metadata = {
 
 export default function IntakePage() {
   return (
-    <div className="veracity-canvas min-h-screen text-white w-full overflow-x-hidden selection:bg-sky-500/30">
+    <div className="harvey-dashboard min-h-screen text-[#1a1a1a] w-full overflow-x-hidden selection:bg-sky-500/30">
       <Suspense
         fallback={
           <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center">
-            <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+            <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-[#1a1a1a] font-serif italic text-2xl shadow-xl">
               V
             </div>
-            <p className="text-sm font-semibold text-white">Loading Pre-Op Questionnaire…</p>
+            <p className="text-sm font-semibold text-[#1a1a1a]">Loading Pre-Op Questionnaire…</p>
           </div>
         }
       >
@@ -27,7 +27,7 @@ export default function IntakePage() {
           <div className="flex items-center justify-between gap-2">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-sky-300 hover:text-sky-200 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1a1a1a] hover:text-[#1a1a1a] transition py-2 px-3 rounded-lg bg-white border border-black/10 hover:bg-black/[0.04] min-h-[44px] shrink-0"
             >
               <ChevronLeft className="h-4 w-4" />
               <span>Back to Home</span>
@@ -35,13 +35,13 @@ export default function IntakePage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/pac"
-                className="text-xs font-mono text-emerald-300 hover:text-emerald-200 transition py-2 px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 min-h-[44px] flex items-center shrink-0"
+                className="text-xs font-mono text-[#1c7a3d] hover:text-[#1c7a3d] transition py-2 px-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 min-h-[44px] flex items-center shrink-0"
               >
                 Quick PAC (3 min) →
               </Link>
               <Link
                 href="/console"
-                className="text-xs font-mono text-sky-400 hover:text-sky-300 transition py-2 px-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 min-h-[44px] flex items-center shrink-0"
+                className="text-xs font-mono text-[#1a1a1a] hover:text-[#1a1a1a] transition py-2 px-3 rounded-lg bg-white border border-black/10 hover:bg-black/[0.04] min-h-[44px] flex items-center shrink-0"
               >
                 OT Console →
               </Link>

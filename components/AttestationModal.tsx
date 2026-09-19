@@ -88,18 +88,18 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/60 p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-2xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-2xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-[#1a1a1a]">
         {/* Modal Header */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15">
-              <ShieldCheck className="h-5 w-5 text-sky-200" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-black/25 bg-white">
+              <ShieldCheck className="h-5 w-5 text-[#1a1a1a]" />
             </div>
             <div>
-              <h2 className="font-serif italic text-lg tracking-wide text-white font-bold">
+              <h2 className="font-serif italic text-lg tracking-wide text-[#1a1a1a] font-bold">
                 {t('attestation.title')}
               </h2>
-              <p className="text-xs text-white/70 font-mono">
+              <p className="text-xs text-[#6b706b] font-mono">
                 {t('attestation.subtitle')}
               </p>
             </div>
@@ -108,7 +108,7 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="veracity-press rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 cursor-pointer"
+            className="veracity-press rounded-xl p-2 text-[#6b706b] hover:bg-black/[0.04] hover:text-[#3f4440] cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -117,37 +117,37 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
         {/* Modal Body */}
         <div className="max-h-[75vh] overflow-y-auto overflow-x-clip p-4 sm:p-6 space-y-4 text-xs font-sans min-w-0 break-words">
           <div role="note" className="rounded-xl border border-amber-400/50 bg-amber-400/10 p-3.5 flex items-start gap-2.5">
-            <AlertTriangle className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
+            <AlertTriangle className="h-4 w-4 text-[#7a5200] shrink-0 mt-0.5" />
             <div className="text-xs">
-              <div className="font-bold text-amber-200 font-mono uppercase tracking-wider text-[11px]">MVP Prototype — demo signature only</div>
-              <p className="text-white/75 mt-0.5">
+              <div className="font-bold text-[#7a5200] font-mono uppercase tracking-wider text-[11px]">MVP Prototype — demo signature only</div>
+              <p className="text-[#3f4440] mt-0.5">
                 Mock patient, demo login, local storage. This button does not create a clinical, legal, or regulatory attestation. Do not use for real patients.
               </p>
             </div>
           </div>
           {/* Case Summary Callout */}
-          <div className="rounded-xl border border-white/25 bg-white/10 p-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-white/85 font-mono text-[11px] min-w-0">
+          <div className="rounded-xl border border-black/25 bg-white p-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#3f4440] font-mono text-[11px] min-w-0">
               <div>
-                <span className="text-white/60">{t('attestation.patient')}</span> <strong className="text-white">{patient.name}</strong> ({patient.mrn})
+                <span className="text-[#6b706b]">{t('attestation.patient')}</span> <strong className="text-[#1a1a1a]">{patient.name}</strong> ({patient.mrn})
               </div>
               <div>
-                <span className="text-white/60">{t('attestation.procedure')}</span> <span className="text-white font-medium">{patient.procedureName}</span>
+                <span className="text-[#6b706b]">{t('attestation.procedure')}</span> <span className="text-[#1a1a1a] font-medium">{patient.procedureName}</span>
               </div>
               <div>
-                <span className="text-white/60">{t('attestation.clearanceStatus')}</span>{' '}
+                <span className="text-[#6b706b]">{t('attestation.clearanceStatus')}</span>{' '}
                 <span className={`font-bold ${
                   patient.overallStatus === 'GREEN_CLEARED'
-                    ? 'text-emerald-200'
+                    ? 'text-[#1c7a3d]'
                     : patient.overallStatus === 'AMBER_CONDITIONAL'
-                    ? 'text-amber-200'
-                    : 'text-rose-200'
+                    ? 'text-[#7a5200]'
+                    : 'text-[#b3261e]'
                 }`}>
                   {patient.overallStatus.replace('_', ' ')}
                 </span>
               </div>
               <div>
-                <span className="text-white/60">{t('attestation.swimLane')}</span> <span className="text-white font-bold">{patient.swimLane}</span>
+                <span className="text-[#6b706b]">{t('attestation.swimLane')}</span> <span className="text-[#1a1a1a] font-bold">{patient.swimLane}</span>
               </div>
             </div>
           </div>
@@ -155,10 +155,10 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
           {/* Soft warning: Quick PAC interview not done yet (non-blocking) */}
           {!patient.pacCompleted && (
             <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-3.5 flex items-start gap-2.5">
-              <AlertTriangle className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
+              <AlertTriangle className="h-4 w-4 text-[#7a5200] shrink-0 mt-0.5" />
               <div className="text-xs">
-                <div className="font-bold text-amber-200">Quick PAC interview not completed (recommended, not blocking)</div>
-                <p className="text-white/75 mt-0.5">
+                <div className="font-bold text-[#7a5200]">Quick PAC interview not completed (recommended, not blocking)</div>
+                <p className="text-[#3f4440] mt-0.5">
                   Patient hasn’t finished the 3-min ask-the-questions flow (meds, 8h fasting, allergies, escort).
                   You can still sign — consider sending the link first.
                 </p>
@@ -174,43 +174,43 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
 
           {/* Statutory Oath & Required Affirmations */}
           <div className="space-y-2.5">
-            <h3 className="font-serif italic font-bold text-white text-sm">
+            <h3 className="font-serif italic font-bold text-[#1a1a1a] text-sm">
               {t('attestation.affirmations')}
             </h3>
 
-            <label className="flex items-start gap-3 rounded-xl border border-white/25 bg-white/10 p-3.5 cursor-pointer hover:border-white/50 hover:bg-white/15 transition">
+            <label className="flex items-start gap-3 rounded-xl border border-black/25 bg-white p-3.5 cursor-pointer hover:border-black/25 hover:bg-black/[0.04] transition">
               <input
                 type="checkbox"
                 checked={clause1}
                 onChange={(e) => setClause1(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-white/30 bg-white/15 text-sky-200 focus:ring-white/60 cursor-pointer"
+                className="mt-0.5 h-4 w-4 rounded border-black/25 bg-white text-[#1a1a1a] focus:ring-black/30 cursor-pointer"
               />
-              <span className="text-white/85 leading-relaxed text-xs">
-                <strong className="text-white">{t('attestation.clause1')}</strong> {t('attestation.clause1Text')}
+              <span className="text-[#3f4440] leading-relaxed text-xs">
+                <strong className="text-[#1a1a1a]">{t('attestation.clause1')}</strong> {t('attestation.clause1Text')}
               </span>
             </label>
 
-            <label className="flex items-start gap-3 rounded-xl border border-white/25 bg-white/10 p-3.5 cursor-pointer hover:border-white/50 hover:bg-white/15 transition">
+            <label className="flex items-start gap-3 rounded-xl border border-black/25 bg-white p-3.5 cursor-pointer hover:border-black/25 hover:bg-black/[0.04] transition">
               <input
                 type="checkbox"
                 checked={clause2}
                 onChange={(e) => setClause2(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-white/30 bg-white/15 text-sky-200 focus:ring-white/60 cursor-pointer"
+                className="mt-0.5 h-4 w-4 rounded border-black/25 bg-white text-[#1a1a1a] focus:ring-black/30 cursor-pointer"
               />
-              <span className="text-white/85 leading-relaxed text-xs">
-                <strong className="text-white">{t('attestation.clause2')}</strong> {t('attestation.clause2Text')}
+              <span className="text-[#3f4440] leading-relaxed text-xs">
+                <strong className="text-[#1a1a1a]">{t('attestation.clause2')}</strong> {t('attestation.clause2Text')}
               </span>
             </label>
 
-            <label className="flex items-start gap-3 rounded-xl border border-white/25 bg-white/10 p-3.5 cursor-pointer hover:border-white/50 hover:bg-white/15 transition">
+            <label className="flex items-start gap-3 rounded-xl border border-black/25 bg-white p-3.5 cursor-pointer hover:border-black/25 hover:bg-black/[0.04] transition">
               <input
                 type="checkbox"
                 checked={clause3}
                 onChange={(e) => setClause3(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-white/30 bg-white/15 text-sky-200 focus:ring-white/60 cursor-pointer"
+                className="mt-0.5 h-4 w-4 rounded border-black/25 bg-white text-[#1a1a1a] focus:ring-black/30 cursor-pointer"
               />
-              <span className="text-white/85 leading-relaxed text-xs">
-                <strong className="text-white">{t('attestation.clause3')}</strong> {t('attestation.clause3Text')}
+              <span className="text-[#3f4440] leading-relaxed text-xs">
+                <strong className="text-[#1a1a1a]">{t('attestation.clause3')}</strong> {t('attestation.clause3Text')}
               </span>
             </label>
 
@@ -219,17 +219,17 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
                 type="checkbox"
                 checked={clauseMvp}
                 onChange={(e) => setClauseMvp(e.target.checked)}
-                className="mt-0.5 h-4 w-4 rounded border-white/30 bg-white/15 text-sky-200 focus:ring-white/60 cursor-pointer"
+                className="mt-0.5 h-4 w-4 rounded border-black/25 bg-white text-[#1a1a1a] focus:ring-black/30 cursor-pointer"
               />
-              <span className="text-white/85 leading-relaxed text-xs">
-                <strong className="text-white">MVP acknowledgment (required):</strong> I understand this is an MVP prototype with mock data and demo auth, not a medical device, with no clinical or legal effect.
+              <span className="text-[#3f4440] leading-relaxed text-xs">
+                <strong className="text-[#1a1a1a]">MVP acknowledgment (required):</strong> I understand this is an MVP prototype with mock data and demo auth, not a medical device, with no clinical or legal effect.
               </span>
             </label>
           </div>
 
           {needsRationale && (
             <div>
-              <label className="block text-[10.5px] font-mono text-amber-200 mb-1 font-semibold uppercase">
+              <label className="block text-[10.5px] font-mono text-[#7a5200] mb-1 font-semibold uppercase">
                 Override / concurrence rationale (required for demo AMBER/RED, min 10 chars)
               </label>
               <textarea
@@ -238,7 +238,7 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
                 rows={3}
                 maxLength={500}
                 placeholder="e.g. Demo: concur with hold — reschedule spinal after 72h washout; GA fallback discussed."
-                className="w-full rounded-xl glass-input border border-amber-400/40 px-3 py-2 text-xs text-white focus:border-amber-300 focus:ring-1 focus:ring-amber-300 focus:outline-none font-sans"
+                className="w-full rounded-xl glass-input border border-amber-400/40 px-3 py-2 text-xs text-[#1a1a1a] focus:border-amber-300 focus:ring-1 focus:ring-amber-300 focus:outline-none font-sans"
               />
             </div>
           )}
@@ -246,35 +246,35 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
           {/* Practitioner Credentials Form */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div>
-              <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">
+              <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">
                 {t('attestation.physicianName')}
               </label>
               <input
                 type="text"
                 value={physicianName}
                 onChange={(e) => setPhysicianName(e.target.value)}
-                className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none font-sans"
+                className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none font-sans"
               />
             </div>
 
             <div>
-              <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">
+              <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">
                 {t('attestation.licenseId')}
               </label>
               <input
                 type="text"
                 value={licenseNumber}
                 onChange={(e) => setLicenseNumber(e.target.value)}
-                className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none font-mono"
+                className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none font-mono"
               />
             </div>
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
-          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
-            <Lock className="h-3.5 w-3.5 text-sky-200" />
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
+          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-[#6b706b]">
+            <Lock className="h-3.5 w-3.5 text-[#1a1a1a]" />
             <span>{t('attestation.sha256')}</span>
           </div>
 
@@ -282,7 +282,7 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-white/85 hover:text-white hover:bg-white/15 transition cursor-pointer"
+              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04] transition cursor-pointer"
             >
               {t('common.cancel')}
             </button>
@@ -291,20 +291,20 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
               type="button"
               disabled={!allAgreed || isSigning}
               onClick={handleSignAndAuthorize}
-              className={`flex items-center gap-2 rounded-xl px-5 py-2 text-xs font-bold transition ${
+              className={`flex items-center gap-2 rounded-full px-5 py-2 text-xs font-bold transition ${
                 allAgreed && !isSigning
-                  ? 'bg-white hover:bg-white/85 text-slate-900 shadow-md shadow-black/40 cursor-pointer active:scale-95'
-                  : 'bg-white/15 text-white/60 border border-white/25 cursor-not-allowed'
+                  ? 'bg-[#1a1a1a] hover:bg-black/80 text-white shadow-md shadow-black/40 cursor-pointer active:scale-95'
+                  : 'bg-white text-[#6b706b] border border-black/25 cursor-not-allowed'
               }`}
             >
               {isSigning ? (
                 <>
-                  <Fingerprint className="h-4 w-4 animate-spin text-slate-900" />
+                  <Fingerprint className="h-4 w-4 animate-spin text-white" />
                   <span>{t('attestation.computing')}</span>
                 </>
               ) : (
                 <>
-                  <Stamp className="h-4 w-4 text-slate-900" />
+                  <Stamp className="h-4 w-4 text-white" />
                   <span>{t('attestation.signAuthorize')}</span>
                 </>
               )}

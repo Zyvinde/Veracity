@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PilotPage() {
   return (
-    <div className="veracity-canvas relative w-full min-h-screen overflow-x-hidden text-white" dir="ltr">
+    <div className="harvey-dashboard relative w-full min-h-screen overflow-x-hidden text-[#1a1a1a]" dir="ltr">
       <PilotWorkspace />
     </div>
   );

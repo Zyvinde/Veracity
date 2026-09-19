@@ -118,8 +118,8 @@ export const FiberHero: React.FC = () => {
   }, [drawFrame]);
 
   return (
-    <div ref={trackRef} className="relative z-10 h-[220vh] bg-[#0a0a0a]">
-      <div className="sticky top-0 z-10 flex h-screen flex-col overflow-hidden bg-[#0a0a0a]">
+    <div ref={trackRef} className="relative z-10 h-[220vh] bg-black">
+      <div className="sticky top-0 z-10 flex h-screen flex-col overflow-hidden bg-black">
         <canvas
           ref={canvasRef}
           aria-hidden="true"
@@ -131,7 +131,7 @@ export const FiberHero: React.FC = () => {
         {/* Cinematic grade — mist blue + readable scrims */}
         <div className="pointer-events-none absolute inset-0 bg-[#0c2444]/30 mix-blend-screen" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_20%,rgba(56,189,248,0.2),transparent_70%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#061424]/60 via-transparent to-[#0a0a0a]/90" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#061424]/60 via-transparent to-black/90" />
 
         <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end px-5 pb-16 sm:px-8 md:px-12">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-sky-200">

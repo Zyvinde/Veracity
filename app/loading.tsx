@@ -5,8 +5,8 @@ import { Skeleton } from '@/components/ui-utils';
 
 export default function Loading() {
   return (
-    <div className="veracity-canvas min-h-screen p-6">
-      <div className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#06090E]/80 backdrop-blur-xl">
+    <div className="harvey-dashboard min-h-screen p-6">
+      <div className="sticky top-0 z-40 border-b border-black/10 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <Skeleton className="h-10 w-10 rounded-xl" />

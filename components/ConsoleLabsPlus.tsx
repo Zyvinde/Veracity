@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { PatientCase } from '@/lib/types';
 import {
   checkDrugInteractions,
@@ -34,6 +34,8 @@ function findLab(patient: PatientCase, keys: string[]) {
  * retained rules-engine functions.
  */
 export const LabsPlusSections: React.FC<{ patient: PatientCase; nowMs: number }> = ({ patient, nowMs }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const anemia = useMemo(() => {
     try { return evaluateAnemiaOptimization(patient); } catch { return null; }
   }, [patient]);
@@ -158,7 +160,7 @@ export const LabsPlusSections: React.FC<{ patient: PatientCase; nowMs: number }>
             <p className="veracity-eyebrow">10 — Clocks</p>
             <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Holds, fasting <span className="italic">&amp; morning meds</span></h2>
           </div>
-          {fasting && <p className="veracity-num text-[11px] text-[#9a9ea6]">{fasting.recommendation}</p>}
+          {mounted && fasting && <p className="veracity-num text-[11px] text-[#9a9ea6]">{fasting.recommendation}</p>}
         </div>
         <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           <div className="veracity-tile p-3.5">

@@ -84,12 +84,12 @@ function PageContent() {
   // Guard: for patient-specific sub-views, wait for patient store hydration
   if ((directView === 'intake' || directView === 'questionnaire' || directView === 'blood' || directView === 'mobile') && (!currentPatient || patients.length === 0)) {
     return (
-      <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+      <div className="harvey-dashboard min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-[#1a1a1a]">
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-[#1a1a1a] font-serif italic text-2xl shadow-xl">
           V
         </div>
-        <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
-        <p className="text-xs text-white/50 font-mono">Loading MVP demo with mock cases</p>
+        <p className="text-sm font-semibold text-[#1a1a1a]">Loading House Health surgical roster…</p>
+        <p className="text-xs text-[#6b706b] font-mono">Loading MVP demo with mock cases</p>
       </div>
     );
   }
@@ -97,7 +97,7 @@ function PageContent() {
   // Patient self-assessment portal (?view=intake)
   if (directView === 'intake' || directView === 'questionnaire') {
     return (
-      <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-8 text-white w-full overflow-x-hidden">
+      <div className="harvey-dashboard min-h-screen px-3 py-4 sm:p-8 text-[#1a1a1a] w-full overflow-x-hidden">
         <div className="max-w-5xl mx-auto space-y-3 sm:space-y-4 w-full">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -105,11 +105,11 @@ function PageContent() {
               onClick={() => {
                 router.push('/');
               }}
-              className="text-xs font-mono text-sky-300 hover:text-sky-200 transition shrink-0"
+              className="text-xs font-mono text-[#1a1a1a] hover:opacity-70 transition shrink-0"
             >
               ← Back to Main Platform
             </button>
-            <span className="text-[11px] sm:text-xs font-mono text-white/50 truncate">Patient Self-Assessment Portal</span>
+            <span className="text-[11px] sm:text-xs font-mono text-[#6b706b] truncate">Patient Self-Assessment Portal</span>
           </div>
           <PatientPreOpQuestionnaire
             patientId={currentPatient?.id}
@@ -123,7 +123,7 @@ function PageContent() {
   // In-OT mobile viewport (?view=blood)
   if (directView === 'blood' || directView === 'mobile') {
     return (
-      <div className="veracity-canvas min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-center text-white w-full overflow-x-hidden">
+      <div className="harvey-dashboard min-h-screen px-3 py-4 sm:p-6 flex flex-col items-center justify-center text-[#1a1a1a] w-full overflow-x-hidden">
         <div className="w-full max-w-md space-y-3">
           <div className="flex items-center justify-between gap-2">
             <button
@@ -131,11 +131,11 @@ function PageContent() {
               onClick={() => {
                 router.push('/');
               }}
-              className="text-xs font-mono text-sky-300 hover:text-sky-200 transition shrink-0"
+              className="text-xs font-mono text-[#1a1a1a] hover:opacity-70 transition shrink-0"
             >
               ← Back to Main Platform
             </button>
-            <span className="text-[11px] sm:text-xs font-mono text-white/50 truncate">In-OT View</span>
+            <span className="text-[11px] sm:text-xs font-mono text-[#6b706b] truncate">In-OT View</span>
           </div>
           <MobileAnesthesiaBloodView
             patientId={currentPatient?.id}
@@ -183,11 +183,11 @@ export default function Home() {
   return (
     <Suspense
       fallback={
-        <div className="veracity-canvas min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center">
-          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-lg">
+        <div className="harvey-dashboard min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center">
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-[#1a1a1a] font-serif italic text-2xl shadow-lg">
             V
           </div>
-          <p className="text-sm font-semibold text-white">Loading House Health Platform…</p>
+          <p className="text-sm font-semibold text-[#1a1a1a]">Loading House Health Platform…</p>
         </div>
       }
     >

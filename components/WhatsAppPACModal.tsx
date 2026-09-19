@@ -334,24 +334,24 @@ ${msg.footer}`;
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/60 p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-[#1a1a1a]">
         {/* Modal Header */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-sky-200">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-black/25 bg-white text-[#1a1a1a]">
               <MessageSquare className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif italic text-lg tracking-wide text-white font-bold">
+                <h2 className="font-serif italic text-lg tracking-wide text-[#1a1a1a] font-bold">
                   {t('whatsapp.title')}
                 </h2>
-                <span className="inline-flex items-center gap-1 rounded-full border border-white/30 bg-white/15 px-2.5 py-0.5 text-[9.5px] font-mono font-bold text-white">
-                  <ShieldCheck className="h-3.5 w-3.5 text-sky-200" />
+                <span className="inline-flex items-center gap-1 rounded-full border border-black/25 bg-white px-2.5 py-0.5 text-[9.5px] font-mono font-bold text-[#1a1a1a]">
+                  <ShieldCheck className="h-3.5 w-3.5 text-[#1a1a1a]" />
                   End-to-End Encrypted
                 </span>
               </div>
-              <p className="text-xs text-white/70 font-mono">
+              <p className="text-xs text-[#6b706b] font-mono">
                 {t('whatsapp.subtitle')}
               </p>
             </div>
@@ -360,7 +360,7 @@ ${msg.footer}`;
           <button
             type="button"
             onClick={onClose}
-            className="veracity-press rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 cursor-pointer"
+            className="veracity-press rounded-xl p-2 text-[#6b706b] hover:bg-black/[0.04] hover:text-[#3f4440] cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -369,20 +369,20 @@ ${msg.footer}`;
         {/* Modal Grid: Left Controls (5 cols) & Right WhatsApp UI Canvas (7 cols) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 max-h-[75vh] overflow-y-auto">
           {/* Controls Column */}
-          <div className="lg:col-span-5 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-white/15 space-y-4 bg-white/10 font-sans text-xs min-w-0 break-words">
+          <div className="lg:col-span-5 p-4 sm:p-6 border-b lg:border-b-0 lg:border-r border-black/15 space-y-4 bg-white font-sans text-xs min-w-0 break-words">
             {/* Patient Header Summary */}
-            <div className="rounded-xl border border-white/25 bg-white/15 p-4 shadow-2xs">
-              <div className="flex items-center justify-between text-white/85 font-mono text-xs">
-                <span className="text-white/60">Recipient Patient</span>
-                <span className="font-bold text-white">{patient.name}</span>
+            <div className="rounded-xl border border-black/25 bg-white p-4 shadow-2xs">
+              <div className="flex items-center justify-between text-[#3f4440] font-mono text-xs">
+                <span className="text-[#6b706b]">Recipient Patient</span>
+                <span className="font-bold text-[#1a1a1a]">{patient.name}</span>
               </div>
-              <div className="mt-1 flex items-center justify-between text-white/70 font-mono text-[11px]">
+              <div className="mt-1 flex items-center justify-between text-[#6b706b] font-mono text-[11px]">
                 <span>{t('whatsapp.mrnFileNo')}</span>
-                <span className="text-white/90 font-semibold">{patient.mrn}</span>
+                <span className="text-[#1a1a1a] font-semibold">{patient.mrn}</span>
               </div>
-              <div className="mt-1 flex items-center justify-between text-white/70 font-mono text-[11px]">
+              <div className="mt-1 flex items-center justify-between text-[#6b706b] font-mono text-[11px]">
                 <span>{t('whatsapp.clearanceStatus')}</span>
-                <span className={`font-bold ${isCleared ? 'text-emerald-200' : isAmber ? 'text-amber-200' : 'text-rose-200'}`}>
+                <span className={`font-bold ${isCleared ? 'text-[#1c7a3d]' : isAmber ? 'text-[#7a5200]' : 'text-[#b3261e]'}`}>
                   {patient.overallStatus.replace('_', ' ')}
                 </span>
               </div>
@@ -390,8 +390,8 @@ ${msg.footer}`;
 
             {/* Phone Number Input */}
             <div>
-              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-white/70 mb-1.5 flex items-center gap-1.5">
-                <Phone className="h-3.5 w-3.5 text-sky-200" />
+              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-[#6b706b] mb-1.5 flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-[#1a1a1a]" />
                 {t('whatsapp.whatsappNumber')}
               </label>
               <div className="relative">
@@ -400,21 +400,21 @@ ${msg.footer}`;
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="+971 50 123 4567"
-                  className="w-full rounded-xl glass-input border px-3.5 py-2 font-mono text-xs font-medium text-white focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3.5 py-2 font-mono text-xs font-medium text-[#1a1a1a] focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                 />
-                <span className="absolute right-2.5 top-2 rounded-full bg-white/15 px-2 py-0.5 font-mono text-[9px] font-bold text-white border border-white/30">
+                <span className="absolute right-2.5 top-2 rounded-full bg-white px-2 py-0.5 font-mono text-[9px] font-bold text-[#1a1a1a] border border-black/25">
                   Verified
                 </span>
               </div>
-              <p className="mt-1 text-[10px] text-white/60 font-mono">
+              <p className="mt-1 text-[10px] text-[#6b706b] font-mono">
                 {t('whatsapp.intlFormats')}
               </p>
             </div>
 
             {/* Language Selector */}
             <div>
-              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-white/70 mb-1.5 flex items-center gap-1.5">
-                <Globe2 className="h-3.5 w-3.5 text-sky-200" />
+              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-[#6b706b] mb-1.5 flex items-center gap-1.5">
+                <Globe2 className="h-3.5 w-3.5 text-[#1a1a1a]" />
                 {t('whatsapp.languageSelect')}
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 font-mono text-xs min-w-0">
@@ -433,8 +433,8 @@ ${msg.footer}`;
                     onClick={() => setLanguage(opt.code)}
                     className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                       language === opt.code
-                        ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                        : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                        ? 'border-sky-300 bg-white font-bold text-sky-800 shadow-2xs'
+                        : 'border-black/25 bg-white text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04]'
                     }`}
                   >
                     <span>{opt.label}</span>
@@ -445,7 +445,7 @@ ${msg.footer}`;
 
             {/* Template Selector: Pre-op clearance vs Day 0-7 follow-up */}
             <div>
-              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-white/70 mb-1.5">
+              <label className="block text-[10.5px] font-mono font-semibold uppercase tracking-wider text-[#6b706b] mb-1.5">
                 Message template
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-xs min-w-0">
@@ -454,8 +454,8 @@ ${msg.footer}`;
                   onClick={() => setTemplate('PREOP')}
                   className={`rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     template === 'PREOP'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                      ? 'border-sky-300 bg-white font-bold text-sky-800 shadow-2xs'
+                      : 'border-black/25 bg-white text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04]'
                   }`}
                 >
                   <span>Pre-op clearance</span>
@@ -465,56 +465,56 @@ ${msg.footer}`;
                   onClick={() => setTemplate('POSTOP')}
                   className={`rounded-xl border py-2 px-3 transition cursor-pointer min-h-[44px] ${
                     template === 'POSTOP'
-                      ? 'border-sky-300 bg-white/15 font-bold text-sky-800 shadow-2xs'
-                      : 'border-white/25 bg-white/15 text-white/75 hover:text-white hover:bg-white/10'
+                      ? 'border-sky-300 bg-white font-bold text-sky-800 shadow-2xs'
+                      : 'border-black/25 bg-white text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04]'
                   }`}
                 >
                   <span>Day 0–7 follow-up</span>
                 </button>
               </div>
-              <p className="mt-1 text-[10px] text-white/60 font-mono">
+              <p className="mt-1 text-[10px] text-[#6b706b] font-mono">
                 Follow-up asks pain / fever / wound + reuses the same send flow.
               </p>
             </div>
 
             {/* Included Attachments Info */}
-            <div className="rounded-xl border border-white/25 bg-white/15 p-3.5 space-y-2 text-[10.5px] text-white/75 shadow-2xs">
-              <span className="font-bold text-white font-mono uppercase tracking-wider block text-[10px]">
+            <div className="rounded-xl border border-black/25 bg-white p-3.5 space-y-2 text-[10.5px] text-[#3f4440] shadow-2xs">
+              <span className="font-bold text-[#1a1a1a] font-mono uppercase tracking-wider block text-[10px]">
                 {t('whatsapp.packageIncludes')}
               </span>
               <div className="flex items-center gap-2">
-                <FileText className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                <FileText className="h-3.5 w-3.5 text-[#1a1a1a] shrink-0" />
                 <span>{t('whatsapp.pdfSlip')}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-amber-200 shrink-0" />
+                <Clock className="h-3.5 w-3.5 text-[#7a5200] shrink-0" />
                 <span>{t('whatsapp.fastingDirectives')}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Lock className="h-3.5 w-3.5 text-sky-200 shrink-0" />
+                <Lock className="h-3.5 w-3.5 text-[#1a1a1a] shrink-0" />
                 <span>{t('whatsapp.sha256Link')}</span>
               </div>
             </div>
 
             {/* Telemetry Progress Bar during send */}
             {sendStep > 0 && (
-              <div className="rounded-xl border border-white/30 bg-white/15 p-3.5 space-y-2 animate-in fade-in">
+              <div className="rounded-xl border border-black/25 bg-white p-3.5 space-y-2 animate-in fade-in">
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-white font-bold flex items-center gap-1.5">
+                  <span className="text-[#1a1a1a] font-bold flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-sky-500" />
                     Gateway Dispatch: Step {sendStep} / 4
                   </span>
-                  <span className="text-white font-bold">
+                  <span className="text-[#1a1a1a] font-bold">
                     {sendStep === 4 ? 'Delivered ✓✓' : 'Sending...'}
                   </span>
                 </div>
-                <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10">
                   <div
                     className="h-full bg-sky-600 rounded-full transition-[width] duration-300 ease-out"
                     style={{ width: `${(sendStep / 4) * 100}%` }}
                   />
                 </div>
-                <p className="text-[10px] font-mono text-white/75">
+                <p className="text-[10px] font-mono text-[#3f4440]">
                   {sendStep === 1 && '1/4: Connecting to Azure UAE North Healthcare WhatsApp Cloud Gateway...'}
                   {sendStep === 2 && '2/4: Assembling localized PAC directives & cryptographic payload...'}
                   {sendStep === 3 && '3/4: Generating secure one-time patient verification link...'}
@@ -525,10 +525,10 @@ ${msg.footer}`;
           </div>
 
           {/* Right WhatsApp Simulator Canvas (7 cols) */}
-          <div className="lg:col-span-7 p-6 bg-[#F0F4F8] flex flex-col justify-between border-l border-white/15">
+          <div className="lg:col-span-7 p-6 bg-[#F0F4F8] flex flex-col justify-between border-l border-black/15">
             <div>
               {/* WhatsApp Chat Header */}
-              <div className="flex items-center justify-between rounded-xl bg-white/15 px-4 py-3 border border-white/25 shadow-xs">
+              <div className="flex items-center justify-between rounded-xl bg-white px-4 py-3 border border-black/25 shadow-xs">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 font-bold text-white shadow">
@@ -538,21 +538,21 @@ ${msg.footer}`;
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <span className="font-sans text-sm font-bold text-white">
+                      <span className="font-sans text-sm font-bold text-[#1a1a1a]">
                         {t('whatsapp.antHealthBot')}
                       </span>
-                      <span className="rounded-full bg-white/15 text-white px-2 py-0.5 font-mono text-[9px] font-bold border border-white/30">
+                      <span className="rounded-full bg-white text-[#1a1a1a] px-2 py-0.5 font-mono text-[9px] font-bold border border-black/25">
                         {t('whatsapp.official')}
                       </span>
                     </div>
-                    <span className="text-[10.5px] text-white/70 font-mono">
+                    <span className="text-[10.5px] text-[#6b706b] font-mono">
                       {t('whatsapp.verifiedBot')}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-white/70 font-mono text-xs">
-                  <span className="text-emerald-200 font-bold">{t('whatsapp.online')}</span>
+                <div className="flex items-center gap-2 text-[#6b706b] font-mono text-xs">
+                  <span className="text-[#1c7a3d] font-bold">{t('whatsapp.online')}</span>
                 </div>
               </div>
 
@@ -560,25 +560,25 @@ ${msg.footer}`;
               <div className="mt-4">
                 <div
                   dir={isRTL ? 'rtl' : 'ltr'}
-                  className="relative rounded-2xl bg-white/15 p-5 text-white/90 border border-white/25 text-xs font-sans space-y-3 max-w-xl leading-relaxed shadow-xs"
+                  className="relative rounded-2xl bg-white p-5 text-[#1a1a1a] border border-black/25 text-xs font-sans space-y-3 max-w-xl leading-relaxed shadow-xs"
                 >
                   {/* Message Title */}
-                  <div className="border-b border-white/15 pb-2.5 flex items-center justify-between">
-                    <div className="font-bold text-white text-sm flex items-center gap-1.5">
-                      <FileCheck2 className="h-4 w-4 text-sky-200" />
+                  <div className="border-b border-black/15 pb-2.5 flex items-center justify-between">
+                    <div className="font-bold text-[#1a1a1a] text-sm flex items-center gap-1.5">
+                      <FileCheck2 className="h-4 w-4 text-[#1a1a1a]" />
                       <span>{msg.title.replace(/\*/g, '')}</span>
                     </div>
-                    <span className="font-mono text-[10px] text-white/60">
+                    <span className="font-mono text-[10px] text-[#6b706b]">
                       PAC #{patient.id}
                     </span>
                   </div>
 
-                  <p className="font-semibold text-white">{msg.greeting}</p>
+                  <p className="font-semibold text-[#1a1a1a]">{msg.greeting}</p>
 
                   {/* Clearance Badge Card */}
                   <div className={`p-3 rounded-xl border text-xs font-mono font-bold ${
                     isCleared
-                      ? 'bg-emerald-500/20 border-emerald-300/40 text-emerald-100'
+                      ? 'bg-emerald-500/20 border-emerald-300/40 text-[#1c7a3d]'
                       : isAmber
                       ? 'bg-amber-500/20 border-amber-300/40 text-amber-800'
                       : 'bg-rose-500/20 border-rose-300/40 text-rose-800'
@@ -587,7 +587,7 @@ ${msg.footer}`;
                   </div>
 
                   {/* Surgery Details */}
-                  <div className="bg-white/10 p-3.5 rounded-xl space-y-1 font-mono text-[11px] text-white/85 border border-white/20">
+                  <div className="bg-white p-3.5 rounded-xl space-y-1 font-mono text-[11px] text-[#3f4440] border border-black/20">
                     {msg.details.map((d, idx) => (
                       <div key={idx}>{d.replace(/\*/g, '')}</div>
                     ))}
@@ -602,55 +602,55 @@ ${msg.footer}`;
                   </div>
 
                   {/* Medications */}
-                  <div className="bg-white/10 p-3.5 rounded-xl space-y-1 text-[11px] text-white/85 border border-white/20">
-                    <strong className="text-white block font-mono text-xs">
+                  <div className="bg-white p-3.5 rounded-xl space-y-1 text-[11px] text-[#3f4440] border border-black/20">
+                    <strong className="text-[#1a1a1a] block font-mono text-xs">
                       {msg.medsTitle.replace(/\*/g, '')}
                     </strong>
                     <div className="whitespace-pre-line text-[11px] font-sans">{msg.medsText.replace(/\*/g, '')}</div>
                   </div>
 
                   {/* PDF Attachment Simulator */}
-                  <div className="rounded-xl border border-white/25 bg-white/10 p-3.5 flex items-center justify-between">
+                  <div className="rounded-xl border border-black/25 bg-white p-3.5 flex items-center justify-between">
                     <div className="flex items-center gap-2.5">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-600 text-white font-bold text-xs shadow-xs">
                         PDF
                       </div>
                       <div>
-                        <div className="font-bold text-white text-[11.5px]">
+                        <div className="font-bold text-[#1a1a1a] text-[11.5px]">
                           Digital_PAC_Clearance_{patient.mrn}.pdf
                         </div>
-                        <div className="text-[10px] text-white/70 font-mono">
+                        <div className="text-[10px] text-[#6b706b] font-mono">
                           1 Page • 248 KB • Cryptographically Signed
                         </div>
                       </div>
                     </div>
-                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-mono text-emerald-200 font-bold border border-emerald-300/40">
+                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-mono text-[#1c7a3d] font-bold border border-emerald-300/40">
                       ATTACHED
                     </span>
                   </div>
 
                   {/* Verification Link */}
-                  <div className="text-[10.5px] font-mono text-white break-all bg-sky-50/80 p-2.5 rounded-xl border border-white/30">
+                  <div className="text-[10.5px] font-mono text-[#1a1a1a] break-all bg-sky-50/80 p-2.5 rounded-xl border border-black/25">
                     {msg.verifyLink.replace(/\*/g, '')}
                   </div>
 
                   {/* WhatsApp Time & Delivery Tick */}
-                  <div className="flex items-center justify-end gap-1.5 pt-1 text-[10px] text-white/60 font-mono">
+                  <div className="flex items-center justify-end gap-1.5 pt-1 text-[10px] text-[#6b706b] font-mono">
                     <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    <CheckCheck className={`h-4 w-4 ${isDelivered ? 'text-sky-200 font-bold' : 'text-white/80'}`} />
+                    <CheckCheck className={`h-4 w-4 ${isDelivered ? 'text-[#1a1a1a] font-bold' : 'text-[#3f4440]'}`} />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Quick Actions Footer */}
-            <div className="mt-4 pt-3.5 border-t border-white/25 flex flex-wrap items-center justify-between gap-2">
+            <div className="mt-4 pt-3.5 border-t border-black/25 flex flex-wrap items-center justify-between gap-2">
               <button
                 type="button"
                 onClick={handleCopyText}
-                className="flex items-center gap-1.5 rounded-xl glass-input border px-3.5 py-2 text-xs font-mono text-white/85 hover:bg-white/10 transition cursor-pointer shadow-2xs"
+                className="flex items-center gap-1.5 rounded-xl glass-input border px-3.5 py-2 text-xs font-mono text-[#3f4440] hover:bg-black/[0.04] transition cursor-pointer shadow-2xs"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-200" /> : <Copy className="h-3.5 w-3.5 text-white/70" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-[#1c7a3d]" /> : <Copy className="h-3.5 w-3.5 text-[#6b706b]" />}
                 <span>{copied ? t('whatsapp.copiedMsg') : t('whatsapp.copyText')}</span>
               </button>
 
@@ -674,9 +674,9 @@ ${msg.footer}`;
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
-          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
-            <Lock className="h-3.5 w-3.5 text-sky-200" />
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
+          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-[#6b706b]">
+            <Lock className="h-3.5 w-3.5 text-[#1a1a1a]" />
             <span>{t('whatsapp.azureGateway')}</span>
           </div>
 
@@ -684,7 +684,7 @@ ${msg.footer}`;
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-white/85 hover:text-white hover:bg-white/15 transition cursor-pointer"
+              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04] transition cursor-pointer"
             >
               Close
             </button>
@@ -693,7 +693,7 @@ ${msg.footer}`;
               type="button"
               disabled={isSending}
               onClick={handleSimulateSend}
-              className="flex items-center gap-2 rounded-xl bg-white hover:bg-white/85 px-6 py-2 text-xs font-bold text-slate-900 transition cursor-pointer disabled:opacity-50 shadow-md shadow-black/40 active:scale-95"
+              className="flex items-center gap-2 rounded-full bg-[#1a1a1a] hover:bg-black/80 px-6 py-2 text-xs font-bold text-white transition cursor-pointer disabled:opacity-50 shadow-md shadow-black/40 active:scale-95"
             >
               {isSending ? (
                 <>

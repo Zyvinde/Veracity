@@ -153,8 +153,13 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
   const [commandOpen, setCommandOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [nowMs, setNowMs] = useState(() => Date.now());
+  const [mounted, setMounted] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
   const [inspectedLabId, setInspectedLabId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const currentPatient: PatientCase | undefined = useMemo(
     () => patients.find((p) => p.id === currentPatientId) ?? patients[0],
@@ -366,7 +371,7 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
               <span className="truncate">Search patients, labs, actions…</span>
               <kbd className="veracity-num ml-auto hidden rounded-md border border-black/10 bg-black/[0.04] px-1.5 py-0.5 text-[10px] text-[#6b706b] sm:inline">⌘K</kbd>
             </button>
-            <span className="veracity-num inline-flex items-center gap-1.5 rounded-full border border-[#9a6700]/30 bg-[#9a6700]/[0.08] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#7a5200]">
+            <span className="veracity-num hidden items-center gap-1.5 rounded-full border border-[#9a6700]/30 bg-[#9a6700]/[0.08] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#7a5200] sm:inline-flex">
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#9a6700]" />
               MVP PROTOTYPE · NOT FOR CLINICAL USE
             </span>
@@ -399,10 +404,10 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
         <main className="mx-auto w-full max-w-[1200px] space-y-8 px-4 py-5 sm:px-6 sm:py-6">
           <section aria-label="Day masthead" className="veracity-fade-up">
             <p className="veracity-eyebrow">
-              Veracity OT Console · {new Date(nowMs).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} · {activeClinician.name}
+              Veracity OT Console · {mounted ? new Date(nowMs).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Loading date'} · {activeClinician.name}
             </p>
             <h1 className="veracity-serif-accent mt-2 text-[32px] leading-[1.1] text-[#1a1a1a] sm:text-[38px]" style={{ letterSpacing: '-0.035em' }}>
-              {dayGreeting(nowMs)}, <span className="italic">in focus.</span>
+              {mounted ? dayGreeting(nowMs) : 'Day roster'}, <span className="italic">in focus.</span>
             </h1>
             <p className="veracity-ui-label mt-2 text-[13px] text-[#6b706b]">
               {counts.total} cases on the board · {counts.stop > 0 ? `${counts.stop} hard stop${counts.stop === 1 ? '' : 's'} need${counts.stop === 1 ? 's' : ''} you first` : 'no hard stops'} · {counts.holds} active medication holds
@@ -435,8 +440,8 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
                 <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">NPO chronometer</p>
                 <span className="veracity-chip h-7 w-7" aria-hidden="true"><Clock3 size={14} className="text-[#6b706b]" /></span>
               </div>
-              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{fasting ? formatCountdown(fasting.hoursUntilSurgery) : '--:--'}</p>
-              <p className="veracity-ui-label mt-2.5 line-clamp-2 text-[12px] leading-snug text-[#6b706b]">{fasting ? fasting.recommendation : 'Select a case to compute fasting status.'}</p>
+              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{mounted && fasting ? formatCountdown(fasting.hoursUntilSurgery) : '--:--'}</p>
+              <p className="veracity-ui-label mt-2.5 line-clamp-2 text-[12px] leading-snug text-[#6b706b]">{mounted && fasting ? fasting.recommendation : 'Computing fasting status.'}</p>
             </div>
             <div className="veracity-card veracity-fade-up veracity-stagger-4 p-4">
               <div className="flex items-center justify-between">
@@ -503,7 +508,7 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
                   <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Last recorded <span className="italic">vitals</span></h2>
                 </div>
                 <p className="veracity-num text-[11px] text-[#9a9ea6]">
-                  {new Date(latestVitals.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · {currentPatient?.name}
+                  {mounted ? new Date(latestVitals.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '--:--'} · {currentPatient?.name}
                 </p>
               </div>
               <div className="veracity-card mt-3 flex flex-wrap items-center gap-x-8 gap-y-4 p-4">

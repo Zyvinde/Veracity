@@ -302,23 +302,23 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
 
   return (
     <div onClick={onClose} className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/60 p-0 sm:p-4 animate-fade-in overflow-y-auto">
-      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-white/90">
+      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-full sm:max-w-4xl overflow-hidden glass-panel rounded-none sm:rounded-2xl shadow-2xl my-0 sm:my-6 min-h-screen sm:min-h-0 animate-scale-in text-[#1a1a1a]">
         {/* Modal Header */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/30 bg-white/15 text-sky-200">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-black/25 bg-white text-[#1a1a1a]">
               <UploadCloud className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif italic text-lg tracking-wide text-white font-bold">
+                <h2 className="font-serif italic text-lg tracking-wide text-[#1a1a1a] font-bold">
                   {t('ingestion.title')}
                 </h2>
-                <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-[9.5px] font-mono font-bold text-white border border-white/30">
+                <span className="rounded-full bg-white px-2.5 py-0.5 text-[9.5px] font-mono font-bold text-[#1a1a1a] border border-black/25">
                   DIAGNOSTIC INGESTION
                 </span>
               </div>
-              <p className="text-xs text-white/70 font-mono">
+              <p className="text-xs text-[#6b706b] font-mono">
                 Direct lab report document processing & sovereign clinical rules verification
               </p>
             </div>
@@ -327,7 +327,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="veracity-press rounded-xl p-2 text-white/60 hover:bg-white/15 hover:text-white/85 cursor-pointer"
+            className="veracity-press rounded-xl p-2 text-[#6b706b] hover:bg-black/[0.04] hover:text-[#3f4440] cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -336,14 +336,14 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         {/* Modal Body */}
         <div className="p-4 sm:p-6 space-y-5 text-xs font-sans max-h-[78vh] overflow-y-auto overflow-x-clip min-w-0 break-words">
           {/* Mode Switcher: Real PDF Upload vs Demo Lab Presets */}
-          <div className="flex items-center gap-2 border-b border-white/15 pb-3.5">
+          <div className="flex items-center gap-2 border-b border-black/15 pb-3.5">
             <button
               type="button"
               onClick={() => setIngestMode('UPLOAD')}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition cursor-pointer ${
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
                 ingestMode === 'UPLOAD'
-                  ? 'bg-white text-slate-900 font-bold shadow-md shadow-black/40'
-                  : 'text-white/75 hover:text-white hover:bg-white/15'
+                  ? 'bg-[#1a1a1a] text-white font-bold shadow-md shadow-black/40'
+                  : 'text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04]'
               }`}
             >
               <FileUp className="h-4 w-4" />
@@ -356,10 +356,10 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 setIngestMode('PRESET');
                 setSelectedFile(null);
               }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition cursor-pointer ${
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition cursor-pointer ${
                 ingestMode === 'PRESET'
-                  ? 'bg-white text-slate-900 font-bold shadow-md shadow-black/40'
-                  : 'text-white/75 hover:text-white hover:bg-white/15'
+                  ? 'bg-[#1a1a1a] text-white font-bold shadow-md shadow-black/40'
+                  : 'text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04]'
               }`}
             >
               <FileCode className="h-4 w-4" />
@@ -376,10 +376,10 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
               onClick={() => fileInputRef.current?.click()}
               className={`relative rounded-2xl border-2 border-dashed p-8 text-center transition cursor-pointer ${
                 isDragOver
-                  ? 'border-white/60 bg-sky-50/60'
+                  ? 'border-black/25 bg-sky-50/60'
                   : selectedFile
-                  ? 'border-sky-300 bg-white/15'
-                  : 'border-white/25 bg-white/10 hover:border-white/50 hover:bg-white/15'
+                  ? 'border-sky-300 bg-white'
+                  : 'border-black/25 bg-white hover:border-black/25 hover:bg-black/[0.04]'
               }`}
             >
               <input
@@ -394,32 +394,32 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 }}
               />
 
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 border border-white/30 text-sky-200 mb-3 shadow-2xs">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white border border-black/25 text-[#1a1a1a] mb-3 shadow-2xs">
                 <UploadCloud className="h-6 w-6" />
               </div>
 
               {selectedFile ? (
                 <div>
-                  <p className="font-mono text-sm font-bold text-white flex items-center justify-center gap-2">
-                    <FileText className="h-4 w-4 text-sky-200" />
+                  <p className="font-mono text-sm font-bold text-[#1a1a1a] flex items-center justify-center gap-2">
+                    <FileText className="h-4 w-4 text-[#1a1a1a]" />
                     <span>{selectedFile.name}</span>
                   </p>
-                  <p className="mt-1 text-[11px] text-white/70 font-mono">
+                  <p className="mt-1 text-[11px] text-[#6b706b] font-mono">
                     Size: {Math.round(selectedFile.size / 1024)} KB · Type: {selectedFile.type || 'application/pdf'} · Ready for extraction
                   </p>
-                  <span className="mt-2.5 inline-block rounded-xl glass-input border px-3 py-1 text-[10px] font-mono text-white/85 shadow-2xs">
+                  <span className="mt-2.5 inline-block rounded-xl glass-input border px-3 py-1 text-[10px] font-mono text-[#3f4440] shadow-2xs">
                     Click to choose another file or drag & drop replacement
                   </span>
                 </div>
               ) : (
                 <div>
-                  <p className="font-serif italic text-base font-bold text-white">
+                  <p className="font-serif italic text-base font-bold text-[#1a1a1a]">
                     Drop your lab report PDF or scanned image here
                   </p>
-                  <p className="mt-1 text-[11px] text-white/70 font-mono">
+                  <p className="mt-1 text-[11px] text-[#6b706b] font-mono">
                     Accepts Al Borg, Medsol, Lal PathLabs, or any generic lab report (.PDF, .JPG, .PNG)
                   </p>
-                  <span className="mt-3 inline-block rounded-xl glass-input border px-4 py-1.5 text-xs font-bold text-white/85 shadow-xs hover:bg-white/10 transition">
+                  <span className="mt-3 inline-block rounded-xl glass-input border px-4 py-1.5 text-xs font-bold text-[#3f4440] shadow-xs hover:bg-black/[0.04] transition">
                     Browse Files
                   </span>
                 </div>
@@ -429,20 +429,20 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
 
           {/* SeamlessMD-lite: document category select */}
           {ingestMode === 'UPLOAD' && (
-            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/25 bg-white/10 p-3">
-              <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-white/70">
+            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-black/25 bg-white p-3">
+              <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider text-[#6b706b]">
                 Document category
               </span>
               <select
                 value={docCategory}
                 onChange={(e) => setDocCategory(e.target.value as 'LAB' | 'ECG' | 'ECHO' | 'CONSENT' | 'OTHER')}
-                className="rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:outline-none min-h-[44px]"
+                className="rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] focus:border-black/40 focus:outline-none min-h-[44px]"
               >
                 {(['LAB', 'ECG', 'ECHO', 'CONSENT', 'OTHER'] as const).map((c) => (
                   <option key={c} value={c} className="bg-slate-900">{c}</option>
                 ))}
               </select>
-              <span className="text-[10.5px] font-mono text-white/60">
+              <span className="text-[10.5px] font-mono text-[#6b706b]">
                 Stored with upload (SQLite + device fallback)
               </span>
             </div>
@@ -472,17 +472,17 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition cursor-pointer ${
                   activePreset === 'AISHA_GREEN'
                     ? 'border-emerald-300 bg-emerald-50/50 shadow-2xs'
-                    : 'border-white/25 bg-white/10 hover:border-white/30 hover:bg-white/20'
+                    : 'border-black/25 bg-white hover:border-black/25 hover:bg-black/[0.04]'
                 }`}
               >
-                <div className="rounded-xl bg-emerald-100 p-2 text-emerald-200 shrink-0">
+                <div className="rounded-xl bg-emerald-100 p-2 text-[#1c7a3d] shrink-0">
                   <CheckCircle2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="font-bold text-white flex items-center gap-1.5">
-                    <Building2 className="h-4 w-4 shrink-0 text-emerald-300" aria-hidden="true" /><span>Medsol (Cleared)</span>
+                  <div className="font-bold text-[#1a1a1a] flex items-center gap-1.5">
+                    <Building2 className="h-4 w-4 shrink-0 text-[#1c7a3d]" aria-hidden="true" /><span>Medsol (Cleared)</span>
                   </div>
-                  <div className="text-[11px] text-white/70 mt-0.5">
+                  <div className="text-[11px] text-[#6b706b] mt-0.5">
                     Aisha Al-Nuaimi · Arthroscopy · All Clean
                   </div>
                 </div>
@@ -509,17 +509,17 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition cursor-pointer ${
                   activePreset === 'FATIMA_AMBER'
                     ? 'border-amber-300 bg-amber-50/50 shadow-2xs'
-                    : 'border-white/25 bg-white/10 hover:border-white/30 hover:bg-white/20'
+                    : 'border-black/25 bg-white hover:border-black/25 hover:bg-black/[0.04]'
                 }`}
               >
-                <div className="rounded-xl bg-amber-100 p-2 text-amber-200 shrink-0">
+                <div className="rounded-xl bg-amber-100 p-2 text-[#7a5200] shrink-0">
                   <AlertTriangle className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="font-bold text-white flex items-center gap-1.5">
-                    <Building2 className="h-4 w-4 shrink-0 text-amber-300" aria-hidden="true" /><span>Al Borg (Conditional)</span>
+                  <div className="font-bold text-[#1a1a1a] flex items-center gap-1.5">
+                    <Building2 className="h-4 w-4 shrink-0 text-[#7a5200]" aria-hidden="true" /><span>Al Borg (Conditional)</span>
                   </div>
-                  <div className="text-[11px] text-white/70 mt-0.5">
+                  <div className="text-[11px] text-[#6b706b] mt-0.5">
                     Fatima Al-Mansoor · Cholecystectomy · Amber K+
                   </div>
                 </div>
@@ -546,17 +546,17 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition cursor-pointer ${
                   activePreset === 'RAJESH_RED'
                     ? 'border-rose-300 bg-rose-50/50 shadow-2xs'
-                    : 'border-white/25 bg-white/10 hover:border-white/30 hover:bg-white/20'
+                    : 'border-black/25 bg-white hover:border-black/25 hover:bg-black/[0.04]'
                 }`}
               >
-                <div className="rounded-xl bg-rose-100 p-2 text-rose-200 shrink-0">
+                <div className="rounded-xl bg-rose-100 p-2 text-[#b3261e] shrink-0">
                   <AlertTriangle className="h-5 w-5" />
                 </div>
                 <div>
-                  <div className="font-bold text-white flex items-center gap-1.5">
-                    <Building2 className="h-4 w-4 shrink-0 text-rose-300" aria-hidden="true" /><span>Lal PathLabs (Hard Stop)</span>
+                  <div className="font-bold text-[#1a1a1a] flex items-center gap-1.5">
+                    <Building2 className="h-4 w-4 shrink-0 text-[#b3261e]" aria-hidden="true" /><span>Lal PathLabs (Hard Stop)</span>
                   </div>
-                  <div className="text-[11px] text-white/70 mt-0.5">
+                  <div className="text-[11px] text-[#6b706b] mt-0.5">
                     Rajesh Sharma · Right TKA · DOAC Hold Red
                   </div>
                 </div>
@@ -565,54 +565,54 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
           )}
 
           {/* Coordinator Case Demographics Form */}
-          <div className="rounded-2xl border border-white/25 bg-white/10 p-5 space-y-3.5">
-            <div className="flex items-center justify-between border-b border-white/20 pb-2.5">
-              <span className="font-mono text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                <User className="h-4 w-4 text-sky-200" />
+          <div className="rounded-2xl border border-black/25 bg-white p-5 space-y-3.5">
+            <div className="flex items-center justify-between border-b border-black/20 pb-2.5">
+              <span className="font-mono text-xs font-bold text-[#1a1a1a] uppercase tracking-wider flex items-center gap-1.5">
+                <User className="h-4 w-4 text-[#1a1a1a]" />
                 <span>Surgical Coordinator Patient Demographics</span>
               </span>
-              <span className="text-[10.5px] font-mono text-white/70">Required for PAC Passport Clearance</span>
+              <span className="text-[10.5px] font-mono text-[#6b706b]">Required for PAC Passport Clearance</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
               <div>
-                <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Patient Full Name</label>
+                <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Patient Full Name</label>
                 <input
                   type="text"
                   value={patientForm.name}
                   onChange={(e) => setPatientForm({ ...patientForm, name: e.target.value })}
-                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white placeholder-white/60 focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] placeholder-black/40 focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   placeholder="e.g. Fatima Al-Mansoor"
                 />
               </div>
 
               <div>
-                <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Medical Record Number (MRN)</label>
+                <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Medical Record Number (MRN)</label>
                 <input
                   type="text"
                   value={patientForm.mrn || ''}
                   onChange={(e) => setPatientForm({ ...patientForm, mrn: e.target.value })}
-                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white placeholder-white/60 focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] placeholder-black/40 focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   placeholder="e.g. DHA-892144-AE"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 min-w-0">
                 <div>
-                  <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Age</label>
+                  <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Age</label>
                   <input
                     type="number"
                     value={patientForm.age}
                     onChange={(e) => setPatientForm({ ...patientForm, age: parseInt(e.target.value, 10) || 0 })}
-                    className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                    className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Gender</label>
+                  <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Gender</label>
                   <select
                     value={patientForm.gender}
                     onChange={(e) => setPatientForm({ ...patientForm, gender: e.target.value as 'M' | 'F' })}
-                    className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                    className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   >
                     <option value="F">Female (F)</option>
                     <option value="M">Male (M)</option>
@@ -621,34 +621,34 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Scheduled Procedure</label>
+                <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Scheduled Procedure</label>
                 <input
                   type="text"
                   value={patientForm.procedureName}
                   onChange={(e) => setPatientForm({ ...patientForm, procedureName: e.target.value })}
-                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white placeholder-white/60 focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] placeholder-black/40 focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   placeholder="e.g. Laparoscopic Cholecystectomy"
                 />
               </div>
 
               <div>
-                <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Attending Surgeon</label>
+                <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Attending Surgeon</label>
                 <input
                   type="text"
                   value={patientForm.surgeon || ''}
                   onChange={(e) => setPatientForm({ ...patientForm, surgeon: e.target.value })}
-                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white placeholder-white/60 focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] placeholder-black/40 focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   placeholder="e.g. Dr. Tariq Al-Hashimi, FRCS"
                 />
               </div>
 
               <div>
-                <label className="block text-[10.5px] font-mono text-white/70 mb-1 font-semibold uppercase">Facility / Day Surgery Center</label>
+                <label className="block text-[10.5px] font-mono text-[#6b706b] mb-1 font-semibold uppercase">Facility / Day Surgery Center</label>
                 <input
                   type="text"
                   value={patientForm.facility || ''}
                   onChange={(e) => setPatientForm({ ...patientForm, facility: e.target.value })}
-                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-white placeholder-white/60 focus:border-white/60 focus:ring-1 focus:ring-white/60 focus:outline-none"
+                  className="w-full rounded-xl glass-input border px-3 py-2 text-xs text-[#1a1a1a] placeholder-black/40 focus:border-black/40 focus:ring-1 focus:ring-black/30 focus:outline-none"
                   placeholder="e.g. Al Garhoud Day Surgery Center"
                 />
               </div>
@@ -659,7 +659,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                 type="button"
                 disabled={isProcessing}
                 onClick={handleStartRealIngestion}
-                className="flex items-center gap-2 rounded-xl bg-white hover:bg-white/85 px-6 py-2.5 text-xs font-bold text-slate-900 transition shadow-md shadow-black/40 disabled:opacity-50 cursor-pointer active:scale-95"
+                className="flex items-center gap-2 rounded-full bg-[#1a1a1a] hover:bg-black/80 px-6 py-2.5 text-xs font-bold text-white transition shadow-md shadow-black/40 disabled:opacity-50 cursor-pointer active:scale-95"
               >
                 {isProcessing ? (
                   <>
@@ -677,9 +677,9 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
           </div>
 
           {/* SeamlessMD-lite: document library with category filter */}
-          <div className="rounded-2xl border border-white/25 bg-white/10 p-4 space-y-2.5">
+          <div className="rounded-2xl border border-black/25 bg-white p-4 space-y-2.5">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
+              <span className="font-mono text-xs font-bold text-[#1a1a1a] uppercase tracking-wider">
                 Document library ({docLibrary.filter((d) => docFilter === 'ALL' || d.category === docFilter).length})
               </span>
               <div className="flex items-center gap-1.5">
@@ -689,7 +689,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                     type="button"
                     onClick={() => setDocFilter(f)}
                     className={`rounded-full px-2.5 py-1 text-[10px] font-mono font-bold transition cursor-pointer ${
-                      docFilter === f ? 'bg-white text-slate-900' : 'bg-white/15 text-white/70 hover:text-white'
+                      docFilter === f ? 'bg-[#1a1a1a] text-white' : 'bg-white text-[#6b706b] hover:text-[#1a1a1a]'
                     }`}
                   >
                     {f}
@@ -698,7 +698,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
               </div>
             </div>
             {docLibrary.filter((d) => docFilter === 'ALL' || d.category === docFilter).length === 0 ? (
-              <p className="text-[11px] font-mono text-white/60">No documents yet — uploads appear here with their category.</p>
+              <p className="text-[11px] font-mono text-[#6b706b]">No documents yet — uploads appear here with their category.</p>
             ) : (
               <div className="max-h-28 space-y-1.5 overflow-y-auto">
                 {docLibrary
@@ -706,9 +706,9 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                   .slice(-10)
                   .reverse()
                   .map((d) => (
-                    <div key={d.id} className="flex items-center justify-between gap-2 rounded-xl bg-white/10 border border-white/15 px-3 py-1.5 text-[11px] font-mono text-white/80">
+                    <div key={d.id} className="flex items-center justify-between gap-2 rounded-xl bg-white border border-black/15 px-3 py-1.5 text-[11px] font-mono text-[#3f4440]">
                       <span className="truncate">{d.filename}</span>
-                      <span className="shrink-0 rounded-full bg-white/15 border border-white/25 px-2 py-0.5 text-[9px] font-bold text-white">{d.category}</span>
+                      <span className="shrink-0 rounded-full bg-white border border-black/25 px-2 py-0.5 text-[9px] font-bold text-[#1a1a1a]">{d.category}</span>
                     </div>
                   ))}
               </div>
@@ -717,17 +717,17 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
 
           {/* Real Telemetry Stepper & Terminal */}
           {pipelineStep > 0 && (
-            <div className="rounded-2xl border border-white/30 bg-white/15 p-4 space-y-3 animate-fade-in">
+            <div className="rounded-2xl border border-black/25 bg-white p-4 space-y-3 animate-fade-in">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-white font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="text-[#1a1a1a] font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
                   <span>Real Ingestion Telemetry & Audit Stream</span>
                 </span>
-                <span className="text-white/70">Stage {pipelineStep} of 4</span>
+                <span className="text-[#6b706b]">Stage {pipelineStep} of 4</span>
               </div>
 
               {/* Progress bar */}
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10">
                 <div
                   className="h-full bg-sky-600 rounded-full transition-[width] duration-300 ease-out"
                   style={{ width: `${(pipelineStep / 4) * 100}%` }}
@@ -746,10 +746,10 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
 
               {visionQuarantine.length > 0 && (
                 <div className="pt-2.5 border-t border-amber-300/30">
-                  <div className="text-[11px] font-mono text-amber-200 uppercase tracking-wider mb-1.5 font-bold">
+                  <div className="text-[11px] font-mono text-[#7a5200] uppercase tracking-wider mb-1.5 font-bold">
                     Manual review required ({visionQuarantine.length}):
                   </div>
-                  <ul className="space-y-1 font-mono text-[10.5px] text-amber-100/90">
+                  <ul className="space-y-1 font-mono text-[10.5px] text-[#7a5200]">
                     {visionQuarantine.slice(0, 4).map((flag, idx) => (
                       <li key={idx} className="flex items-start gap-1.5">
                         <AlertTriangle className="h-3.5 w-3.5 mt-px shrink-0" />
@@ -762,8 +762,8 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
 
               {/* Parsed Biomarkers Snapshot Table */}
               {parsedLabsResult.length > 0 && (
-                <div className="pt-2.5 border-t border-white/25">
-                  <div className="text-[11px] font-mono text-white/75 uppercase tracking-wider mb-2 font-bold">
+                <div className="pt-2.5 border-t border-black/25">
+                  <div className="text-[11px] font-mono text-[#3f4440] uppercase tracking-wider mb-2 font-bold">
                     Extracted Biomarkers ({parsedLabsResult.length} verified · {visionSource}):
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 min-w-0">
@@ -772,17 +772,17 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
                         key={lab.id}
                         className="rounded-xl glass-input border p-2.5 shadow-2xs"
                       >
-                        <div className="text-[10px] text-white/70 truncate font-medium">{lab.name}</div>
-                        <div className="font-mono text-xs font-bold text-white mt-0.5">
-                          {lab.value} <span className="text-[10px] text-white/60 font-normal">{lab.unit}</span>
+                        <div className="text-[10px] text-[#6b706b] truncate font-medium">{lab.name}</div>
+                        <div className="font-mono text-xs font-bold text-[#1a1a1a] mt-0.5">
+                          {lab.value} <span className="text-[10px] text-[#6b706b] font-normal">{lab.unit}</span>
                         </div>
                         <span
                           className={`inline-block mt-1 text-[9px] font-mono px-2 py-0.5 rounded-full ${
                             lab.status === 'NORMAL'
-                              ? 'bg-emerald-500/20 text-emerald-200 font-bold border border-emerald-300/40'
+                              ? 'bg-emerald-500/20 text-[#1c7a3d] font-bold border border-emerald-300/40'
                               : lab.status.includes('CRITICAL')
-                              ? 'bg-rose-500/20 text-rose-200 font-bold border border-rose-300/40'
-                              : 'bg-amber-500/20 text-amber-200 font-bold border border-amber-300/40'
+                              ? 'bg-rose-500/20 text-[#b3261e] font-bold border border-rose-300/40'
+                              : 'bg-amber-500/20 text-[#7a5200] font-bold border border-amber-300/40'
                           }`}
                         >
                           {lab.status.replace('_', ' ')}
@@ -797,9 +797,9 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/15 bg-white/10 px-4 sm:px-6 py-4 min-w-0">
-          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-white/70">
-            <ShieldCheck className="h-4 w-4 text-sky-200" />
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-black/15 bg-white px-4 sm:px-6 py-4 min-w-0">
+          <div className="flex items-center gap-1.5 text-[10.5px] font-mono text-[#6b706b]">
+            <ShieldCheck className="h-4 w-4 text-[#1a1a1a]" />
             <span>Zero Data Leakage · SHA-256 Provenance Bounding Box Audited</span>
           </div>
 
@@ -807,7 +807,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-white/85 hover:text-white hover:bg-white/15 transition cursor-pointer"
+              className="rounded-xl glass-input border px-4 py-2 text-xs font-semibold text-[#3f4440] hover:text-[#1a1a1a] hover:bg-black/[0.04] transition cursor-pointer"
             >
               {t('common.cancel')}
             </button>
@@ -816,10 +816,10 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
               type="button"
               disabled={pipelineStep < 4}
               onClick={handleApplyCase}
-              className={`flex items-center gap-2 rounded-xl px-6 py-2 text-xs font-bold transition ${
+              className={`flex items-center gap-2 rounded-full px-6 py-2 text-xs font-bold transition ${
                 pipelineStep >= 4
-                  ? 'bg-white hover:bg-white/85 text-slate-900 shadow-md shadow-black/40 cursor-pointer active:scale-95'
-                  : 'bg-white/15 text-white/60 border border-white/25 cursor-not-allowed'
+                  ? 'bg-[#1a1a1a] hover:bg-black/80 text-white shadow-md shadow-black/40 cursor-pointer active:scale-95'
+                  : 'bg-white text-[#6b706b] border border-black/25 cursor-not-allowed'
               }`}
             >
               <span>Load Patient Case Into PAC Roster</span>

@@ -219,7 +219,7 @@ function ScrollCanvas({ posterSrc }: { posterSrc?: string }) {
   }, [drawFrame]);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#071626]">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-black">
       {/* 1 — Fallback poster if first frame loading */}
       {posterSrc && !isFirstFrameReady && (
         <img
@@ -240,9 +240,9 @@ function ScrollCanvas({ posterSrc }: { posterSrc?: string }) {
       />
 
       {/* 3 — Cinematic mist blue atmospheric overlays */}
-      <div className="absolute inset-0 bg-[#0c2444]/35 mix-blend-screen pointer-events-none" />
+      <div className="absolute inset-0 bg-black/40 mix-blend-screen pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_20%,rgba(56,189,248,0.22),transparent_70%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#061424]/40 via-transparent to-[#0a0a0a]/85 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/90 pointer-events-none" />
     </div>
   );
 }
