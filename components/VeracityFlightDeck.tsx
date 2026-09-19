@@ -5,6 +5,9 @@ import { usePatientStore, CLINICIANS } from '@/lib/store';
 import { computeFastingCompliance } from '@/lib/rules-engine';
 import type { ClearanceStatus, ExtractedLabItem, PatientCase, VitalsTrend } from '@/lib/types';
 import { CommandPalette } from '@/components/CommandPalette';
+import { PreOpSections } from '@/components/ConsolePreOp';
+import { LabsPlusSections } from '@/components/ConsoleLabsPlus';
+import { FlowSections } from '@/components/ConsoleFlow';
 import ProvenanceInspectorModal, { labItemToModalProps } from '@/components/ProvenanceInspectorModal';
 import { logAuditEvent } from '@/lib/audit-logger';
 import { RULES_ENGINE_VERSION } from '@/lib/constants';
@@ -14,7 +17,10 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock3,
+  Droplet,
   FileCheck2,
+  FileText,
+  Grid,
   Maximize2,
   Minimize2,
   Pill,
@@ -321,6 +327,15 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
           <button type="button" onClick={() => scrollTo('veracity-vitals')} aria-label="Vitals" title="Vitals" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <Clock3 size={17} aria-hidden="true" />
           </button>
+          <button type="button" onClick={() => scrollTo('veracity-checklist')} aria-label="Checklist" title="Checklist" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
+            <FileText size={17} aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => scrollTo('veracity-fishbone')} aria-label="Fishbone labs" title="Fishbone" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
+            <Droplet size={17} aria-hidden="true" />
+          </button>
+          <button type="button" onClick={() => scrollTo('veracity-kanban')} aria-label="OR kanban" title="Kanban" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
+            <Grid size={17} aria-hidden="true" />
+          </button>
           <button type="button" onClick={onOpenAuditDrawer} aria-label="Audit trail" title="Audit" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <History size={17} aria-hidden="true" />
           </button>
@@ -596,6 +611,14 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
               Estimated only: 45 min per hard stop plus 15 min per conditional at $1,200/hr. No measured theater time exists in this record; do not report as realized savings.
             </p>
           </section>
+
+          {currentPatient && (
+            <>
+              <PreOpSections patient={currentPatient} />
+              <LabsPlusSections patient={currentPatient} nowMs={nowMs} />
+              <FlowSections patients={patients} currentPatient={currentPatient} onSelectPatient={selectPatient} />
+            </>
+          )}
 
           <section aria-label="Case actions" className="flex flex-wrap gap-2 pb-2">
             <button type="button" onClick={onOpenIngestion} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2.5 text-[13px] font-medium text-[#1a1a1a] shadow-sm hover:bg-black/[0.04]">

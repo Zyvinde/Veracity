@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { usePatientStore } from '@/lib/store';
 import NovaCinematicLanding from '@/components/NovaCinematicLanding';
+import FiberHero from '@/components/FiberHero';
 import AttestationModal from '@/components/AttestationModal';
 import { WhatsAppPACModal } from '@/components/WhatsAppPACModal';
 import { logAuditEvent } from '@/lib/audit-logger';
@@ -171,6 +172,7 @@ function PageContent() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white relative selection:bg-white/20" dir="ltr">
       <div className="relative z-10">
+        <FiberHero />
         <NovaCinematicLanding />
       </div>
     </div>
