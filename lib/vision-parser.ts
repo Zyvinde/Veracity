@@ -20,7 +20,7 @@ export interface BoundingBox {
   confidence: number;
 }
 
-export type VisionSourceLab = 'AL_BORG' | 'MEDSOL' | 'DR_LAL' | 'ASTER' | 'UNKNOWN';
+export type VisionSourceLab = 'AL_BORG' | 'MEDSOL' | 'DR_LAL' | 'ASTER' | 'PURE_LAB' | 'UNKNOWN';
 export type VisionBiomarkerStatus = 'NORMAL' | 'CONDITIONAL' | 'PANIC';
 
 export interface ExtractedBiomarker {
@@ -319,6 +319,7 @@ const VALUE_UNIT_PATTERN =
 
 export function detectSourceLab(fullText: string, filename?: string): VisionSourceLab {
   const hay = `${fullText}\n${filename ?? ''}`.toLowerCase();
+  if (hay.includes('purelab') || hay.includes('pure lab') || hay.includes('purehealth') || /pul-\d+/i.test(hay)) return 'PURE_LAB';
   if (hay.includes('al borg') || hay.includes('alborg') || hay.includes('al-borg')) return 'AL_BORG';
   if (hay.includes('medsol')) return 'MEDSOL';
   if (hay.includes('lal path') || hay.includes('lalpath') || hay.includes('dr lal') || hay.includes('dr. lal')) return 'DR_LAL';

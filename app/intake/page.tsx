@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Patient Pre-Op Assessment Portal — House Health Clinical Decision Support',
+  title: 'Patient Pre-Op Assessment Demo — House Health MVP Prototype',
   description:
-    'Sovereign patient pre-operative self-assessment portal: medical history, contraceptive VTE risks, medications, and surgical readiness.',
+    'MVP prototype demo of a patient pre-op questionnaire with mock data. Not a medical device, not for clinical use.',
 };
 
 export default function IntakePage() {

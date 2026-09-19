@@ -72,14 +72,14 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "House Health (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
-  description: "Private Beta clinical decision support platform for perioperative risk assessment, anesthesia triage, and surgical delay prevention under DHA § 3060(a) guidelines.",
+  title: "House Health [MVP PROTOTYPE] — Pre-Operative Assessment Demo, Not for Clinical Use",
+  description: "MVP prototype for evaluation only. Non-diagnostic clinical decision support demo with mock data. Not a medical device. Not for diagnosis or autonomous clinical decisions.",
   icons: {
     icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cg transform='rotate(-30 12 12)'%3E%3Ccircle cx='7.3' cy='3.2' r='1.45'/%3E%3Crect x='5.5' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Crect x='14.9' y='4.7' width='3.6' height='14.6' rx='1.8'/%3E%3Ccircle cx='16.7' cy='20.8' r='1.45'/%3E%3C/g%3E%3C/svg%3E",
   },
   openGraph: {
-    title: "House Health (Private Beta) — Pre-Operative Assessment & Clinical Decision Support",
-    description: "Private Beta clinical decision support platform for perioperative assessment, anesthesia clearance workflows, and surgical safety defense.",
+    title: "House Health [MVP PROTOTYPE] — Evaluation Demo Only",
+    description: "MVP prototype. Mock data. Not a medical device. For pilot evaluation discussions only — not for clinical use.",
     type: "website",
   },
 };
@@ -98,18 +98,19 @@ export default function RootLayout({
             __html: `(function(){try{if(localStorage.getItem('veracity-theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}})()`,
           }}
         />
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.googleapis.com https://db.onlinewebfonts.com https://*.onlinewebfonts.com; font-src 'self' https://fonts.gstatic.com https://*.gstatic.com https://db.onlinewebfonts.com https://*.onlinewebfonts.com data:; img-src 'self' data: https:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net https://*.cloudfront.net data: blob:; connect-src 'self' https:;" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link href="https://db.onlinewebfonts.com/c/ca3d10781128664daddf89bf2e2d1305?family=Graphik+LCG+Regular+Regular" rel="stylesheet" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.googleapis.com; font-src 'self' https://fonts.gstatic.com https://*.gstatic.com data:; img-src 'self' data: https:; media-src 'self' data: blob:; connect-src 'self' https:;" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen w-full max-w-full overflow-x-clip bg-[#0a0a0a] text-white font-sans antialiased selection:bg-white/20 dark:bg-[#0A0B0E] dark:text-slate-200 dark:selection:bg-[#10B981] dark:selection:text-[#06281C]">
         <I18nProvider>
+          <div role="note" aria-label="MVP prototype notice" className="sticky top-0 z-[100] w-full bg-amber-400 px-3 py-2 text-center font-mono text-[11px] font-bold uppercase tracking-wider text-black">
+            MVP Prototype — Demo with mock data only · Not a medical device · Not for clinical use
+          </div>
           <div id="app-root" className="w-full max-w-full min-w-0 overflow-x-clip">
             {children}
           </div>
-          <Toaster richColors theme="dark" position="bottom-right" closeButton />
+          <Toaster richColors theme="light" position="bottom-right" closeButton />
         </I18nProvider>
       </body>
     </html>

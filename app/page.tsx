@@ -88,7 +88,7 @@ function PageContent() {
           V
         </div>
         <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
-        <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
+        <p className="text-xs text-white/50 font-mono">Loading MVP demo with mock cases</p>
       </div>
     );
   }

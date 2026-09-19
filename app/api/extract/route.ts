@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extractTextFromPdfBuffer } from '@/lib/pdf-parser';
-import { parseLabReport } from '@/lib/lab-parser';
+import { detectLabSource, parseLabReport } from '@/lib/lab-parser';
 import { saveUploadedFileDb } from '@/lib/db';
-import { requireAuth, assertUploadCategory } from '@/lib/api-utils';
+import { requireAuth, assertUploadCategory, sanitizeFilename } from '@/lib/api-utils';
 
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const ALLOWED_TYPES = new Set([
@@ -44,10 +44,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const filename = file.name;
+    const filename = sanitizeFilename(file.name || 'upload');
     const category = assertUploadCategory(formData.get('category') as string);
+    const rawSource = (formData.get('source') as string) || 'AUTO';
     const arrayBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(arrayBuffer);
+    // MVP demo: keep uploads in local demo store only. Do not upload real PHI here.
     const base64Data = Buffer.from(uint8Array).toString('base64');
 
     const fileId = `file-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
@@ -60,9 +62,12 @@ export async function POST(req: NextRequest) {
     const extractionResult = await extractTextFromPdfBuffer(uint8Array, filename);
     const allLines = extractionResult.pages.flatMap((p) => p.lines);
 
+    // Source auto-detect (PureLab/Al Borg/Medsol) when caller sends AUTO or nothing.
+    const requestedSource = rawSource === 'AUTO' || !rawSource ? detectLabSource(extractionResult.fullText, filename) : (labSource as any);
+
     const parsedLabs = parseLabReport(
       extractionResult.fullText,
-      labSource as any,
+      requestedSource,
       allLines,
       filename,
       { age: patientAge, gender: patientGender }
@@ -73,6 +78,7 @@ export async function POST(req: NextRequest) {
       fileId,
       filename,
       category,
+      source: requestedSource,
       fullText: extractionResult.fullText,
       pages: extractionResult.pages,
       isOcr: extractionResult.isOcr,
@@ -80,9 +86,10 @@ export async function POST(req: NextRequest) {
       dataUrl: `data:${mimeType};base64,${base64Data}`,
     });
   } catch (error: any) {
-    console.error('Error in /api/extract:', error);
+    // Avoid echoing untrusted filenames/PHI into logs or responses.
+    console.error('Error in /api/extract: upload failed');
     return NextResponse.json(
-      { success: false, error: error.message || 'Failed to extract PDF text' },
+      { success: false, error: 'Failed to extract document text (MVP demo)' },
       { status: 500 }
     );
   }

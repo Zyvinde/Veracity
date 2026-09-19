@@ -11,7 +11,29 @@ import {
 } from './rules-engine';
 import { ExtractedLine } from './pdf-parser';
 
-export type LabReportSource = 'AL_BORG' | 'LAL_PATHLABS' | 'MEDSOL' | 'GENERIC';
+export type LabReportSource = 'AL_BORG' | 'LAL_PATHLABS' | 'MEDSOL' | 'PURE_LAB' | 'GENERIC';
+
+/**
+ * Detects the issuing lab from report text (headers/footers/filename).
+ * PureLab reports carry "PureLab"/"Pure Lab"/"purelab.com"/"PUL-" accession markers.
+ */
+export function detectLabSource(rawText: string, filename?: string): LabReportSource {
+  const hay = `${rawText}\n${filename ?? ''}`.toLowerCase();
+  if (hay.includes('purelab') || hay.includes('pure lab') || hay.includes('purehealth') || /pul-\d+/i.test(hay)) {
+    return 'PURE_LAB';
+  }
+  if (hay.includes('al borg') || hay.includes('alborg') || hay.includes('al-borg')) return 'AL_BORG';
+  if (hay.includes('lal path') || hay.includes('lalpath') || hay.includes('dr lal') || hay.includes('dr. lal')) {
+    return 'LAL_PATHLABS';
+  }
+  if (hay.includes('medsol')) return 'MEDSOL';
+  return 'GENERIC';
+}
+
+/** µmol/L → mg/dL for creatinine (÷ 88.4). PureLab reports creatinine in µmol/L. */
+export function creatinineUmolToMgDl(umol: number): number {
+  return Math.round((umol / 88.4) * 100) / 100;
+}
 
 interface LabDefinition {
   key: string;
@@ -386,14 +408,24 @@ export function parseLabReport(
 
     // Test each line of text
     for (const line of lines) {
+      // PureLab header/admin lines carry numbers (accession, dates) — skip them for this source.
+      const skipLine =
+        source === 'PURE_LAB' &&
+        /purelab|purehealth|accession|collected on|reported on|authori[sz]ed by|emirates id|patient id|dob\s*:|supersedes|page \d+ of/i.test(line);
+      if (skipLine) continue;
       for (const pattern of def.patterns) {
         const match = line.match(pattern);
         if (match && match[1]) {
           const cleanStr = match[1].replace(/,/g, '');
-          const parsedNum = parseFloat(cleanStr);
+          let parsedNum = parseFloat(cleanStr);
           if (!isNaN(parsedNum)) {
+            // PureLab unit normalization: creatinine reported in µmol/L → mg/dL.
+            // Heuristic: values > 20 cannot be mg/dL (validateRange caps at 20), so convert.
+            if (source === 'PURE_LAB' && def.key === 'CREATININE' && parsedNum > 20) {
+              parsedNum = creatinineUmolToMgDl(parsedNum);
+            }
             // Apply sanitizer if defined
-            const sanitized = def.sanitizeValue ? def.sanitizeValue(parsedNum) : parsedNum;
+            const sanitized = def.sanitizeValue ? def.sanitizeValue(parsedNum, line) : parsedNum;
             // Validate biological possibility
             if (!def.validateRange || def.validateRange(sanitized)) {
               matchedValue = sanitized;

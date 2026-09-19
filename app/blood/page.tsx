@@ -45,7 +45,7 @@ function BloodPageContent() {
           V
         </div>
         <p className="text-sm font-semibold text-white">Loading In-OT Blood View…</p>
-        <p className="text-xs text-white/50 font-mono">Connecting to sovereign blood bank</p>
+        <p className="text-xs text-white/50 font-mono">Loading MVP demo with mock cases</p>
       </div>
     );
   }

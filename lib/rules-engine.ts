@@ -486,8 +486,9 @@ export function checkDrugInteractions(medications: MedicationHoldClock[]): DrugI
   const found: DrugInteraction[] = [];
   for (let i = 0; i < medications.length; i++) {
     for (let j = i + 1; j < medications.length; j++) {
-      const drug1 = medications[i].drugName.toLowerCase();
-      const drug2 = medications[j].drugName.toLowerCase();
+      // Brand-aware matching so UAE prescriptions (Augmentin, Brufen, Plavix…) hit generic patterns.
+      const drug1 = normalizeDrugName(medications[i].drugName);
+      const drug2 = normalizeDrugName(medications[j].drugName);
       for (const interaction of DRUG_INTERACTION_MAP) {
         const matches =
           (drug1.includes(interaction.drug1Pattern) && drug2.includes(interaction.drug2Pattern)) ||
@@ -2383,5 +2384,63 @@ export function evaluateAdversarialCase(input: AdversarialCase): AdversarialDeci
   }
 
   return { cleared: hardStops.length === 0, hardStops, conditionals };
+}
+
+/* =====================================================
+ * MVP pilot additions: brand normalization + scope guard
+ * ===================================================== */
+import { UAE_BRAND_TO_GENERIC } from './constants';
+
+/** Normalize a prescription string: lowercase + map UAE brands to generic fragments. */
+export function normalizeDrugName(raw: string): string {
+  const lower = (raw || '').toLowerCase();
+  let out = lower;
+  for (const [brand, generic] of Object.entries(UAE_BRAND_TO_GENERIC)) {
+    if (out.includes(brand)) out = `${out} ${generic}`;
+  }
+  return out;
+}
+
+export interface PopulationScope {
+  inScope: boolean;
+  flags: string[];
+  guidance: string;
+}
+
+/**
+ * Population scope guard: the demo rule set is adult, non-obstetric,
+ * elective perioperative only. Out-of-scope cases fail closed to
+ * direct anesthesiologist review — the engine must refuse, not guess.
+ */
+export function evaluatePopulationScope(patient: PatientCase): PopulationScope {
+  const flags: string[] = [];
+  if (patient.age < 18) flags.push(`Pediatric patient (age ${patient.age}): rules not validated under 18`);
+  if (patient.isPregnant) flags.push('Pregnancy: obstetric anesthesia review required, demo rules do not apply');
+  if (patient.asaStatus === 'ASA V' || patient.asaStatus === 'ASA E') {
+    flags.push(`${patient.asaStatus}: high-acuity case, consultant-only review, no demo triage`);
+  }
+  if (patient.invasivenessTier >= 4) {
+    flags.push('Tier-4 complex surgery (cardiac/craniotomy class): tertiary-center pathway, demo rules do not apply');
+  }
+  if (flags.length > 0) {
+    return {
+      inScope: false,
+      flags,
+      guidance: 'OUT OF SCOPE for MVP demo rules: direct senior anesthesiologist review required. Do not use demo flags for decisions.',
+    };
+  }
+  return { inScope: true, flags: [], guidance: 'Within MVP demo scope (adult elective tiers 1–3). Demo flags only.' };
+}
+
+/** Count demo flags for alert-burden tracking: criticals, borderlines, hold meds. */
+export function countDemoFlags(patient: PatientCase): { critical: number; borderline: number; medHolds: number; total: number } {
+  let critical = 0;
+  let borderline = 0;
+  for (const l of patient.labs || []) {
+    if (l.status === 'CRITICAL_LOW' || l.status === 'CRITICAL_HIGH') critical += 1;
+    else if (l.status === 'BORDERLINE_LOW' || l.status === 'BORDERLINE_HIGH') borderline += 1;
+  }
+  const medHolds = (patient.medications || []).filter((m) => m.status === 'HOLD_REQUIRED' || m.status === 'HARD_STOP').length;
+  return { critical, borderline, medHolds, total: critical + borderline + medHolds };
 }
 

@@ -158,3 +158,39 @@ export const TIMEZONE_MAP: Record<string, string> = {
   'NMC_INDIA': 'Asia/Kolkata',
   'GCC_COUNCIL': 'Asia/Riyadh',
 };
+
+/**
+ * UAE formulary brand → generic fragment map (MVP demo subset).
+ * Lets the interaction matcher catch local brand prescriptions
+ * (e.g. Augmentin → amoxicillin). Curated with an anesthesiologist;
+ * extend before any pilot use.
+ */
+export const UAE_BRAND_TO_GENERIC: Record<string, string> = {
+  augmentin: 'amoxicillin',
+  clamox: 'amoxicillin',
+  brufen: 'ibuprofen',
+  voltaren: 'diclofenac',
+  cataflam: 'diclofenac',
+  panadol: 'paracetamol',
+  adol: 'paracetamol',
+  aspirin: 'aspirin',
+  plavix: 'clopidogrel',
+  xarelto: 'rivaroxaban',
+  eliquis: 'apixaban',
+  pradaxa: 'dabigatran',
+  clexane: 'enoxaparin',
+  lasix: 'furosemide',
+  norvasc: 'amlodipine',
+  zestril: 'lisinopril',
+  cozaar: 'losartan',
+  glucophage: 'metformin',
+  januvia: 'sitagliptin',
+  ozempic: 'semaglutide',
+  rybelsus: 'semaglutide',
+  mounjaro: 'tirzepatide',
+  lipitor: 'atorvastatin',
+  crestor: 'rosuvastatin',
+  nexium: 'esomeprazole',
+  ventolin: 'salbutamol',
+  seretide: 'salmeterol',
+};

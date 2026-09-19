@@ -17,7 +17,7 @@ export default function ConsoleFiberBackground({
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(10, 30, 54, 0.35), rgba(7, 23, 44, 0.5) 50%, rgba(4, 13, 24, 0.9))',
+            'radial-gradient(60% 26% at 50% 0%, rgba(26, 26, 26, 0.06), rgba(26, 26, 26, 0) 70%), linear-gradient(to bottom, #fafaf8 0%, #f4f2ec 60%, #edeae2 100%)',
         }}
       />
     </div>

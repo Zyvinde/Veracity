@@ -36,9 +36,9 @@ interface VeracityFlightDeckProps {
 }
 
 const STATUS_META: Record<ClearanceStatus, { label: string; dot: string; pill: string }> = {
-  GREEN_CLEARED: { label: 'Cleared', dot: 'bg-[#34C759]', pill: 'veracity-status-cleared' },
-  AMBER_CONDITIONAL: { label: 'Conditional', dot: 'bg-[#FF9500]', pill: 'veracity-status-conditional' },
-  RED_HARD_STOP: { label: 'Hard stop', dot: 'bg-[#FF3B30]', pill: 'veracity-status-stop' },
+  GREEN_CLEARED: { label: 'Cleared', dot: 'bg-[#1c7a3d]', pill: 'veracity-status-cleared' },
+  AMBER_CONDITIONAL: { label: 'Conditional', dot: 'bg-[#9a6700]', pill: 'veracity-status-conditional' },
+  RED_HARD_STOP: { label: 'Hard stop', dot: 'bg-[#b3261e]', pill: 'veracity-status-stop' },
 };
 
 function getInitials(name: string): string {
@@ -195,8 +195,11 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
-      const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+      const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable);
       if (typing) return;
+      // Don't hijack keyboard when user holds modifiers, uses screen-reader keys, or a modal is open.
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (document.querySelector('[role="dialog"]')) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setCommandOpen((v) => !v);
@@ -306,51 +309,51 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
   };
 
   return (
-    <div className="veracity-canvas flex min-h-screen w-full text-slate-100">
-      <nav aria-label="Console sections" className="hidden w-[68px] shrink-0 flex-col items-center gap-1.5 border-r border-white/[0.07] bg-[#08090c] py-4 md:flex">
-        <div aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 font-serif text-[22px] italic text-slate-950">
+    <div className="harvey-dashboard flex min-h-screen w-full text-[#1a1a1a]">
+      <nav aria-label="Console sections" className="hidden w-[68px] shrink-0 flex-col items-center gap-1.5 border-r border-[#1a1a1a]/[0.08] bg-white/70 py-4 backdrop-blur-xl md:flex">
+        <div aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a1a1a] font-serif text-[22px] italic text-white">
           V
         </div>
         <div className="mt-4 flex flex-col items-center gap-1">
-          <button type="button" onClick={() => scrollTo('veracity-roster')} aria-label="Surgical roster" title="Roster" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 hover:bg-white/[0.06] hover:text-white">
+          <button type="button" onClick={() => scrollTo('veracity-roster')} aria-label="Surgical roster" title="Roster" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <Activity size={17} aria-hidden="true" />
           </button>
-          <button type="button" onClick={() => scrollTo('veracity-vitals')} aria-label="Vitals" title="Vitals" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 hover:bg-white/[0.06] hover:text-white">
+          <button type="button" onClick={() => scrollTo('veracity-vitals')} aria-label="Vitals" title="Vitals" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <Clock3 size={17} aria-hidden="true" />
           </button>
-          <button type="button" onClick={onOpenAuditDrawer} aria-label="Audit trail" title="Audit" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 hover:bg-white/[0.06] hover:text-white">
+          <button type="button" onClick={onOpenAuditDrawer} aria-label="Audit trail" title="Audit" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <History size={17} aria-hidden="true" />
           </button>
-          <button type="button" onClick={onOpenIngestion} aria-label="Ingest document" title="Ingest" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-slate-400 hover:bg-white/[0.06] hover:text-white">
+          <button type="button" onClick={onOpenIngestion} aria-label="Ingest document" title="Ingest" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             <Plus size={17} aria-hidden="true" />
           </button>
         </div>
         <div className="mt-auto flex flex-col items-center gap-2">
-          <button type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} title="Fullscreen" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] border border-white/10 text-slate-400 hover:bg-white/[0.06] hover:text-white">
+          <button type="button" onClick={toggleFullscreen} aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} title="Fullscreen" className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-[10px] border border-black/10 text-[#6b706b] hover:bg-black/[0.04] hover:text-black">
             {isFullscreen ? <Minimize2 size={16} aria-hidden="true" /> : <Maximize2 size={16} aria-hidden="true" />}
           </button>
-          <button type="button" onClick={onOpenAttestation} aria-label={`Attest as ${activeClinician.name}`} title={activeClinician.name} className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-full border border-sky-300/30 bg-sky-400/10 text-[13px] font-semibold text-sky-100">
+          <button type="button" onClick={onOpenAttestation} aria-label={`Attest as ${activeClinician.name}`} title={activeClinician.name} className="veracity-focus veracity-press flex h-10 w-10 items-center justify-center rounded-full border border-[#1a1a1a]/20 bg-[#1a1a1a]/[0.05] text-[13px] font-semibold text-[#1a1a1a]">
             {activeClinician.initials}
           </button>
         </div>
       </nav>
 
       <div className="min-w-0 flex-1 pb-20 md:pb-0">
-        <header className={`sticky top-0 z-30 border-b backdrop-blur-xl transition-[background-color,border-color] duration-200 ${headerScrolled ? 'border-white/[0.12] bg-[#08090c]/90' : 'border-white/[0.07] bg-[#08090c]/75'}`}>
+        <header className={`sticky top-0 z-30 border-b backdrop-blur-xl transition-[background-color,border-color] duration-200 ${headerScrolled ? 'border-[#1a1a1a]/[0.12] bg-[#fafaf8]/90' : 'border-[#1a1a1a]/[0.08] bg-[#fafaf8]/75'}`}>
           <div className="flex flex-wrap items-center gap-2 px-3 py-2.5 sm:px-5">
             <button
               type="button"
               onClick={() => setCommandOpen(true)}
-              className="veracity-focus veracity-press veracity-ui-label flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-left text-[13px] text-slate-400 hover:border-white/20 hover:text-white sm:max-w-md"
+              className="veracity-focus veracity-press veracity-ui-label flex min-w-0 flex-1 items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-left text-[13px] text-[#6b706b] shadow-sm hover:border-black/20 hover:text-black sm:max-w-md"
               aria-label="Open command palette"
             >
-              <Search size={15} aria-hidden="true" className="shrink-0 text-slate-500" />
+              <Search size={15} aria-hidden="true" className="shrink-0 text-[#9a9ea6]" />
               <span className="truncate">Search patients, labs, actions…</span>
-              <kbd className="veracity-num ml-auto hidden rounded-md border border-white/10 bg-black/40 px-1.5 py-0.5 text-[10px] text-slate-500 sm:inline">⌘K</kbd>
+              <kbd className="veracity-num ml-auto hidden rounded-md border border-black/10 bg-black/[0.04] px-1.5 py-0.5 text-[10px] text-[#6b706b] sm:inline">⌘K</kbd>
             </button>
-            <span className="veracity-num inline-flex items-center gap-1.5 rounded-full border border-emerald-300/25 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-semibold tracking-wide text-emerald-200">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-              CDS EVALUATION ONLY
+            <span className="veracity-num inline-flex items-center gap-1.5 rounded-full border border-[#9a6700]/30 bg-[#9a6700]/[0.08] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-[#7a5200]">
+              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#9a6700]" />
+              MVP PROTOTYPE · NOT FOR CLINICAL USE
             </span>
             {hardStopPatients.length > 0 ? (
               <button type="button" onClick={() => hardStopPatients[0] && selectPatient(hardStopPatients[0].id)} className="veracity-focus veracity-press veracity-num inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold veracity-status-stop" aria-label={`${hardStopPatients.length} hard stops, review first`}>
@@ -364,13 +367,13 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
               </span>
             )}
             <div className="ml-auto flex items-center gap-1.5">
-              <button type="button" onClick={onOpenWhatsApp} aria-label="Share PAC update" className="veracity-focus veracity-press rounded-lg border border-white/10 bg-transparent p-2 text-slate-400 hover:bg-white/[0.06] hover:text-white">
+              <button type="button" onClick={onOpenWhatsApp} aria-label="Share PAC update" className="veracity-focus veracity-press rounded-full border border-black/10 bg-white p-2 text-[#6b706b] shadow-sm hover:bg-black/[0.04] hover:text-black">
                 <Share2 size={15} aria-hidden="true" />
               </button>
-              <button type="button" onClick={onOpenPrintSlip} aria-label="Print PAC slip" className="veracity-focus veracity-press rounded-lg border border-white/10 bg-transparent p-2 text-slate-400 hover:bg-white/[0.06] hover:text-white">
+              <button type="button" onClick={onOpenPrintSlip} aria-label="Print PAC slip" className="veracity-focus veracity-press rounded-full border border-black/10 bg-white p-2 text-[#6b706b] shadow-sm hover:bg-black/[0.04] hover:text-black">
                 <Printer size={15} aria-hidden="true" />
               </button>
-              <button type="button" onClick={onOpenAttestation} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-2 text-[13px] font-semibold text-slate-950 hover:bg-white">
+              <button type="button" onClick={onOpenAttestation} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-4 py-2 text-[13px] font-semibold text-white hover:bg-black">
                 <FileCheck2 size={15} aria-hidden="true" />
                 Attest
               </button>
@@ -383,10 +386,10 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             <p className="veracity-eyebrow">
               Veracity OT Console · {new Date(nowMs).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })} · {activeClinician.name}
             </p>
-            <h1 className="veracity-serif-accent mt-2 text-[32px] leading-[1.1] text-white sm:text-[38px]">
-              {dayGreeting(nowMs)}, <span className="text-sky-300">in focus.</span>
+            <h1 className="veracity-serif-accent mt-2 text-[32px] leading-[1.1] text-[#1a1a1a] sm:text-[38px]" style={{ letterSpacing: '-0.035em' }}>
+              {dayGreeting(nowMs)}, <span className="italic">in focus.</span>
             </h1>
-            <p className="veracity-ui-label mt-2 text-[13px] text-slate-400">
+            <p className="veracity-ui-label mt-2 text-[13px] text-[#6b706b]">
               {counts.total} cases on the board · {counts.stop > 0 ? `${counts.stop} hard stop${counts.stop === 1 ? '' : 's'} need${counts.stop === 1 ? 's' : ''} you first` : 'no hard stops'} · {counts.holds} active medication holds
             </p>
           </section>
@@ -394,10 +397,10 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
           <section aria-label="Executive metrics" className="grid grid-cols-2 gap-3 xl:grid-cols-4">
             <div className="veracity-card veracity-fade-up veracity-stagger-1 p-4">
               <div className="flex items-center justify-between">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Cases today</p>
-                <span className="veracity-chip veracity-chip-tint-sky h-7 w-7" aria-hidden="true"><Users size={14} className="text-sky-300" /></span>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Cases today</p>
+                <span className="veracity-chip veracity-chip-tint-sky h-7 w-7" aria-hidden="true"><Users size={14} className="text-[#1a1a1a]" /></span>
               </div>
-              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-white">{counts.total}</p>
+              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{counts.total}</p>
               <p className="veracity-num mt-2.5 flex flex-wrap gap-1.5 text-[10.5px]">
                 <span className="rounded-full px-2 py-0.5 veracity-status-cleared">{counts.cleared} cleared</span>
                 <span className="rounded-full px-2 py-0.5 veracity-status-conditional">{counts.conditional} cond</span>
@@ -406,27 +409,27 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             </div>
             <div className="veracity-card veracity-fade-up veracity-stagger-2 p-4">
               <div className="flex items-center justify-between">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Active med holds</p>
-                <span className="veracity-chip veracity-chip-tint-amber h-7 w-7" aria-hidden="true"><Pill size={14} className="text-amber-300" /></span>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Active med holds</p>
+                <span className="veracity-chip veracity-chip-tint-amber h-7 w-7" aria-hidden="true"><Pill size={14} className="text-[#7a5200]" /></span>
               </div>
-              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-white">{counts.holds}</p>
-              <p className="veracity-ui-label mt-2.5 text-[12px] leading-snug text-slate-500">Hold-required plus hard-stop clocks across roster.</p>
+              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{counts.holds}</p>
+              <p className="veracity-ui-label mt-2.5 text-[12px] leading-snug text-[#6b706b]">Hold-required plus hard-stop clocks across roster.</p>
             </div>
             <div className="veracity-card veracity-fade-up veracity-stagger-3 p-4">
               <div className="flex items-center justify-between">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">NPO chronometer</p>
-                <span className="veracity-chip h-7 w-7" aria-hidden="true"><Clock3 size={14} className="text-slate-300" /></span>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">NPO chronometer</p>
+                <span className="veracity-chip h-7 w-7" aria-hidden="true"><Clock3 size={14} className="text-[#6b706b]" /></span>
               </div>
-              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-white">{fasting ? formatCountdown(fasting.hoursUntilSurgery) : '--:--'}</p>
-              <p className="veracity-ui-label mt-2.5 line-clamp-2 text-[12px] leading-snug text-slate-500">{fasting ? fasting.recommendation : 'Select a case to compute fasting status.'}</p>
+              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{fasting ? formatCountdown(fasting.hoursUntilSurgery) : '--:--'}</p>
+              <p className="veracity-ui-label mt-2.5 line-clamp-2 text-[12px] leading-snug text-[#6b706b]">{fasting ? fasting.recommendation : 'Select a case to compute fasting status.'}</p>
             </div>
             <div className="veracity-card veracity-fade-up veracity-stagger-4 p-4">
               <div className="flex items-center justify-between">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Attestation</p>
-                <span className="veracity-chip veracity-chip-tint-green h-7 w-7" aria-hidden="true"><FileCheck2 size={14} className="text-emerald-300" /></span>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Attestation</p>
+                <span className="veracity-chip veracity-chip-tint-green h-7 w-7" aria-hidden="true"><FileCheck2 size={14} className="text-[#1c7a3d]" /></span>
               </div>
-              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-white">{counts.total === 0 ? '—' : `${Math.round((attestedCount / counts.total) * 100)}%`}</p>
-              <p className="veracity-num mt-2.5 text-[12px] text-slate-500">{attestedCount}/{counts.total} cases attested</p>
+              <p className="veracity-num mt-2 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{counts.total === 0 ? '—' : `${Math.round((attestedCount / counts.total) * 100)}%`}</p>
+              <p className="veracity-num mt-2.5 text-[12px] text-[#6b706b]">{attestedCount}/{counts.total} cases attested</p>
             </div>
           </section>
 
@@ -434,9 +437,9 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <div>
                 <p className="veracity-eyebrow">01 — Board</p>
-                <h2 className="veracity-serif-accent mt-1 text-[24px] text-white">Surgical day <span className="text-sky-300">roster</span></h2>
+                <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Surgical day <span className="italic">roster</span></h2>
               </div>
-              <p className="veracity-num text-[11px] text-slate-600">← → or 1–9 to move</p>
+              <p className="veracity-num text-[11px] text-[#9a9ea6]">← → or 1–9 to move</p>
             </div>
             <div role="listbox" aria-label="Patients" aria-orientation="horizontal" className="mt-3 flex gap-2.5 overflow-x-auto pb-1">
               {patients.map((p, idx) => {
@@ -450,19 +453,19 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
                     aria-selected={active}
                     onClick={() => selectPatient(p.id)}
                     style={{ transition: 'background-color 150ms ease-out, border-color 150ms ease-out, color 150ms ease-out' }}
-                    className={`veracity-focus flex w-[216px] shrink-0 flex-col gap-2 rounded-xl border p-3 text-left ${active ? 'border-sky-300/50 bg-sky-400/[0.07]' : 'veracity-tile hover:border-white/[0.16]'}`}
+                    className={`veracity-focus flex w-[216px] shrink-0 flex-col gap-2 rounded-2xl border p-3 text-left ${active ? 'border-[#1a1a1a] bg-[#1a1a1a]/[0.04] shadow-sm' : 'veracity-tile hover:border-black/[0.16]'}`}
                   >
                     <span className="flex items-center gap-2.5">
-                      <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.05] text-[11px] font-semibold text-slate-200">
+                      <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/10 bg-black/[0.04] text-[11px] font-semibold text-[#1a1a1a]">
                         {getInitials(p.name)}
                       </span>
                       <span className="min-w-0">
-                        <span className="veracity-ui-label block truncate text-[13.5px] font-medium text-white">{p.name}</span>
-                        <span className="veracity-num block truncate text-[10.5px] text-slate-500">{String(idx + 1).padStart(2, '0')} · {p.mrn}</span>
+                        <span className="veracity-ui-label block truncate text-[13.5px] font-medium text-[#1a1a1a]">{p.name}</span>
+                        <span className="veracity-num block truncate text-[10.5px] text-[#6b706b]">{String(idx + 1).padStart(2, '0')} · {p.mrn}</span>
                       </span>
                       <span aria-hidden="true" className={`ml-auto h-2 w-2 shrink-0 rounded-full ${meta.dot}`} />
                     </span>
-                    <span className="veracity-num truncate text-[11px] text-slate-500">{p.procedureName}</span>
+                    <span className="veracity-num truncate text-[11px] text-[#6b706b]">{p.procedureName}</span>
                     <span className={`veracity-num w-fit rounded-full px-2 py-0.5 text-[10px] font-semibold ${meta.pill}`}>{meta.label}</span>
                   </button>
                 );
@@ -471,8 +474,8 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             {currentPatient && currentMeta && (
               <div className="veracity-tile mt-3 flex flex-wrap items-center gap-2.5 p-3.5">
                 <span aria-hidden="true" className={`h-2 w-2 rounded-full ${currentMeta.dot}`} />
-                <p className="veracity-ui-label min-w-0 flex-1 text-[13px] leading-snug text-slate-200">{currentPatient.primaryActionDirective}</p>
-                <span className="veracity-num hidden text-[11px] text-slate-600 sm:inline">{currentPatient.id} · ASA {currentPatient.asaStatus.replace('ASA ', '')} · Tier {currentPatient.invasivenessTier}</span>
+                <p className="veracity-ui-label min-w-0 flex-1 text-[13px] leading-snug text-[#1a1a1a]">{currentPatient.primaryActionDirective}</p>
+                <span className="veracity-num hidden text-[11px] text-[#9a9ea6] sm:inline">{currentPatient.id} · ASA {currentPatient.asaStatus.replace('ASA ', '')} · Tier {currentPatient.invasivenessTier}</span>
               </div>
             )}
           </section>
@@ -482,35 +485,35 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <div>
                   <p className="veracity-eyebrow">02 — Vitals</p>
-                  <h2 className="veracity-serif-accent mt-1 text-[24px] text-white">Last recorded <span className="text-sky-300">vitals</span></h2>
+                  <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Last recorded <span className="italic">vitals</span></h2>
                 </div>
-                <p className="veracity-num text-[11px] text-slate-600">
+                <p className="veracity-num text-[11px] text-[#9a9ea6]">
                   {new Date(latestVitals.timestamp).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · {currentPatient?.name}
                 </p>
               </div>
               <div className="veracity-card mt-3 flex flex-wrap items-center gap-x-8 gap-y-4 p-4">
                 <div>
-                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Heart rate</p>
-                  <p className="veracity-num mt-1 text-[34px] font-semibold leading-none tracking-tight text-white">
-                    {latestVitals.heartRate} <span className="text-[13px] font-medium text-slate-500">bpm</span>
+                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Heart rate</p>
+                  <p className="veracity-num mt-1 text-[34px] font-semibold leading-none tracking-tight text-[#1a1a1a]">
+                    {latestVitals.heartRate} <span className="text-[13px] font-medium text-[#6b706b]">bpm</span>
                   </p>
                 </div>
                 {hrSparkline && (
                   <svg viewBox="0 0 120 36" className="h-9 w-[120px] shrink-0" role="img" aria-label={`Heart rate trend, latest ${latestVitals.heartRate} bpm`}>
-                    <polyline points={hrSparkline} fill="none" stroke="#34C759" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
+                    <polyline points={hrSparkline} fill="none" stroke="#1c7a3d" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" />
                   </svg>
                 )}
                 <div>
-                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">NIBP</p>
-                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-white">{latestVitals.systolicBp}/{latestVitals.diastolicBp}</p>
+                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">NIBP</p>
+                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{latestVitals.systolicBp}/{latestVitals.diastolicBp}</p>
                 </div>
                 <div>
-                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">SpO2</p>
-                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-white">{latestVitals.spo2}<span className="text-[13px] font-medium text-slate-500">%</span></p>
+                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">SpO2</p>
+                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{latestVitals.spo2}<span className="text-[13px] font-medium text-[#6b706b]">%</span></p>
                 </div>
                 <div>
-                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Temp</p>
-                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-white">{latestVitals.temperatureC}<span className="text-[13px] font-medium text-slate-500">°C</span></p>
+                  <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Temp</p>
+                  <p className="veracity-num mt-1 text-[22px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{latestVitals.temperatureC}<span className="text-[13px] font-medium text-[#6b706b]">°C</span></p>
                 </div>
               </div>
             </section>
@@ -520,12 +523,12 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <div>
                 <p className="veracity-eyebrow">03 — Labs</p>
-                <h2 className="veracity-serif-accent mt-1 text-[24px] text-white">Blood <span className="text-sky-300">telemetry</span></h2>
+                <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Blood <span className="italic">telemetry</span></h2>
               </div>
-              <p className="veracity-ui-label text-[12px] text-slate-500">{currentPatient ? `${currentPatient.name} · ${telemetryLabs.length} markers` : 'No case selected'}</p>
+              <p className="veracity-ui-label text-[12px] text-[#6b706b]">{currentPatient ? `${currentPatient.name} · ${telemetryLabs.length} markers` : 'No case selected'}</p>
             </div>
             {telemetryLabs.length === 0 ? (
-              <p className="veracity-ui-label veracity-tile mt-3 p-4 text-[13px] text-slate-400">No biomarkers in this record yet. Ingest a lab report to populate telemetry.</p>
+              <p className="veracity-ui-label veracity-tile mt-3 p-4 text-[13px] text-[#6b706b]">No biomarkers in this record yet. Ingest a lab report to populate telemetry.</p>
             ) : (
               <div className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
                 {telemetryLabs.map((lab) => {
@@ -535,30 +538,30 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
                   return (
                     <article key={lab.id} className={critical ? 'veracity-tile-critical p-3.5' : 'veracity-tile p-3.5'}>
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="veracity-ui-label text-[12.5px] font-medium leading-snug text-slate-200">{lab.name}</h3>
+                        <h3 className="veracity-ui-label text-[12.5px] font-medium leading-snug text-[#1a1a1a]">{lab.name}</h3>
                         <span className={`veracity-num shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${critical ? 'veracity-status-stop' : lab.status.startsWith('BORDERLINE') ? 'veracity-status-conditional' : 'veracity-status-cleared'}`}>
                           {lab.status.replace('_', ' ')}
                         </span>
                       </div>
-                      <p className="veracity-num mt-2 text-[26px] font-semibold leading-none tracking-tight text-white">
-                        {lab.value.toLocaleString()} <span className="text-[12px] font-medium text-slate-500">{lab.unit}</span>
+                      <p className="veracity-num mt-2 text-[26px] font-semibold leading-none tracking-tight text-[#1a1a1a]">
+                        {lab.value.toLocaleString()} <span className="text-[12px] font-medium text-[#6b706b]">{lab.unit}</span>
                       </p>
                       <div className="mt-3" aria-hidden="true">
-                        <div className="relative h-1 overflow-hidden rounded-full bg-white/10">
-                          <div className="absolute inset-y-0 rounded-full bg-white/25" style={{ left: `${window.left}%`, width: `${window.width}%` }} />
-                          <div className="absolute inset-y-[-2px] w-[2px] rounded bg-sky-300" style={{ left: `calc(${pos}% - 1px)` }} />
+                        <div className="relative h-1 overflow-hidden rounded-full bg-black/[0.08]">
+                          <div className="absolute inset-y-0 rounded-full bg-black/20" style={{ left: `${window.left}%`, width: `${window.width}%` }} />
+                          <div className="absolute inset-y-[-2px] w-[2px] rounded bg-[#1a1a1a]" style={{ left: `calc(${pos}% - 1px)` }} />
                         </div>
-                        <div className="veracity-num mt-1.5 flex justify-between text-[10px] text-slate-600">
+                        <div className="veracity-num mt-1.5 flex justify-between text-[10px] text-[#9a9ea6]">
                           <span>{lab.refLow}</span>
                           <span>ref {lab.refLow}–{lab.refHigh}</span>
                           <span>{lab.refHigh}</span>
                         </div>
                       </div>
-                      <p className="veracity-ui-label mt-2 line-clamp-2 min-h-[32px] text-[12px] leading-snug text-slate-400">{lab.directive}</p>
+                      <p className="veracity-ui-label mt-2 line-clamp-2 min-h-[32px] text-[12px] leading-snug text-[#6b706b]">{lab.directive}</p>
                       <button
                         type="button"
                         onClick={() => openProvenanceForLab(lab)}
-                        className="veracity-focus veracity-press veracity-num mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-transparent px-2 py-1 text-[11px] font-medium text-slate-400 hover:border-sky-300/40 hover:text-sky-200"
+                        className="veracity-focus veracity-press veracity-num mt-2.5 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-2.5 py-1 text-[11px] font-medium text-[#6b706b] hover:border-black/30 hover:text-black"
                         aria-label={`Inspect provenance for ${lab.name}`}
                       >
                         <ShieldCheck size={12} aria-hidden="true" />
@@ -575,56 +578,56 @@ export const VeracityFlightDeck: React.FC<VeracityFlightDeckProps> = ({
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <div>
                 <p className="veracity-eyebrow">04 — Yield</p>
-                <h2 className="veracity-serif-accent mt-1 text-[24px] text-white">Waste <span className="text-sky-300">avoided</span></h2>
+                <h2 className="veracity-serif-accent mt-1 text-[24px] text-[#1a1a1a]">Waste <span className="italic">avoided</span></h2>
               </div>
-              <span className="veracity-num rounded-full border border-amber-300/25 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold text-amber-200">ESTIMATED · MODEL-BASED</span>
+              <span className="veracity-num rounded-full border border-[#9a6700]/25 bg-[#9a6700]/[0.08] px-2 py-0.5 text-[10px] font-semibold text-[#7a5200]">ESTIMATED · MODEL-BASED</span>
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2.5">
               <div className="veracity-tile p-4">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Theater minutes preserved</p>
-                <p className="veracity-num mt-2 text-[28px] font-semibold leading-none tracking-tight text-white">{wasteEstimate.avoidedMinutes.toLocaleString()} <span className="text-[13px] font-medium text-slate-500">min</span></p>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Theater minutes preserved</p>
+                <p className="veracity-num mt-2 text-[28px] font-semibold leading-none tracking-tight text-[#1a1a1a]">{wasteEstimate.avoidedMinutes.toLocaleString()} <span className="text-[13px] font-medium text-[#6b706b]">min</span></p>
               </div>
               <div className="veracity-tile p-4">
-                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-slate-500">Fixed overhead recovered</p>
-                <p className="veracity-num mt-2 text-[28px] font-semibold leading-none tracking-tight text-white">${wasteEstimate.recoveredUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                <p className="veracity-ui-label text-[11px] font-medium uppercase tracking-[0.1em] text-[#6b706b]">Fixed overhead recovered</p>
+                <p className="veracity-num mt-2 text-[28px] font-semibold leading-none tracking-tight text-[#1a1a1a]">${wasteEstimate.recoveredUsd.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
               </div>
             </div>
-            <p className="veracity-ui-label mt-2.5 text-[12px] leading-snug text-slate-600">
+            <p className="veracity-ui-label mt-2.5 text-[12px] leading-snug text-[#9a9ea6]">
               Estimated only: 45 min per hard stop plus 15 min per conditional at $1,200/hr. No measured theater time exists in this record; do not report as realized savings.
             </p>
           </section>
 
           <section aria-label="Case actions" className="flex flex-wrap gap-2 pb-2">
-            <button type="button" onClick={onOpenIngestion} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-[10px] border border-white/10 bg-transparent px-3.5 py-2.5 text-[13px] font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white">
+            <button type="button" onClick={onOpenIngestion} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2.5 text-[13px] font-medium text-[#1a1a1a] shadow-sm hover:bg-black/[0.04]">
               <Plus size={15} aria-hidden="true" /> Ingest report
             </button>
-            <button type="button" onClick={onOpenAttestation} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-[10px] bg-slate-100 px-3.5 py-2.5 text-[13px] font-semibold text-slate-950 hover:bg-white">
+            <button type="button" onClick={onOpenAttestation} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-full bg-[#1a1a1a] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-black">
               <ShieldCheck size={15} aria-hidden="true" /> Verify &amp; attest
             </button>
-            <button type="button" onClick={onOpenAuditDrawer} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-[10px] border border-white/10 bg-transparent px-3.5 py-2.5 text-[13px] font-medium text-slate-200 hover:bg-white/[0.06] hover:text-white">
+            <button type="button" onClick={onOpenAuditDrawer} className="veracity-focus veracity-press veracity-ui-label inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-4 py-2.5 text-[13px] font-medium text-[#1a1a1a] shadow-sm hover:bg-black/[0.04]">
               <History size={15} aria-hidden="true" /> Audit trail
             </button>
           </section>
         </main>
       </div>
 
-      <nav aria-label="Console quick actions" className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around gap-1 rounded-2xl border border-white/10 bg-[#08090c]/90 px-2 py-2 backdrop-blur-xl md:hidden">
-        <button type="button" onClick={() => scrollTo('veracity-roster')} aria-label="Roster" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-slate-400">
+      <nav aria-label="Console quick actions" className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around gap-1 rounded-2xl border border-black/10 bg-white/85 px-2 py-2 shadow-lg backdrop-blur-xl md:hidden">
+        <button type="button" onClick={() => scrollTo('veracity-roster')} aria-label="Roster" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[#6b706b]">
           <Activity size={18} aria-hidden="true" />
           <span className="veracity-ui-label text-[9.5px] font-semibold">Roster</span>
         </button>
-        <button type="button" onClick={() => scrollTo('veracity-telemetry')} aria-label="Telemetry" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-slate-400">
+        <button type="button" onClick={() => scrollTo('veracity-telemetry')} aria-label="Telemetry" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[#6b706b]">
           <Clock3 size={18} aria-hidden="true" />
           <span className="veracity-ui-label text-[9.5px] font-semibold">Labs</span>
         </button>
-        <button type="button" onClick={onOpenIngestion} aria-label="Ingest report" className="veracity-focus flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-950">
+        <button type="button" onClick={onOpenIngestion} aria-label="Ingest report" className="veracity-focus flex h-12 w-12 items-center justify-center rounded-full bg-[#1a1a1a] text-white">
           <Plus size={20} aria-hidden="true" />
         </button>
-        <button type="button" onClick={onOpenAttestation} aria-label="Attest" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-slate-400">
+        <button type="button" onClick={onOpenAttestation} aria-label="Attest" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[#6b706b]">
           <ShieldCheck size={18} aria-hidden="true" />
           <span className="veracity-ui-label text-[9.5px] font-semibold">Attest</span>
         </button>
-        <button type="button" onClick={onOpenAuditDrawer} aria-label="Audit trail" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-slate-400">
+        <button type="button" onClick={onOpenAuditDrawer} aria-label="Audit trail" className="veracity-focus flex flex-1 flex-col items-center gap-0.5 rounded-xl py-1.5 text-[#6b706b]">
           <History size={18} aria-hidden="true" />
           <span className="veracity-ui-label text-[9.5px] font-semibold">Audit</span>
         </button>

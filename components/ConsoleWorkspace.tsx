@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { usePatientStore } from '@/lib/store';
 import VeracityFlightDeck from '@/components/VeracityFlightDeck';
 import AttestationModal from '@/components/AttestationModal';
 import PrintablePACSlip from '@/components/PrintablePACSlip';
-import IngestionModal from '@/components/IngestionModal';
+const IngestionModal = dynamic(() => import('@/components/IngestionModal'), { ssr: false });
 import { WhatsAppPACModal } from '@/components/WhatsAppPACModal';
 import { AuditTrailDrawer } from '@/components/AuditTrailDrawer';
 import { logAuditEvent } from '@/lib/audit-logger';
@@ -99,18 +100,23 @@ function ConsoleWorkspaceContent() {
   // Guard: store hydrates async — show branded loader instead of crashing on undefined patient
   if (!currentPatient || patients.length === 0) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-white">
-        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-8 text-center text-[#1a1a1a]">
+        <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1a1a1a] text-white font-serif italic text-2xl shadow-sm">
           V
         </div>
-        <p className="text-sm font-semibold text-white">Loading House Health surgical roster…</p>
-        <p className="text-xs text-white/50 font-mono">Fetching sovereign clinical cases</p>
+        <p className="text-sm font-semibold text-[#1a1a1a]">Loading House Health surgical roster…</p>
+        <p className="text-xs text-[#6b706b] font-mono">Loading MVP demo with mock cases</p>
       </div>
     );
   }
 
   return (
     <div className="relative z-10 w-full max-w-full min-w-0 overflow-x-clip min-h-screen">
+      <div role="note" aria-label="MVP prototype notice" className="mx-auto w-full max-w-[1200px] px-4 pt-4 sm:px-6">
+        <div className="rounded-full border border-[#9a6700]/30 bg-[#9a6700]/[0.08] px-3 py-2 text-center font-mono text-[11px] font-bold uppercase tracking-wider text-[#7a5200]">
+          MVP Prototype — mock cases, demo auth, local storage · Not for clinical use
+        </div>
+      </div>
       <VeracityFlightDeck
         onOpenIngestion={() => setIsIngestionOpen(true)}
         onOpenAttestation={() => setIsAttestationOpen(true)}
@@ -169,13 +175,13 @@ function ConsoleWorkspaceContent() {
 
 export default function ConsoleWorkspace() {
   return (
-    <Suspense
+      <Suspense
       fallback={
-      <div className="min-h-screen w-full max-w-full min-w-0 overflow-x-clip flex flex-col items-center justify-center gap-4 px-4 py-8 sm:p-8 text-center text-white">
-          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl text-white font-serif italic text-2xl shadow-xl">
+      <div className="min-h-screen w-full max-w-full min-w-0 overflow-x-clip flex flex-col items-center justify-center gap-4 px-4 py-8 sm:p-8 text-center text-[#1a1a1a]">
+          <div className="glass-card-subtle flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1a1a1a] text-white font-serif italic text-2xl shadow-sm">
             V
           </div>
-          <p className="text-sm font-semibold text-white">Loading House Health console…</p>
+          <p className="text-sm font-semibold text-[#1a1a1a]">Loading House Health console…</p>
         </div>
       }
     >

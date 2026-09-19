@@ -4,11 +4,13 @@ import { getDb, seedDatabase, getAllPatientsDb } from '@/lib/db';
 const ADMIN_TOKEN = process.env.ADMIN_API_KEY;
 
 export async function POST(req: NextRequest) {
-  if (ADMIN_TOKEN) {
-    const authHeader = req.headers.get('authorization');
-    if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
-      return NextResponse.json({ success: false, error: 'Unauthorized: provide Authorization: Bearer <ADMIN_API_KEY>' }, { status: 401 });
-    }
+  // MVP hardening: never allow open re-seed. Require ADMIN_API_KEY to be set and matched.
+  if (!ADMIN_TOKEN) {
+    return NextResponse.json({ success: false, error: 'Seed disabled: ADMIN_API_KEY not configured' }, { status: 403 });
+  }
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${ADMIN_TOKEN}`) {
+    return NextResponse.json({ success: false, error: 'Unauthorized: provide Authorization: Bearer <ADMIN_API_KEY>' }, { status: 401 });
   }
   try {
     const db = getDb();

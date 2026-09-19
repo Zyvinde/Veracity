@@ -49,11 +49,11 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
   const getStatusDisplay = (status: PatientCase['overallStatus']) => {
     switch (status) {
       case 'GREEN_CLEARED':
-        return { title: 'CLEARED FOR SURGERY', color: 'text-black border-black bg-zinc-100 font-bold', badge: 'CLEARED' };
+        return { title: 'DEMO: NO FLAGS IN MOCK CHECK', color: 'text-black border-black bg-zinc-100 font-bold', badge: 'DEMO' };
       case 'AMBER_CONDITIONAL':
-        return { title: 'CONDITIONAL SURGICAL CLEARANCE', color: 'text-amber-800 border-amber-800 bg-amber-50 font-bold', badge: 'CONDITIONAL' };
+        return { title: 'DEMO: CONDITIONAL ITEMS TO REVIEW', color: 'text-amber-800 border-amber-800 bg-amber-50 font-bold', badge: 'DEMO' };
       case 'RED_HARD_STOP':
-        return { title: 'HARD STOP • CASE POSTPONEMENT RECOMMENDED', color: 'text-red-700 border-red-700 bg-red-50 font-bold', badge: 'HARD STOP' };
+        return { title: 'DEMO: HARD-STOP ITEMS TO REVIEW', color: 'text-red-700 border-red-700 bg-red-50 font-bold', badge: 'DEMO' };
     }
   };
 
@@ -100,6 +100,9 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
           id="printable-pac-slip"
           className="p-4 sm:p-8 bg-white text-slate-900 font-sans text-xs leading-relaxed max-h-[85vh] overflow-y-auto overflow-x-clip min-w-0 break-words"
         >
+          <div role="note" className="mb-3 rounded-lg border-2 border-amber-600 bg-amber-50 p-2 text-center font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800">
+            MVP Prototype — Mock data · Demo output only · Not for clinical use · Not a medical device
+          </div>
           <div className="border-b-2 border-slate-900 pb-4 flex justify-between items-start">
             <div>
               <div className="flex items-center gap-2">
@@ -237,9 +240,12 @@ export const PrintablePACSlip: React.FC<PrintablePACSlipProps> = ({
               <div className="w-16 h-16 border border-slate-300 bg-slate-100 flex items-center justify-center font-mono text-[8px] text-center p-1">
                 {t('printSlip.digitalSignature')}
               </div>
-              <span className="font-mono text-[8px] text-emerald-700 font-bold mt-1">✓ {t('printSlip.validatedCds')}</span>
+              <span className="font-mono text-[8px] text-slate-500 font-bold mt-1">DEMO ONLY — NOT VALIDATED</span>
             </div>
           </div>
+          <p className="mt-4 rounded-lg border border-amber-600 bg-amber-50 p-2 text-center font-mono text-[9px] font-semibold uppercase tracking-wide text-amber-800">
+            MVP prototype demo slip — mock data, no clinical or legal effect. Requires independent physician verification.
+          </p>
         </div>
       </div>
     </div>

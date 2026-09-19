@@ -142,6 +142,8 @@ export interface AttestationRecord {
   jurisdiction: Jurisdiction;
   acceptedClauses: string[];
   rulesEngineVersion: string;
+  /** Required when signing a demo AMBER/RED case: why the physician overrode or concurred. */
+  overrideRationale?: string;
 }
 
 export interface AuditLogEntry {

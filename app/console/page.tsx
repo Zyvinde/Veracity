@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import ConsoleWorkspace, { ConsoleBackdrop } from '@/components/ConsoleWorkspace';
 
 export const metadata: Metadata = {
-  title: 'OT Console (Private Beta) — House Health Clinical Decision Support',
+  title: 'OT Console (MVP Prototype) — House Health Demo',
   description:
-    'House Health OT Console (Private Beta): Pre-operative assessment, anesthesia decision support, and surgical delay prevention under DHA § 3060(a) CDS guidelines.',
+    'House Health OT Console MVP prototype: mock pre-op cases for pilot evaluation discussions only. Not a medical device, not for clinical use.',
 };
 
 export default function ConsolePage() {
   return (
-    <div className="veracity-canvas relative w-full min-h-screen overflow-x-hidden text-white selection:bg-sky-500 selection:text-white" dir="ltr">
+    <div className="harvey-dashboard relative w-full min-h-screen overflow-x-hidden text-[#1a1a1a] selection:bg-[#1a1a1a] selection:text-white" dir="ltr">
       <ConsoleBackdrop />
       <ConsoleWorkspace />
     </div>

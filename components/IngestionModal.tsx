@@ -5,7 +5,7 @@ import { PatientCase, ExtractedLabItem } from '@/lib/types';
 import { PATIENT_FATIMA, PATIENT_RAJESH, PATIENT_AISHA } from '@/lib/mock-data';
 import { buildPatientFromLabs, CoordinatorPatientMetadata } from '@/lib/patient-builder';
 import { extractTextFromPdfFileClient } from '@/lib/pdf-parser';
-import { parseLabReport } from '@/lib/lab-parser';
+import { detectLabSource, parseLabReport } from '@/lib/lab-parser';
 import { extractVisionDocument } from '@/lib/vision-parser';
 import { usePatientStore } from '@/lib/store';
 import {
@@ -158,6 +158,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         formData.append('age', String(patientForm.age));
         formData.append('gender', patientForm.gender);
         formData.append('category', docCategory);
+        formData.append('source', detectLabSource('', selectedFile.name));
 
         try {
           const res = await fetch('/api/extract', {
@@ -208,8 +209,9 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
         `[01.40s] Optical Character Recognition complete. Parsing tabular clinical biomarkers...`,
       ]);
 
-      // 2. Parse structured lab items
-      let labs = parseLabReport(fullText, 'GENERIC', extractedLines, filename, {
+      // 2. Parse structured lab items (source auto-detected: PureLab/Al Borg/Medsol/Generic)
+      const detectedSource = detectLabSource(fullText, filename);
+      let labs = parseLabReport(fullText, detectedSource, extractedLines, filename, {
         age: patientForm.age,
         gender: patientForm.gender,
       });
@@ -247,6 +249,7 @@ export const IngestionModal: React.FC<IngestionModalProps> = ({
           ? vision.quarantineFlags.map((f) => `[01.90s] QUARANTINE: ${f}`)
           : [`[01.90s] Vision quality gates passed (local-only, confidence floor 0.88).`]),
         `[02.10s] Evaluating deterministic local rules engine (legacy ASA 2023-inspired GLP-1 policy; historical, not current guidance)...`,
+        `[02.12s] Report source detected: ${detectedSource}.`,
       ]);
 
       // 3. Build full dynamic PatientCase

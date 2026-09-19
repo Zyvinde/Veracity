@@ -7,16 +7,12 @@ import { usePatientStore, CLINICIANS } from '@/lib/store';
 import {
   ShieldCheck,
   X,
-  FileCheck2,
   Lock,
   Stamp,
   Fingerprint,
   AlertTriangle,
-  Sparkles,
-  Check,
   Globe2,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface AttestationModalProps {
   isOpen: boolean;
@@ -37,13 +33,16 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
   const [clause1, setClause1] = useState(true);
   const [clause2, setClause2] = useState(true);
   const [clause3, setClause3] = useState(true);
+  const [clauseMvp, setClauseMvp] = useState(false);
   const [physicianName, setPhysicianName] = useState(activeClinician?.name || patient.anesthesiologist || 'Dr. Consultant Anesthesiologist');
   const [licenseNumber, setLicenseNumber] = useState(activeClinician?.license.split(' ')[0] || (patient.mrn.includes('DHA') ? 'DHA-MED-2026-99014' : 'NMC-IN-2026-44019'));
+  const [overrideRationale, setOverrideRationale] = useState('');
   const [isSigning, setIsSigning] = useState(false);
 
   if (!isOpen) return null;
 
-  const allAgreed = clause1 && clause2 && clause3;
+  const needsRationale = patient.overallStatus !== 'GREEN_CLEARED';
+  const allAgreed = clause1 && clause2 && clause3 && clauseMvp && (!needsRationale || overrideRationale.trim().length >= 10);
 
   const handleSignAndAuthorize = async () => {
     if (!allAgreed) return;
@@ -73,23 +72,13 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
         'Reviewed all algorithmic CDS biomarker range variances and verified clinical accuracy.',
         'Acknowledged medication hold times per ASA 2023 & ASRA 2025 guidelines.',
         'Certified statutory responsibility under UAE Decree-Law No. 4 / Indian Medical Council Act.',
+        'Acknowledged MVP prototype with mock data: demo signature only, no clinical or legal effect.',
       ],
       rulesEngineVersion: 'v2.5.0-Sovereign-CDS',
+      ...(needsRationale ? { overrideRationale: overrideRationale.trim().slice(0, 500) } : {}),
     };
 
-    // Celebration confetti — skipped when the user prefers reduced motion
-    try {
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        confetti({
-          particleCount: 75,
-          spread: 80,
-          origin: { y: 0.6 },
-        });
-      }
-    } catch {
-      // Confetti fallback
-    }
-
+    // No celebratory effects in a clinical-adjacent flow — keep the MVP demo sober.
     setTimeout(() => {
       setIsSigning(false);
       onAuthorize(record);
@@ -127,6 +116,15 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
 
         {/* Modal Body */}
         <div className="max-h-[75vh] overflow-y-auto overflow-x-clip p-4 sm:p-6 space-y-4 text-xs font-sans min-w-0 break-words">
+          <div role="note" className="rounded-xl border border-amber-400/50 bg-amber-400/10 p-3.5 flex items-start gap-2.5">
+            <AlertTriangle className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
+            <div className="text-xs">
+              <div className="font-bold text-amber-200 font-mono uppercase tracking-wider text-[11px]">MVP Prototype — demo signature only</div>
+              <p className="text-white/75 mt-0.5">
+                Mock patient, demo login, local storage. This button does not create a clinical, legal, or regulatory attestation. Do not use for real patients.
+              </p>
+            </div>
+          </div>
           {/* Case Summary Callout */}
           <div className="rounded-xl border border-white/25 bg-white/10 p-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-white/85 font-mono text-[11px] min-w-0">
@@ -215,7 +213,35 @@ export const AttestationModal: React.FC<AttestationModalProps> = ({
                 <strong className="text-white">{t('attestation.clause3')}</strong> {t('attestation.clause3Text')}
               </span>
             </label>
+
+            <label className="flex items-start gap-3 rounded-xl border border-amber-400/50 bg-amber-400/10 p-3.5 cursor-pointer hover:border-amber-300/70 transition">
+              <input
+                type="checkbox"
+                checked={clauseMvp}
+                onChange={(e) => setClauseMvp(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-white/30 bg-white/15 text-sky-200 focus:ring-white/60 cursor-pointer"
+              />
+              <span className="text-white/85 leading-relaxed text-xs">
+                <strong className="text-white">MVP acknowledgment (required):</strong> I understand this is an MVP prototype with mock data and demo auth, not a medical device, with no clinical or legal effect.
+              </span>
+            </label>
           </div>
+
+          {needsRationale && (
+            <div>
+              <label className="block text-[10.5px] font-mono text-amber-200 mb-1 font-semibold uppercase">
+                Override / concurrence rationale (required for demo AMBER/RED, min 10 chars)
+              </label>
+              <textarea
+                value={overrideRationale}
+                onChange={(e) => setOverrideRationale(e.target.value)}
+                rows={3}
+                maxLength={500}
+                placeholder="e.g. Demo: concur with hold — reschedule spinal after 72h washout; GA fallback discussed."
+                className="w-full rounded-xl glass-input border border-amber-400/40 px-3 py-2 text-xs text-white focus:border-amber-300 focus:ring-1 focus:ring-amber-300 focus:outline-none font-sans"
+              />
+            </div>
+          )}
 
           {/* Practitioner Credentials Form */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">

@@ -192,7 +192,7 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
     // Default English
     return {
       greeting: `Dear ${patient.name},`,
-      title: `*Official Digital Pre-Operative Assessment (PAC) Clearance*`,
+      title: `*MVP Demo Pre-Operative Summary (not a clearance)*`,
       status: isCleared
         ? '🟢 *Status: CLEARED FOR SURGERY*'
         : isAmber
@@ -216,9 +216,9 @@ export const WhatsAppPACModal: React.FC<WhatsAppPACModalProps> = ({
       fitnessText: (patient.fitnessReferrals || []).length > 0
         ? (patient.fitnessReferrals || []).map((r) => `• ${r.specialty}: ${r.status.replace('_', ' ')} — ${r.reason}`).join('\n')
         : `• No outside specialist fitness required.`,
-      verifyLink: `🔗 *View Cryptographic Digital PAC Slip:* https://pac.house.health/v/${patient.mrn}`,
+      verifyLink: `🔗 *Demo PAC slip (mock, no clinical effect):* https://pac.house.health/v/${patient.mrn}`,
       pacInterviewLink: `📝 *Complete your 3-min Quick PAC (meds, 8h fasting, allergies, escort):* ${typeof window !== 'undefined' ? window.location.origin : ''}/pac?mrn=${encodeURIComponent(patient.mrn)}&mode=self`,
-      footer: `Certificate No: ${certNumber} | Hash: ${attestationRecord?.signatureHash?.substring(0, 18) || '0x7f83b165...'}...\n🔒 House Health Sovereign Healthcare Gateway`,
+      footer: `Certificate No: ${certNumber} | Hash: ${attestationRecord?.signatureHash?.substring(0, 18) || '0x7f83b165...'}...\n⚠️ MVP demo output — mock data, not for clinical use`,
     };
   };
 

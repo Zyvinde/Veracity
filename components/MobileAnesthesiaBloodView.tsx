@@ -70,7 +70,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
     refLow: 3.5,
     refHigh: 5.0,
     status: 'NORMAL' as const,
-    directive: 'Normal electrolyte range. Cleared for standard induction.',
+    directive: 'Normal electrolyte range in this mock case. Independent verification required.',
   };
 
   const hemoglobinLab = currentPatient.labs.find((l) => l.name.toLowerCase().includes('hemoglobin')) || {
@@ -81,7 +81,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
     refLow: currentPatient.gender === 'M' ? 13.0 : 12.0,
     refHigh: currentPatient.gender === 'M' ? 17.5 : 15.5,
     status: 'NORMAL' as const,
-    directive: 'Adequate red cell reserve. Cleared for standard surgery.',
+    directive: 'Adequate red cell reserve in this mock case. Independent verification required.',
   };
 
   const plateletsLab = currentPatient.labs.find((l) => l.name.toLowerCase().includes('platelet')) || {
@@ -129,11 +129,11 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
   };
 
   const bloodBankData = {
-    bloodGroup: 'A+',
-    rhFactor: 'Positive',
-    antibodyScreen: 'Negative',
-    crossmatchedUnits: 2,
-    bloodBankStatus: 'RESERVED_IN_OT_DEPOT',
+    bloodGroup: 'DEMO — not linked',
+    rhFactor: 'Unknown (mock)',
+    antibodyScreen: 'Not tested (mock)',
+    crossmatchedUnits: 0,
+    bloodBankStatus: 'DEMO_PLACEHOLDER',
   };
 
   const kEval = evaluatePotassium(potassiumLab.value);
@@ -150,6 +150,9 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
 
   return (
     <div className="w-full max-w-full sm:max-w-md mx-auto glass-panel text-white rounded-2xl border-white/[0.08] shadow-2xl overflow-hidden overflow-x-clip font-sans min-w-0 break-words">
+      <div role="note" className="bg-amber-400 px-3 py-1.5 text-center font-mono text-[10px] font-bold uppercase tracking-wider text-black">
+        MVP Prototype · Mock data · Not for clinical use
+      </div>
       {/* Top Phone In-OT Header */}
       <div className="bg-black/30 border-b border-white/15 p-3.5 sm:p-4 min-w-0 max-w-full overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
@@ -165,7 +168,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
                 <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
               </div>
               <span className="text-[10px] text-white/60 font-mono block truncate">
-                DHA § 3060(a) Bedside STAT Triage
+                MVP demo bedside triage (mock data)
               </span>
             </div>
           </div>
@@ -225,9 +228,11 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       </div>
 
       {/* View Tabs */}
-      <div className="grid grid-cols-3 border-b border-white/15 bg-black/30 text-center min-w-0 max-w-full overflow-hidden">
+      <div role="tablist" aria-label="In-OT demo views" className="grid grid-cols-3 border-b border-white/15 bg-black/30 text-center min-w-0 max-w-full overflow-hidden">
         <button
           type="button"
+          role="tab"
+          aria-selected={activeTab === 'STAT_LABS'}
           onClick={() => setActiveTab('STAT_LABS')}
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
@@ -241,6 +246,8 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={activeTab === 'CLINICAL_HISTORY'}
           onClick={() => setActiveTab('CLINICAL_HISTORY')}
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
@@ -254,6 +261,8 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={activeTab === 'NPO_MEDS'}
           onClick={() => setActiveTab('NPO_MEDS')}
           className={
             'py-3 px-1 font-bold border-b-2 transition min-h-[44px] min-w-0 flex items-center justify-center gap-1.5 cursor-pointer text-[11px] sm:text-xs break-words ' +
@@ -820,8 +829,8 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
       {/* Bottom Action Footer for In-OT Anesthesiologist */}
       <div className="p-4 bg-black/30 border-t border-white/15 space-y-2">
         {clearedNotice && (
-          <div className="p-2 rounded-lg bg-emerald-600 text-white text-xs font-bold text-center animate-fade-in">
-            ✓ In-OT Anesthetic Clearance Logged & Certified!
+          <div className="p-2 rounded-lg bg-amber-400 text-black text-xs font-bold text-center animate-fade-in">
+            Demo note logged (mock — no clinical effect).
           </div>
         )}
 
@@ -832,7 +841,7 @@ export const MobileAnesthesiaBloodView: React.FC<MobileAnesthesiaBloodViewProps>
             className="veracity-press flex items-center justify-center gap-1.5 rounded-xl bg-slate-100 hover:bg-white text-slate-950 py-3 px-3 text-xs font-bold shadow-md cursor-pointer min-h-[46px]"
           >
             <CheckCircle2 className="h-4 w-4" />
-            <span>1-Tap OT Clearance</span>
+            <span>Demo: log review note</span>
           </button>
 
           <button

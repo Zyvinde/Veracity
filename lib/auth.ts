@@ -1,5 +1,20 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { randomBytes } from 'crypto';
+
+// MVP demo auth: hardcoded demo accounts, clearly labeled. Do NOT use for real PHI.
+// Secret: require NEXTAUTH_SECRET in production; generate ephemeral random secret for local demo boot.
+function resolveSecret(): string {
+  if (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.length >= 32) {
+    return process.env.NEXTAUTH_SECRET;
+  }
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('NEXTAUTH_SECRET must be set (>=32 chars) in production');
+  }
+  // eslint-disable-next-line no-console
+  console.warn('[auth] NEXTAUTH_SECRET missing — using ephemeral demo secret (sessions will not persist across restarts)');
+  return randomBytes(32).toString('hex');
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -51,5 +66,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || 'house-health-sovereign-pac-demo-secret-2026',
+  secret: resolveSecret(),
 };

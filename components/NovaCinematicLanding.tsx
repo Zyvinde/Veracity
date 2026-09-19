@@ -7,9 +7,6 @@ import { usePatientStore } from '@/lib/store';
 import PatientPreOpQuestionnaire from '@/components/PatientPreOpQuestionnaire';
 import MobileAnesthesiaBloodView from '@/components/MobileAnesthesiaBloodView';
 
-const HERO_VIDEO_URL =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260729_102822_0e6c87e8-c141-4744-bf32-ad30db296371.mp4';
-
 /* ── Reveal: staggered fade-up on entering viewport ─────────────── */
 function Reveal({
   children,
@@ -296,6 +293,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
     { label: 'Platform', href: '#pillars', id: 'pillars', sup: '3' },
     { label: 'OT Economics', href: '#value-matrix', id: 'value-matrix', sup: null },
     { label: 'Safety Specs', href: '#compliance', id: 'compliance', sup: null },
+    { label: 'Pilot Board', href: '/pilot', id: 'pilot', sup: null },
     { label: 'Inquiries', href: '#contact', id: 'contact', sup: null },
   ];
 
@@ -313,11 +311,11 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 <span className="text-base sm:text-xl font-medium tracking-tight text-white">house health</span>
               </a>
               <span className="hidden sm:inline-block rounded-full border border-sky-400/40 bg-sky-500/15 px-2 py-0.5 font-mono text-[9px] font-bold tracking-wider text-sky-300 uppercase shrink-0">
-                Private Beta
+                MVP Prototype
               </span>
               <span className="hidden xl:inline-flex items-center gap-1 rounded-full border border-amber-400/35 bg-amber-500/10 px-2.5 py-0.5 font-mono text-[9px] font-semibold tracking-wider text-amber-300 uppercase">
                 <AlertTriangle className="h-2.5 w-2.5" />
-                Non-Diagnostic CDS Demo
+                Mock data · Not for clinical use
               </span>
             </div>
 
@@ -465,7 +463,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                 <Reveal delay={120} className="mb-3.5 max-w-full">
                   <div className="inline-flex items-center gap-1.5 sm:gap-2 rounded-xl border border-amber-400/40 bg-amber-950/50 px-2.5 sm:px-3 py-1.5 sm:py-2 backdrop-blur-md text-amber-200 text-[10px] sm:text-xs font-mono shadow-md max-w-full">
                     <AlertTriangle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-300 shrink-0" />
-                    <span className="truncate">FOR CDS EVALUATION ONLY · DHA § 3060(a)</span>
+                    <span className="truncate">MVP PROTOTYPE · MOCK DATA ONLY · NOT FOR CLINICAL USE</span>
                   </div>
                 </Reveal>
                 <Reveal delay={180} className="mb-4">
@@ -695,12 +693,12 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               </Reveal>
               <Reveal delay={180}>
                 <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-normal leading-tight tracking-tight text-white drop-shadow-lg">
-                  Stopping the multimillion-dollar leak in <span className="italic">theatre utilization.</span>
+                  Where day-of-surgery delays <span className="italic">usually come from.</span>
                 </h2>
               </Reveal>
               <Reveal delay={240}>
                 <p className="mt-4 max-w-2xl text-xs sm:text-base leading-relaxed text-white/70">
-                  Operating theatre downtime costs hospitals $60 to $100 per minute. House Health eliminates avoidable morning cancellations and holding bay delays through verified, pre-induction protocol defense.
+                  Illustrative workflow targets for this MVP demo — not measured results. Theatre downtime is often cited at roughly $60–$100/min in the literature; this prototype aims to surface avoidable holds (meds, NPO, blood readiness) earlier in a demo workflow.
                 </p>
               </Reveal>
 
@@ -708,28 +706,28 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <div className="mt-8 sm:mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   {
-                    stat: '120+ Min',
-                    headline: 'Surgical Delay Reduction',
-                    detail: 'Catches missed GLP-1 (Semaglutide/Ozempic) and DOAC (Apixaban/Xarelto) hold windows 7 days prior at intake rather than in the morning holding bay.',
-                    tag: 'Pharmacotherapy Defense',
+                    stat: '~120 min',
+                    headline: 'Delay-review target (illustrative)',
+                    detail: 'Demo goal: surface missed GLP-1 / DOAC hold windows at intake in the mock workflow, instead of the morning holding bay.',
+                    tag: 'Demo target',
                   },
                   {
-                    stat: '0%',
-                    headline: 'Day-of-Surgery NPO Cancellations',
-                    detail: 'Automated pre-op intake screens 8h solids / 2h minimum clears (3h preferred) adherence and flags difficult airway anatomy (Mallampati/OSA) days in advance.',
-                    tag: 'Aspiration & Airway Guard',
+                    stat: 'Fewer',
+                    headline: 'NPO-day cancels (illustrative)',
+                    detail: 'Demo intake screens 8h solids / 2h minimum clears (3h preferred) and flags airway anatomy in mock cases.',
+                    tag: 'Demo target',
                   },
                   {
-                    stat: '100%',
-                    headline: 'Morning Blood Bank Readiness',
-                    detail: 'Pre-op anemia optimization (IV iron/EPO cutoffs) and automated blood type & crossmatch reservation eliminates morning blood bank scramble.',
-                    tag: 'Transfusion Preparation',
+                    stat: 'Earlier',
+                    headline: 'Blood readiness check (illustrative)',
+                    detail: 'Demo anemia flags and mock crossmatch checklist — not linked to a real blood bank.',
+                    tag: 'Demo target',
                   },
                   {
-                    stat: '80%',
-                    headline: 'Anaesthetist Clinic Time Saved',
-                    detail: 'Tele-PAC digital triage fast-tracks healthy ASA I/II patients, liberating senior consultant time for high-risk ASA III/IV complex cases.',
-                    tag: 'Tele-PAC Fast-Track',
+                    stat: 'Less',
+                    headline: 'Clinic triage time (illustrative)',
+                    detail: 'Demo tele-PAC triage mock for ASA I/II fast-track in the prototype workflow.',
+                    tag: 'Demo target',
                   },
                 ].map((card, i) => (
                   <Reveal key={card.headline} delay={220 + i * 100}>
@@ -750,9 +748,9 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                           {card.detail}
                         </p>
                       </div>
-                      <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-mono text-emerald-300 font-semibold">
+                      <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-1.5 text-[11px] font-mono text-white/60 font-semibold">
                         <CheckCircle2 size={13} className="shrink-0" />
-                        <span>Verified Protocol</span>
+                        <span>Demo workflow — unvalidated</span>
                       </div>
                     </div>
                   </Reveal>
@@ -796,7 +794,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                       {
                         dimension: 'Regulatory Attestation',
                         legacy: 'Scattered paper slips; difficult retrospective medicolegal defense',
-                        veracity: '1-Tap 256-bit SHA immutable audit trail compliant with DHA § 3060(a)',
+                        veracity: 'Demo SHA-256-style audit trail in the prototype (not compliant, not immutable)',
                       },
                       {
                         dimension: 'Patient Communication',
@@ -929,7 +927,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   <span className="text-base font-medium tracking-tight text-white">house health</span>
                 </a>
                 <span className="rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[8.5px] text-white/70">
-                  v2.5 Beta
+                  v2.5 MVP Prototype
                 </span>
               </div>
               <nav className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2">
@@ -937,6 +935,7 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
                   { label: 'Platform', href: '#pillars' },
                   { label: 'OT Economics', href: '#value-matrix' },
                   { label: 'Safety Specs', href: '#compliance' },
+                  { label: 'Pilot Board', href: '/pilot' },
                   { label: 'Inquiries', href: '#contact' },
                   { label: 'OT Console', href: '/console' },
                 ].map((link) => (
@@ -959,11 +958,11 @@ export const NovaCinematicLanding: React.FC<{ posterSrc?: string }> = ({ posterS
               <div className="flex items-center justify-center gap-2 mb-1.5 text-amber-300">
                 <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
                 <span className="font-mono text-[10.5px] font-bold uppercase tracking-wider">
-                  Regulatory Notice · Clinical Decision Support Evaluation
+                  MVP Prototype · Not a medical device · Mock data only
                 </span>
               </div>
               <p className="text-xs text-white/80 leading-relaxed font-sans max-w-3xl mx-auto">
-                FOR DEMONSTRATION &amp; CLINICAL DECISION SUPPORT EVALUATION ONLY. Not for primary diagnosis or autonomous medical decisions. All surgical clearances and medication directives require independent physician verification under applicable regulatory frameworks (DHA § 3060(a) CDS / MOHAP).
+                MVP PROTOTYPE FOR DEMONSTRATION AND PILOT DISCUSSIONS ONLY. Uses synthetic mock cases, local demo auth, and local demo storage. Not for diagnosis, triage, or autonomous clinical decisions. No regulatory clearance (DHA / MOHAP / FDA). Any clinical use requires independent physician verification and a validated, approved system.
               </p>
             </div>
           </footer>

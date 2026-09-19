@@ -13,7 +13,7 @@ export const PATIENT_FATIMA: PatientCase = {
   procedureName: 'Laparoscopic Cholecystectomy',
   cptCode: 'CPT 47562',
   invasivenessTier: 2,
-  facility: 'Al Garhoud Day Surgery Center, Dubai (Azure UAE North Enclave)',
+  facility: 'Al Garhoud Day Surgery Center, Dubai (mock demo case)',
   surgeon: 'Dr. Tariq Al-Hashimi, FRCS',
   anesthesiologist: 'Dr. Mariam Ben-Salem, DESA (Consultant Anaesthetist)',
   asaStatus: 'ASA II',
